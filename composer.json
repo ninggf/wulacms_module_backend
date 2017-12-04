@@ -1,0 +1,25 @@
+{
+  "name": "wulacms/backend",
+  "description": "wualcms管理后台界面",
+  "type": "wula-module",
+  "require": {
+    "wula/wula-installer": "^1.0",
+    "wula/jqadmin": "*"
+  },
+  "license": "MIT",
+  "authors": [
+	{
+	  "name": "Leo Ning",
+	  "email": "windywany@gmail.com"
+	}
+  ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  },
+  "support": {
+	  "issues": "https://github.com/ninggf/wulacms_module_backend/issues"
+  },
+  "homepage": "https://www.wulacms.com/modules/backend"
+}
