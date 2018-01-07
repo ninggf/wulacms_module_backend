@@ -78,7 +78,8 @@
             <ul class="layui-nav jqadmin-header-item right-menu cloneDom">
                 <li class="layui-nav-item first cloneDom">
                     <a href="javascript:">
-                        <cite>{$myPassport.nickname}</cite>
+                        <img src="{'wula/jqadmin/images/avatar.jpg'|vendor}" class="layui-nav-img"/>
+                        {$myPassport.nickname}
                         <span class="layui-nav-more"></span>
                     </a>
                     <dl class="layui-nav-child">

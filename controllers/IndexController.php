@@ -75,4 +75,11 @@ class IndexController extends AdminController {
 
 		return view($data);
 	}
+
+	public function home() {
+		$data['title']         = '后台主页';
+		$data['workspaceView'] = './index/home.tpl';
+
+		return view('layout', $data);
+	}
 }
