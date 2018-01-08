@@ -113,7 +113,7 @@ class AdminPassport extends Passport {
 		$this->nickname          = $user['nickname'];
 		$this->phone             = $user['phone'];
 		$this->email             = $user['email'];
-		$this->avatar            = $user['avatar'] ? $user['avatar'] : App::assets('avatar.jpg');
+		$this->avatar            = $user['avatar'] ? $user['avatar'] : App::assets('wula/jqadmin/images/avatar.jpg');
 		$this->data['status']    = $user['status'];
 		$this->data['lastip']    = $user['lastip'];
 		$this->data['lastlogin'] = $user['lastlogin'];

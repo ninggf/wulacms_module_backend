@@ -52,7 +52,7 @@
         </form>
     </div>
 </div>
-{initjq}
+{initjq config=1}
 <script type="text/javascript">
 	layui.use(['jquery', 'layer', 'wulaui'], function ($, layer) {
 		$('#login-form').on('ajax.before', function () {

@@ -78,12 +78,11 @@
             <ul class="layui-nav jqadmin-header-item right-menu cloneDom">
                 <li class="layui-nav-item first cloneDom">
                     <a href="javascript:">
-                        <img src="{'wula/jqadmin/images/avatar.jpg'|vendor}" class="layui-nav-img"/>
-                        {$myPassport.nickname}
+                        <img id="my-avatar" src="{$myPassport->avatar|media}" class="layui-nav-img"/>
+                        <cite id="username">{$myPassport.nickname}</cite>
                         <span class="layui-nav-more"></span>
                     </a>
                     <dl class="layui-nav-child">
-                        <!-- tab-menu -->
                         {foreach $user as $um}
                             <dd class="{$navi.textCls}">
                                 <a href="javascript:" {$um.h5datas} data-title="{$um.name}" style="{$navi.textStyle}">
@@ -93,8 +92,17 @@
                                 </a>
                             </dd>
                         {/foreach}
+                        <dd class="tab-menu">
+                            <a href="javascript:;" data-url="{'system/account/profile'|app}" data-title="个人资料">
+                                <i class="iconfont" data-icon="&#xe672;">&#xe672;</i>
+                                <span>个人资料</span>
+                            </a>
+                        </dd>
                         <dd>
-                            <a href="{'backend/auth/signout'|app}"><i class="iconfont" style="color: red">&#xe64b; </i>退出</a>
+                            <a href="{'backend/auth/signout'|app}">
+                                <i class="iconfont" style="color: red">&#xe64b; </i>
+                                <span>退出</span>
+                            </a>
                         </dd>
                     </dl>
                 </li>
@@ -158,7 +166,7 @@
     </script>
 {/literal}
 {initjq config=1}
-<script type="text/javascript">
+<script>
 	layui.use(['jquery', 'jqmenu', 'layer', 'toastr'], function ($, menu, layer, toast) {
 		var mainMenu               = new menu(),
 			jqIndex                = function () {
@@ -191,7 +199,13 @@
 				mainMenu.menuShowType();
 			})
 		};
-        (new jqIndex()).init();
+		(new jqIndex()).init();
+		window.updateUsername = function (name) {
+			$('#username').text(name);
+		};
+		window.updateAvatar   = function (avatar) {
+			$('#my-avatar').attr('src', avatar);
+		}
 	});
 </script>
 </body>
