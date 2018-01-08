@@ -11,7 +11,7 @@
     <meta name="format-detection" content="telephone=no">
     {loaduicss jqadmin="jqadmin.css" theme='black/theme.css'}
 </head>
-<body>
+<body style="opacity: 0">
 <ul class='right-click-menu'>
     <li><a href='javascript:;' data-event='fresh'>刷新</a></li>
     <li><a href='javascript:;' data-event='close'>关闭</a></li>
@@ -199,13 +199,16 @@
 				mainMenu.menuShowType();
 			})
 		};
-		(new jqIndex()).init();
-		window.updateUsername = function (name) {
+		window.updateUsername      = function (name) {
 			$('#username').text(name);
 		};
-		window.updateAvatar   = function (avatar) {
+		window.updateAvatar        = function (avatar) {
 			$('#my-avatar').attr('src', avatar);
-		}
+		};
+		(new jqIndex()).init();
+		$('body').animate({
+			opacity: 1
+		}, 600)
 	});
 </script>
 </body>
