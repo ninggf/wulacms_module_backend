@@ -50,6 +50,11 @@ class IndexController extends AdminController {
 				}
 				$setting->url = '';
 			}
+			if ($this->passport->is('开发人员')) {
+				$doc              = $system->getMenu('helpdoc', '文档', 999998);
+				$doc->data['url'] = App::url('backend/doc');
+				$doc->icon        = '&#xe6bc;';
+			}
 		}
 		fire('dashboard\initUI', $ui);
 		$data = $ui->menuData();
@@ -71,7 +76,6 @@ class IndexController extends AdminController {
 		];
 
 		$data['website']['name'] = App::cfg('name', 'Hello WulaCms');
-		$data['isDeveloper']     = $this->passport->is('开发人员');
 
 		return view($data);
 	}
