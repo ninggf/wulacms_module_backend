@@ -45,7 +45,7 @@
                     {capture append="submenus"}
                         <ul class="layui-nav layui-nav-tree">
                             {foreach $navi.child as $nna}
-                                <li class="layui-nav-item {if $nna.child}layui-nav-itemed{/if}">
+                                <li class="layui-nav-item">
                                     <a href="javascript:;" {$nna.h5datas} data-title="{$nna.name}"
                                        class="{$nna.textCls}" style="{$nna.textStyle}">
                                         <i class="iconfont {$nna.iconCls}" style="{$nna.iconStyle}"
@@ -94,7 +94,7 @@
                         {/foreach}
                         <dd class="tab-menu">
                             <a href="javascript:;" data-url="{'system/account/profile'|app}" data-title="个人资料">
-                                <i class="iconfont" data-icon="&#xe672;">&#xe672;</i>
+                                <i class="iconfont" data-icon="&#xe623;">&#xe623;</i>
                                 <span>个人资料</span>
                             </a>
                         </dd>
@@ -183,9 +183,12 @@
 		};
 		jqIndex.prototype.refresh  = function () {
 			$('.fresh-btn').bind("click", function () {
-				var iframe = $('.jqadmin-body .layui-show').children('iframe'), id = iframe.data('id');
-				mainMenu.tabmenu.effect(id, !0);
-				iframe[0].contentWindow.location.reload(true);
+				var iframe = $('.jqadmin-body .layui-show').children('iframe');
+				iframe.animate({
+					opacity: 0, marginTop: "50px"
+				}, 50, function () {
+					iframe[0].contentWindow.location.reload(true);
+				});
 			})
 		};
 		jqIndex.prototype.showMenu = function () {
@@ -209,7 +212,7 @@
 		$('body').animate({
 			opacity: 1
 		}, 600)
-	});
+	})
 </script>
 </body>
 </html>

@@ -101,7 +101,7 @@ abstract class Setting {
 	}
 
 	/**
-	 * 配置脚本(requirejs).
+	 * 自定义模块
 	 *
 	 * @param string $group
 	 *
@@ -109,6 +109,10 @@ abstract class Setting {
 	 */
 	public function script($group = '') {
 		return null;
+	}
+
+	public function needReload() {
+		return false;
 	}
 
 	/**

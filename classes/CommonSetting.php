@@ -10,9 +10,11 @@
 
 namespace backend\classes;
 
+use backend\classes\form\CommonSettingForm;
+
 class CommonSetting extends Setting {
 	public function getForm($group = '') {
-		return null;
+		return new CommonSettingForm(true);
 	}
 
 	public function getName() {
