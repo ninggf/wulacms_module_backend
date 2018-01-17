@@ -16,7 +16,7 @@
     </header>
     <section class="scrollable">
         <div class="wrapper bg-white-only">
-            <div style="max-width: 700px">
+            <div class="max-w-800 m-c">
                 <form name="SettingForm" action="{'backend/setting/save'|app}/{$setting|escape}/{$group|escape}"
                       data-validate="{$rules|escape}" data-ajax method="post" role="form"
                       class="form-horizontal {if $script}hidden{/if}" data-loading>

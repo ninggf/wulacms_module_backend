@@ -134,15 +134,13 @@ class AdminPassport extends Passport {
 		if ($this->data['roles']) {
 			$acl = new AclTable();
 			foreach ($this->data['roles'] as $rid => $role) {
-				$ac = $acl->findAll(['role_id' => $rid], 'res,allowed,priority');
-				/**@var \wulaphp\db\sql\Query $a */
+				$ac = $acl->findAll(['role_id' => $rid], 'res,allowed,priority')->toArray();
 				foreach ($ac as $a) {
 					$res = $a['res'];
 					//priority越小优先级越高.
 					if (!isset($acls[ $res ]) || $acls[ $res ]['priority'] > $a['priority']) {
-						$ra = $a->get();
-						unset($ra['res']);
-						$acls[ $res ] = $ra;
+						unset($a['res']);
+						$acls[ $res ] = $a;
 					}
 				}
 			}

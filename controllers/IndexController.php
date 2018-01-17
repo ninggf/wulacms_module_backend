@@ -10,12 +10,12 @@
 
 namespace backend\controllers;
 
+use backend\classes\BackendController;
 use backend\classes\DashboardUI;
 use wulaphp\app\App;
-use wulaphp\mvc\controller\AdminController;
 use function backend\get_system_settings;
 
-class IndexController extends AdminController {
+class IndexController extends BackendController {
 
 	public function index() {
 		$ui = new DashboardUI();

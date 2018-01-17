@@ -38,7 +38,7 @@ class DatepickerField extends FormField {
 		$daysDisabled = isset ($definition ['daysDisabled']) ? ' data-disabled="' . $definition['daysDisabled'] . '"' : '';
 		$dwd          = isset ($definition ['dwd']) ? ' data-dwd="' . $definition['dwd'] . '"' : '';
 
-		return '<div data-widget="datepicker" class="input-group date" ' . $from . $to . $format . $fromDay . $toDay . $daysDisabled . $dwd . '>
+		return '<div data-datepicker class="input-group date" ' . $from . $to . $format . $fromDay . $toDay . $daysDisabled . $dwd . '>
 				  <input id="' . $id . '" type="text"  ' . $pl . $readonly . $disabled . ' name="' . $this->name . '" value="' . html_escape($this->value) . '" class="form-control ' . $class . '"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 				</div>';
 	}

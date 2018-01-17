@@ -49,6 +49,7 @@ class CommonSettingForm extends FormTable {
 	 * 系统离线时允许以下IP访问
 	 * @var \backend\form\TextareaField
 	 * @type string
+	 * @option {"row":10}
 	 * @note   一行一个IP。
 	 */
 	public $allowedIps;
