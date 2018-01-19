@@ -11,6 +11,7 @@
 namespace backend\controllers;
 
 use backend\classes\CaptchaCode;
+use system\classes\Syslog;
 use wulaphp\app\App;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
@@ -55,6 +56,8 @@ class AuthController extends AdminController {
 	 */
 	public function indexPost($username, $passwd, $captcha = '') {
 		if ($this->passport->login([$username, $passwd, $captcha])) {
+			Syslog::info('Login', $this->passport->uid, 'accesslog');
+
 			return Ajax::redirect(App::url('backend'));
 		} else {
 			return Ajax::error($this->passport->error, 'alert');
@@ -112,6 +115,7 @@ class AuthController extends AdminController {
 	 * @return null|\wulaphp\mvc\view\JsonView
 	 */
 	public function signout() {
+		Syslog::info('Logout', $this->passport->uid, 'accesslog');
 		$this->passport->logout();
 		if (Request::isAjaxRequest() || rqset('ajax')) {
 			return Ajax::redirect(App::url('backend/auth'));

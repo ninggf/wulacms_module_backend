@@ -117,11 +117,12 @@ class AdminPassport extends Passport {
 		$this->data['status']    = $user['status'];
 		$this->data['lastip']    = $user['lastip'];
 		$this->data['lastlogin'] = $user['lastlogin'];
+		$this->data['logintime'] = time();
 		foreach ($user['roles'] as $r) {
 			$rid                         = $r['id'];
 			$this->data['roles'][ $rid ] = $r['name'];
 		}
-		$table->updateLoginInfo($this->uid);
+		$table->updateLoginInfo($this->uid, $this->data['logintime']);
 
 		return true;
 	}
