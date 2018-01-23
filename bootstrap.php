@@ -10,7 +10,6 @@ use wulaphp\auth\Passport;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\io\Response;
-
 /**
  * 管理后台模块
  * @group kernel
@@ -21,7 +20,7 @@ class BackendModule extends CmfModule {
 	}
 
 	public function getDescription() {
-		return '基于jqadmin&layui的管理后台';
+		return '基于bootstrap && layui的管理后台。';
 	}
 
 	public function getHomePageURL() {
@@ -85,6 +84,7 @@ class BackendModule extends CmfModule {
 
 		return $v;
 	}
+
 }
 
 function get_system_settings() {
