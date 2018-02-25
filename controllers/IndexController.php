@@ -26,13 +26,12 @@ class IndexController extends BackendController {
 	public function index() {
 		$ui = new DashboardUI();
 		if ($this->passport->cando('m:system')) {
-			$system            = $ui->getMenu('system', '系统', 999999);
-			$system->icon      = '&#xe628;';
-			$system->iconCls   = 'layui-icon';
+			$system            = $ui->getMenu('system', __('System'), 999999);
+			$system->icon      = '&#xe696;';
 			$system->iconStyle = "color:orange";
 			// 设置
 			if ($this->passport->cando('m:system/setting')) {
-				$setting       = $system->getMenu('setting', '设置', 999995);
+				$setting       = $system->getMenu('setting', __('Settings'), 999900);
 				$setting->icon = '&#xe689;';
 				$setting->url  = App::url('backend/setting');
 				//通知其它模块提供配置
@@ -57,7 +56,7 @@ class IndexController extends BackendController {
 				$setting->url = '';
 			}
 			if ($this->passport->is('开发人员')) {
-				$doc              = $system->getMenu('helpdoc', '文档', 999998);
+				$doc              = $system->getMenu('helpdoc', __('Documents'), 999999);
 				$doc->data['url'] = App::url('backend/doc');
 				$doc->icon        = '&#xe6bc;';
 			}
@@ -103,7 +102,7 @@ class IndexController extends BackendController {
 		usort($myWidgets, ArrayCompare::compare('pos'));
 
 		$uses    = ['jquery', 'bootstrap', 'sortable', 'wulaui'];
-		$alias   = ['$', '_$', '_$$', '_$$$'];
+		$alias   = ['$', '_$$$', '_$$', '_$'];
 		$init    = [];
 		$modules = [];
 		foreach ($myWidgets as $w) {

@@ -10,6 +10,7 @@ use wulaphp\auth\Passport;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\io\Response;
+
 /**
  * 管理后台模块
  * @group kernel
@@ -20,7 +21,7 @@ class BackendModule extends CmfModule {
 	}
 
 	public function getDescription() {
-		return '基于bootstrap && layui的管理后台。';
+		return '基于bootstrap&layui的管理后台。';
 	}
 
 	public function getHomePageURL() {
@@ -55,7 +56,11 @@ class BackendModule extends CmfModule {
 	 * @return \wulaphp\mvc\view\View
 	 */
 	public static function onNeedLogin($view) {
-		App::redirect('backend/auth');
+		if (Request::isAjaxRequest()) {
+			Response::respond(401, __('Please login'));
+		} else {
+			App::redirect('backend/auth');
+		}
 
 		return $view;
 	}
@@ -70,9 +75,9 @@ class BackendModule extends CmfModule {
 	public static function onDenied($view, $message) {
 		if (!$view) {
 			if (Request::isAjaxRequest()) {
-				$view = Ajax::fatal($message ? $message : '权限受限，请联系管理员', 403);
+				$view = Ajax::fatal($message ? $message : __('permission denied'), 403);
 			} else {
-				Response::respond(403, '权限受限，请联系管理员');
+				Response::respond(403, $message ? $message : __('permission denied'));
 			}
 		}
 

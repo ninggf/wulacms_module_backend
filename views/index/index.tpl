@@ -13,10 +13,10 @@
 </head>
 <body style="opacity: 0">
 <ul class='right-click-menu'>
-    <li><a href='javascript:;' data-event='fresh'>刷新</a></li>
-    <li><a href='javascript:;' data-event='close'>关闭</a></li>
-    <li><a href='javascript:;' data-event='other'>关闭其它</a></li>
-    <li><a href='javascript:;' data-event='all'>全部关闭</a></li>
+    <li><a href='javascript:;' data-event='fresh'>{'Refresh'|t}</a></li>
+    <li><a href='javascript:;' data-event='close'>{'Close'|t}</a></li>
+    <li><a href='javascript:;' data-event='other'>{'Close Others'|t}</a></li>
+    <li><a href='javascript:;' data-event='all'>{'Close All'|t}</a></li>
 </ul>
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
@@ -50,7 +50,11 @@
                                        class="{$nna.textCls}" style="{$nna.textStyle}">
                                         <i class="iconfont {$nna.iconCls}" style="{$nna.iconStyle}"
                                            data-icon="{$nna.icon|default:'&#xe618;'}">{$nna.icon|default:'&#xe618;'}</i><span>{$nna.name}</span>
-                                        {if $nna.child}<em class="layui-nav-more"></em>{/if}
+                                        {if $nna.child}
+                                            <em class="layui-nav-more"></em>
+                                        {elseif $nna.badge}
+                                            <span class="layui-badge-dot"></span>
+                                        {/if}
                                     </a>
                                     {if $nna.child}
                                         <dl class="layui-nav-child">
@@ -93,21 +97,21 @@
                             </dd>
                         {/foreach}
                         <dd class="tab-menu">
-                            <a href="javascript:;" data-url="{'system/account/profile'|app}" data-title="个人资料">
+                            <a href="javascript:;" data-url="{'system/account/profile'|app}" data-title="{'Profile'|t}">
                                 <i class="iconfont" data-icon="&#xe623;">&#xe623;</i>
-                                <span>个人资料</span>
+                                <span>{'Profile'|t}</span>
                             </a>
                         </dd>
                         <dd>
                             <a href="{'backend/auth/signout'|app}">
                                 <i class="iconfont" style="color: red">&#xe64b; </i>
-                                <span>退出</span>
+                                <span>{'Logout'|t}</span>
                             </a>
                         </dd>
                     </dl>
                 </li>
             </ul>
-            <button title="刷新" class="layui-btn layui-btn-sm  jq-btn-primary fresh-btn">
+            <button title="{'Refresh'|t}" class="layui-btn layui-btn-sm  jq-btn-primary fresh-btn">
                 <i class="iconfont">&#xe62e; </i>
             </button>
         </div>
@@ -132,11 +136,11 @@
             <ul class="layui-tab-title">
                 <li class="layui-this" id="admin-home" lay-id="0">
                     <i class="iconfont">&#xe622;</i>
-                    <em data-href="{'backend/home'|app}">后台首页</em>
+                    <em data-href="{'backend/home'|app}">{'Dashboard'|t}</em>
                 </li>
             </ul>
             <div class="tab-move-btn">
-                <span>更多<i class="iconfont">&#xe604;</i></span>
+                <span>{'More'|t}<i class="iconfont">&#xe604;</i></span>
             </div>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
@@ -149,7 +153,7 @@
     <div class="layui-footer jqadmin-foot">
         <div class="layui-mian">
             <p class="jqadmin-copyright">感谢您选择基于<a href="https://www.wulaphp.com" target="_blank">wulaphp</a>的<a
-                        target="_blank" href="">wulacms</a>系统创造财富. </p>
+                        target="_blank" href="https://www.wulacms.com">wulacms</a>. </p>
         </div>
     </div>
 </div>

@@ -17,9 +17,6 @@ class IFramePageController extends BackendController {
 	protected $layout = 'backend/views/layout';
 
 	protected function onInitLayoutData($data) {
-		//$data['page_style'] = 'black/page.css';
-		//$data['bodyCls']    = 'leo';
-
 		return $data;
 	}
 }
