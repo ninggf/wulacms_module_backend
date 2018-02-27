@@ -227,7 +227,7 @@ class BootstrapFormRender extends FormRender {
 	 *
 	 * @param FormTable $form
 	 *
-	 * @return \backend\form\classes\BootstrapFormRender
+	 * @return \backend\form\BootstrapFormRender
 	 */
 	public static function inline(FormTable $form) {
 		return new BootstrapFormRender($form, ['type' => 'inline']);
@@ -238,7 +238,7 @@ class BootstrapFormRender extends FormRender {
 	 *
 	 * @param \wulaphp\form\FormTable $form
 	 *
-	 * @return \backend\form\classes\BootstrapFormRender
+	 * @return \backend\form\BootstrapFormRender
 	 */
 	public static function v(FormTable $form) {
 		return new BootstrapFormRender($form, ['type' => 'vertical']);
@@ -250,7 +250,7 @@ class BootstrapFormRender extends FormRender {
 	 * @param \wulaphp\form\FormTable $form
 	 * @param array                   $options 选项，通过label-col要配置标签的宽度,field-col设置字段宽度
 	 *
-	 * @return \backend\form\classes\BootstrapFormRender
+	 * @return \backend\form\BootstrapFormRender
 	 */
 	public static function h(FormTable $form, $options = []) {
 		$options['type'] = 'horizontal';

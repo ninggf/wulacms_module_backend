@@ -152,8 +152,8 @@
     <!-- 底部区域 -->
     <div class="layui-footer jqadmin-foot">
         <div class="layui-mian">
-            <p class="jqadmin-copyright">感谢您选择基于<a href="https://www.wulaphp.com" target="_blank">wulaphp</a>的<a
-                        target="_blank" href="https://www.wulacms.com">wulacms</a>. </p>
+            <p class="jqadmin-copyright">基于<a href="https://www.wulaphp.com" target="_blank">wulaphp</a>的<a
+                        target="_blank" href="https://www.wulacms.com">wulacms</a>强力驱动. </p>
         </div>
     </div>
 </div>
