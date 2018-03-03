@@ -81,6 +81,7 @@ class IndexController extends BackendController {
 		];
 
 		$data['website']['name'] = App::cfg('name', 'Hello WulaCms');
+		$data['brandName']       = App::cfg('brandName');
 
 		return view($data);
 	}

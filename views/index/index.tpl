@@ -26,8 +26,10 @@
         <!-- logo区域 -->
         <div class="jqadmin-logo-box">
             <a class="logo" href="{'backend'|app}" title="WulaCMS">
-                <h1>W<b class="text-danger">u</b>l<b class="text-success">a</b>C<b class="text-info">M</b>S<sup
-                            style="color: red">&hearts;</sup><sub>{$version}</sub></h1>
+                <h1>{if $brandName}{$brandName}{else}
+                    W<b class="text-danger">u</b>l<b class="text-success">a</b>C<b class="text-info">M</b>S{/if}<sup
+                            style="color: red">&hearts;</sup><sub>{$version}</sub>
+                </h1>
             </a>
         </div>
         <!-- 主菜单区域 -->
