@@ -1,36 +1,37 @@
 <div class="vbox wulaui">
-    <header class="header clearfix bg-light b-b {if !$groups} hidden-xs{/if}">
-        <ul class="nav nav-tabs">
-            {if $groups}
+    <header class="header clearfix bg-light lt b-b {if !$groups} hidden-xs{/if}">
+        {if $groups}
+            <ul class="nav nav-tabs">
                 {foreach $groups as $gp=>$g}
                     <li class="{if $g@index == 0}m-l-lg{/if} {if $gp == $group}active{/if}">
                         <a href="{$cfgurl}/{$gp}" id="navi-system-setting">{$g}</a>
                     </li>
                 {/foreach}
-            {else}
-                <li class="m-l-lg active">
-                    <a href="javascript:;">{$settingName}</a>
-                </li>
-            {/if}
-        </ul>
+            </ul>
+        {else}
+            <p class="h4">{$settingName}</p>
+        {/if}
     </header>
-    <section class="scrollable">
+    <section class="w-f scrollable">
         <div class="wrapper bg-white-only">
-            <div class="max-w-800 m-c">
-                <form name="SettingForm" action="{'backend/setting/save'|app}/{$setting|escape}/{$group|escape}"
+            <div class="max-w-800">
+                <form name="SettingForm" id="setting-form"
+                      action="{'backend/setting/save'|app}/{$setting|escape}/{$group|escape}"
                       data-validate="{$rules|escape}" data-ajax method="post" role="form"
                       class="form-horizontal {if $script}hidden{/if}" data-loading>
                     {$form|render}
-                    <div class="form-group">
-                        <div class="col-md-offset-3 col-md-9 col-xs-12">
-                            <button type="submit" class="btn btn-primary">保存</button>
-                            <button type="reset" class="btn btn-default">重置</button>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
     </section>
+    <footer class="footer bg-light b-t lt">
+        <div class="row m-t-xs max-w-800">
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-md btn-primary opt-save">保存</button>
+                <button class="btn btn-md btn-warning opt-reset">重置</button>
+            </div>
+        </div>
+    </footer>
 </div>
 <script type="application/javascript">
     {if $script}
@@ -41,9 +42,21 @@
 		if (setting && setting.init) {
 			setting.init();
 		}
-		$('form[name=SettingForm]').removeClass('hidden');
+		$('#setting-form').removeClass('hidden');
+
+		$('body').on('click', '.opt-save', function () {
+			$('#setting-form').submit();
+		}).on('click', '.opt-reset', function () {
+			$('#setting-form').get(0).reset();
+		});
 	});
     {else}
-	layui.use(['jquery', 'wulaui']);
+	layui.use(['jquery', 'wulaui'], function ($, w) {
+		$('body').on('click', '.opt-save', function () {
+			$('#setting-form').submit();
+		}).on('click', '.opt-reset', function () {
+			$('#setting-form').get(0).reset();
+		});
+	});
     {/if}
 </script>
