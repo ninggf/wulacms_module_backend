@@ -196,7 +196,7 @@ trait Plupload {
 				}
 				//添加水印
 				//				$water = $this->watermark();
-				$uploader = $this->getUploader();
+				$uploader = self::getUploader();
 				if ($uploader) {
 					$rst = $uploader->save($filePath, $dest);
 					if ($rst) {
@@ -237,7 +237,7 @@ trait Plupload {
 	 *
 	 * @return \wulaphp\io\IUploader
 	 */
-	protected function getUploader() {
+	public static function getUploader() {
 		return apply_filter('plupload\getUploader', new LocaleUploader());
 	}
 
