@@ -86,15 +86,15 @@ class CaptchaCode {
 	/**
 	 * 构造函数
 	 *
-	 * @access public
+	 * @param string $sessionName
 	 */
-	public function __construct() {
+	public function __construct($sessionName = 'auth_code') {
 		$this->setCode(null);
 		$this->setMolestation(null);
 		$this->setBgColor(null);
 		$this->setImage(null);
 		$this->setFont(null); // code, image 两部分必须在 font 之前定义
-		$this->setSession('');
+		$this->setSession($sessionName);
 	}
 
 	/**
@@ -156,7 +156,7 @@ class CaptchaCode {
 	 * @return void
 	 */
 	public function setSession($session) {
-		if (isset ($session) && !empty ($session)) {
+		if (!empty ($session)) {
 			$this->session = $session;
 		} else {
 			$this->session = 'auth_code';
