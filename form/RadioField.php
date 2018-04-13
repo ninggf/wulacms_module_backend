@@ -11,6 +11,7 @@
 namespace backend\form;
 
 use wulaphp\form\FormField;
+use wulaphp\form\FormTable;
 
 class RadioField extends FormField {
 	public function getName() {
@@ -55,4 +56,26 @@ class RadioField extends FormField {
 
 		return implode('', $html);
 	}
+
+	public function getOptionForm() {
+		return new RadioFieldForm(true);
+	}
+}
+
+class RadioFieldForm extends FormTable {
+	public $table = null;
+	/**
+	 * 一行显示
+	 * @var \backend\form\CheckboxField
+	 * @type bool
+	 * @layout 1,col-xs-9
+	 */
+	public $inline = 0;
+	/**
+	 * 自定义CSS类
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-3
+	 */
+	public $class;
 }

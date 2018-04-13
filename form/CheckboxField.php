@@ -14,7 +14,7 @@ use wulaphp\form\FormField;
 use wulaphp\form\FormTable;
 
 class CheckboxField extends FormField {
-	public function __construct($name, FormTable $form, array $options = []) {
+	public function __construct($name, $form, array $options = []) {
 		$options['checkbox'] = true;
 		parent::__construct($name, $form, $options);
 	}
@@ -33,4 +33,19 @@ class CheckboxField extends FormField {
 
 		return '<input id="' . $id . '" type="checkbox"' . $class . $readonly . $disabled . $checked . ' name="' . $this->name . '"/>';
 	}
+
+	public function getOptionForm() {
+		return new CheckboxFieldForm(true);
+	}
+}
+
+class CheckboxFieldForm extends FormTable {
+	public $table = null;
+	/**
+	 * 自定义CSS类
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-3
+	 */
+	public $class;
 }

@@ -8,6 +8,7 @@
 namespace backend\form;
 
 use wulaphp\form\FormField;
+use wulaphp\form\FormTable;
 
 class SelectField extends FormField {
 	public function getName() {
@@ -37,6 +38,34 @@ class SelectField extends FormField {
 		$html [] = '</select>';
 
 		return implode('', $html);
-
 	}
+
+	public function getOptionForm() {
+		return new SelectFieldForm(true);
+	}
+}
+
+class SelectFieldForm extends FormTable {
+	public $table = null;
+	/**
+	 * 提示符
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-6
+	 */
+	public $placeholder = '';
+	/**
+	 * 自定义CSS类
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-3
+	 */
+	public $class;
+	/**
+	 * 多选
+	 * @var \backend\form\CheckboxField
+	 * @type bool
+	 * @layout 1,col-xs-3
+	 */
+	public $multiple = 0;
 }

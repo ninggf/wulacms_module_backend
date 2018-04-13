@@ -195,7 +195,7 @@ trait Plupload {
 					return $rtn;
 				}
 				//添加水印
-				//				$water = $this->watermark();
+				//$water = $this->watermark();
 				$uploader = self::getUploader();
 				if ($uploader) {
 					$rst = $uploader->save($filePath, $dest);

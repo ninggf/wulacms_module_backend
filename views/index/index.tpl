@@ -12,12 +12,6 @@
     {loaduicss jqadmin="jqadmin.css" theme='black/theme.css'}
 </head>
 <body style="opacity: 0">
-<ul class='right-click-menu'>
-    <li><a href='javascript:;' data-event='fresh'>{'Refresh'|t}</a></li>
-    <li><a href='javascript:;' data-event='close'>{'Close'|t}</a></li>
-    <li><a href='javascript:;' data-event='other'>{'Close Others'|t}</a></li>
-    <li><a href='javascript:;' data-event='all'>{'Close All'|t}</a></li>
-</ul>
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="jqadmin-auxiliary-btn">

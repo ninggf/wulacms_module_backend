@@ -11,6 +11,7 @@
 namespace backend\form;
 
 use wulaphp\form\FormField;
+use wulaphp\form\FormTable;
 
 /**
  * Class DatepickerField
@@ -42,4 +43,69 @@ class DatepickerField extends FormField {
 				  <input id="' . $id . '" type="text"  ' . $pl . $readonly . $disabled . ' name="' . $this->name . '" value="' . html_escape($this->value) . '" class="form-control ' . $class . '"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 				</div>';
 	}
+
+	public function getOptionForm() {
+		return new DatepickerFieldForm(true);
+	}
+
+}
+
+class DatepickerFieldForm extends FormTable {
+	public $table = null;
+	/**
+	 * 提示符
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-6
+	 */
+	public $placeholder;
+	/**
+	 * 日期格式
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-6
+	 */
+	public $format;
+	/**
+	 * 不早于这个日期控件中的日期
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 2,col-xs-6
+	 */
+	public $from;
+	/**
+	 * 不晚于这个日期控件中的日期
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 2,col-xs-6
+	 */
+	public $to;
+	/**
+	 * 开始日期
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 3,col-xs-6
+	 */
+	public $startDate;
+	/**
+	 * 结束日期
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 3,col-xs-6
+	 */
+	public $endDate;
+	/**
+	 * 不可用的日期
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 4,col-xs-12
+	 */
+	public $daysDisabled;
+	/**
+	 * 禁用星期几(0是周日)
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 5,col-xs-12
+	 */
+	public $dwd;
 }

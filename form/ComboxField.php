@@ -12,6 +12,7 @@ namespace backend\form;
 
 use wulaphp\app\App;
 use wulaphp\form\FormField;
+use wulaphp\form\FormTable;
 
 class ComboxField extends FormField {
 	public function getName() {
@@ -23,8 +24,8 @@ class ComboxField extends FormField {
 		$id          = isset ($definition ['id']) ? $definition ['id'] : $definition ['name'];
 		$readonly    = isset ($definition ['readonly']) ? ' data-readonly ' : '';
 		$disabled    = isset ($definition ['disabled']) ? ' data-disabled ' : '';
-		$placeholder = isset($definition['placeholder']) ? ' placeholder="' . $definition['placeholder'] . '"' : '';
-		$url         = isset ($definition['url']) ? $definition['url'] : '';
+		$placeholder = isset ($definition ['placeholder']) ? ' placeholder="' . $definition['placeholder'] . '"' : '';
+		$url         = isset ($definition ['url']) ? $definition['url'] : '';
 		$parent      = isset ($definition ['parent']) ? ' data-parent="' . $definition['parent'] . '"' : '';
 		$mnl         = isset ($definition ['mnl']) ? ' data-mnl="' . $definition['mnl'] . '"' : '';
 		$allowClear  = isset ($definition ['allowClear']) ? ' data-allow-clear="' . ($definition['multi'] ? 'true' : 'false') . '"' : '';
@@ -58,4 +59,63 @@ class ComboxField extends FormField {
 			return implode("\n", $html);
 		}
 	}
+
+	public function getOptionForm() {
+		return new ComboxFieldForm(true);
+	}
+}
+
+class ComboxFieldForm extends FormTable {
+	public $table = null;
+	/**
+	 * 提示符
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-6
+	 */
+	public $placeholder = '';
+	/**
+	 * 上级ID(级联选框)
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-6
+	 */
+	public $parent;
+	/**
+	 * 获取数据URL
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 2,col-xs-12
+	 */
+	public $url;
+	/**
+	 * 启动查询字符数量
+	 * @var \backend\form\TextField
+	 * @type int
+	 * @digits
+	 * @layout 4,col-xs-6
+	 */
+	public $mnl = 1;
+	/**
+	 * 最多选择多少个(0为单选)
+	 * @var \backend\form\TextField
+	 * @type int
+	 * @digits
+	 * @layout 4,col-xs-6
+	 */
+	public $multi = 0;
+	/**
+	 * 允许清空
+	 * @var \backend\form\CheckboxField
+	 * @type bool
+	 * @layout 6,col-xs-6
+	 */
+	public $allowClear = 1;
+	/**
+	 * 标签模式
+	 * @var \backend\form\CheckboxField
+	 * @type bool
+	 * @layout 6,col-xs-6
+	 */
+	public $tagMode = 0;
 }

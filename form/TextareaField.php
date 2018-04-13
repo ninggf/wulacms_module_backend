@@ -11,6 +11,7 @@
 namespace backend\form;
 
 use wulaphp\form\FormField;
+use wulaphp\form\FormTable;
 
 class TextareaField extends FormField {
 	public function getName() {
@@ -31,4 +32,34 @@ class TextareaField extends FormField {
 
 		return implode('', $html);
 	}
+
+	public function getOptionForm() {
+		return new TextareaFieldForm(true);
+	}
+}
+
+class TextareaFieldForm extends FormTable {
+	public $table = null;
+	/**
+	 * 提示符
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-6
+	 */
+	public $placeholder = '';
+	/**
+	 * 自定义CSS类
+	 * @var \backend\form\TextField
+	 * @type string
+	 * @layout 1,col-xs-3
+	 */
+	public $class;
+	/**
+	 * 行数
+	 * @var \backend\form\TextField
+	 * @type int
+	 * @digits
+	 * @layout 1,col-xs-3
+	 */
+	public $row = 3;
 }

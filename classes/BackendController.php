@@ -11,14 +11,14 @@
 namespace backend\classes;
 
 use wulaphp\app\App;
+use wulaphp\io\Response;
 use wulaphp\mvc\controller\AdminController;
 
 class BackendController extends AdminController {
 	public function beforeRun($action, $refMethod) {
 		$domain = App::cfg('domain');
 		if ($domain && $_SERVER['HTTP_HOST'] != $domain) {
-			status_header(403);
-			exit();
+			Response::respond(404);
 		}
 		$view = parent::beforeRun($action, $refMethod);
 
