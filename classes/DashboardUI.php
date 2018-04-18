@@ -35,7 +35,7 @@ class DashboardUI {
 			$menu = $this->menus [ $id ];
 		} else {
 			$menu                = new Menu($id);
-			$this->menus [ $id ] = &$menu;
+			$this->menus [ $id ] = $menu;
 		}
 		if ($ids) {
 			foreach ($ids as $id) {
