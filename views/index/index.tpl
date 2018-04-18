@@ -30,6 +30,7 @@
         <div class="jqadmin-main-menu" id="hd-left-top">
             <ul class="layui-nav clearfix" id="menu" lay-filter="main-menu">
                 {foreach $menu.menus as $navi}
+                    {if $navi.child}
                     <li class="layui-nav-item head-nav-item" id="navi-{$navi.id}">
                         <a href="javascript:" {$navi.h5datas} class="{$navi.textCls}" style="{$navi.textStyle}"
                            data-title="{$navi.name}">
@@ -42,7 +43,7 @@
                         <ul class="layui-nav layui-nav-tree">
                             {foreach $navi.child as $nna}
                                 <li class="layui-nav-item">
-                                    <a href="javascript:;" {$nna.h5datas} data-title="{$nna.name}"
+                                    <a href="javascript:" {$nna.h5datas} data-title="{$nna.name}"
                                        class="{$nna.textCls}" style="{$nna.textStyle}">
                                         <i class="iconfont {$nna.iconCls}" style="{$nna.iconStyle}"
                                            data-icon="{$nna.icon|default:'&#xe618;'}">{$nna.icon|default:'&#xe618;'}</i><span>{$nna.name}</span>
@@ -56,7 +57,7 @@
                                         <dl class="layui-nav-child">
                                             {foreach $nna.child as $ncd}
                                                 <dd>
-                                                    <a href="javascript:;" {$ncd.h5datas} class="{$ncd.textCls}"
+                                                    <a href="javascript:" {$ncd.h5datas} class="{$ncd.textCls}"
                                                        style="{$ncd.textStyle}" data-title="{$ncd.name}">
                                                         <i class="iconfont {$ncd.iconCls}" style="{$ncd.iconStyle}"
                                                            data-icon="{$ncd.icon|default:'&#xe618;'}">{$ncd.icon|default:'&#xe618;'}</i>
@@ -70,6 +71,7 @@
                             {/foreach}
                         </ul>
                     {/capture}
+                    {/if}
                 {/foreach}
             </ul>
         </div>
@@ -93,7 +95,7 @@
                             </dd>
                         {/foreach}
                         <dd class="tab-menu">
-                            <a href="javascript:;" data-url="{'system/account/profile'|app}" data-title="{'Profile'|t}">
+                            <a href="javascript:" data-url="{'system/account/profile'|app}" data-title="{'Profile'|t}">
                                 <i class="iconfont" data-icon="&#xe623;">&#xe623;</i>
                                 <span>{'Profile'|t}</span>
                             </a>
