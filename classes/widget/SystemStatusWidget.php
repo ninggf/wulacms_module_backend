@@ -64,8 +64,4 @@ class SystemStatusWidget extends Widget {
 
 		return $this->load('backend/views/widget/system', $data);
 	}
-
-	public function script() {
-		return 'backend/views/widget/system';
-	}
 }
