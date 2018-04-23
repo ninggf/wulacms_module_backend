@@ -35,7 +35,13 @@ class FileUploaderField extends FormField {
 		$multi   = isset ($definition ['multi']) ? ' data-multi="' . $definition['multi'] . '"' : '';
 		$noWater = isset ($definition ['noWater']) ? ' data-no-water' : '';
 
-		return '<div id="' . $id . '" data-name="' . $this->name . '" data-uploader="' . $url . '"' . $width . $height . $resize . $maxfs . $exts . $multi . $noWater . $readonly . $disabled . $auto . '></div>';
+		if ($multi) {
+			$value = html_escape(json_encode($this->value));
+		} else {
+			$value = html_escape($this->value);
+		}
+
+		return '<div id="' . $id . '" data-name="' . $this->name . '" data-uploader="' . $url . '"' . $width . $height . $resize . $maxfs . $exts . $multi . $noWater . $readonly . $disabled . $auto . ' data-value="' . $value . '"></div>';
 	}
 
 	public function getOptionForm() {
@@ -82,6 +88,7 @@ class FileUploaderFieldForm extends FormTable {
 	 * @var \backend\form\TextField
 	 * @type string
 	 * @layout 2,col-xs-8
+	 * @note   默认值为:jpg,gif,png,jpeg
 	 */
 	public $exts;
 	/**
