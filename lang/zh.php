@@ -28,6 +28,7 @@ return [
 		'Select'            => '选择框',
 		'Textarea'          => '文本域',
 		'Html Editor'       => 'HTML编辑器',
-		'Separator'         => '分隔线'
+		'Separator'         => '分隔线',
+		'Time Picker'       => '时间选择器'
 	]
 ];
