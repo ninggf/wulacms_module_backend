@@ -26,22 +26,22 @@ class FileUploaderField extends FormField {
 		$disabled   = isset ($definition ['disabled']) ? ' data-disabled ' : '';
 
 		$auto    = isset ($definition ['auto']) ? ' data-auto ' : '';
-		$url     = isset ($definition['url']) ? $definition['url'] : App::url('media/upload');
-		$width   = isset ($definition ['width']) ? ' data-width="' . $definition['width'] . '"' : '';
-		$height  = isset ($definition ['height']) ? ' data-height="' . $definition['height'] . '"' : '';
-		$resize  = isset ($definition ['resize']) ? ' data-resize="' . $definition['resize'] . '"' : '';
-		$maxfs   = isset ($definition ['maxFileSize']) ? ' data-max-file-size="' . $definition['maxFileSize'] . '"' : '';
-		$exts    = isset ($definition ['exts']) ? ' data-exts="' . $definition['exts'] . '"' : '';
-		$multi   = isset ($definition ['multi']) ? ' data-multi="' . $definition['multi'] . '"' : '';
-		$noWater = isset ($definition ['noWater']) ? ' data-no-water' : '';
-
+		$url     = isset ($definition['url']) ? App::url($definition['url']) : App::url('media/upload');
+		$width   = isset ($definition ['width']) ? ' data-width="' . $definition['width'] . '" ' : '';
+		$height  = isset ($definition ['height']) ? ' data-height="' . $definition['height'] . '" ' : '';
+		$resize  = isset ($definition ['resize']) ? ' data-resize="' . $definition['resize'] . '" ' : '';
+		$maxfs   = isset ($definition ['maxFileSize']) ? ' data-max-file-size="' . $definition['maxFileSize'] . '" ' : '';
+		$exts    = isset ($definition ['exts']) ? ' data-exts="' . $definition['exts'] . '" ' : '';
+		$multi   = isset ($definition ['multi']) ? ' data-multi="' . $definition['multi'] . '" ' : '';
+		$noWater = isset ($definition ['noWater']) ? ' data-no-water ' : '';
+		$local   = isset($definition['local']) ? ' data-local-store ' : '';
 		if ($multi) {
 			$value = html_escape(json_encode($this->value));
 		} else {
 			$value = html_escape($this->value);
 		}
 
-		return '<div id="' . $id . '" data-name="' . $this->name . '" data-uploader="' . $url . '"' . $width . $height . $resize . $maxfs . $exts . $multi . $noWater . $readonly . $disabled . $auto . ' data-value="' . $value . '"></div>';
+		return '<div id="' . $id . '" data-name="' . $this->name . '" data-uploader="' . $url . '"' . $width . $height . $resize . $maxfs . $exts . $multi . $noWater . $readonly . $disabled . $auto . $local . ' data-value="' . $value . '"></div>';
 	}
 
 	public function getOptionForm() {

@@ -14,7 +14,7 @@
     </header>
     <section class="w-f scrollable">
         <div class="wrapper bg-white-only">
-            <div class="max-w-800">
+            <div class="max1000">
                 <form name="SettingForm" id="setting-form"
                       action="{'backend/setting/save'|app}/{$setting|escape}/{$group|escape}"
                       data-validate="{$rules|escape}" data-ajax method="post" role="form"
@@ -25,15 +25,15 @@
         </div>
     </section>
     <footer class="footer bg-light b-t lt">
-        <div class="row m-t-xs max-w-800">
-            <div class="col-md-offset-3 col-md-9">
-                <button class="btn btn-md btn-primary opt-save">保存</button>
+        <div class="row m-t-xs max1000">
+            <div class="col-md-offset-9 col-md-3">
                 <button class="btn btn-md btn-warning opt-reset">重置</button>
+                <button class="btn btn-md btn-primary opt-save">保存</button>
             </div>
         </div>
     </footer>
 </div>
-<script type="application/javascript">
+<script type="text/javascript">
     {if $script}
 	layui.extend({
 		'backend.setting': '{$script}'

@@ -10,19 +10,23 @@
 
 namespace backend\form;
 
+use media\classes\FtpUploader;
+use media\classes\ImageTool;
+use wulaphp\app\App;
 use wulaphp\io\LocaleUploader;
 
 trait Plupload {
 	/**
 	 * 保存通过Plupload上传的文件.
 	 *
-	 * @param string|null $dest      目标目录
-	 * @param int         $maxSize   最大上传体积
-	 * @param bool        $canUpload 是否可以上传
+	 * @param string|null           $dest      目标目录
+	 * @param int                   $maxSize   最大上传体积
+	 * @param bool                  $canUpload 是否可以上传
+	 * @param \wulaphp\io\IUploader $uploader  使用指定文件上传器.
 	 *
 	 * @return array
 	 */
-	protected final function upload($dest = null, $maxSize = 10000000, $canUpload = true) {
+	protected final function upload($dest = null, $maxSize = 10000000, $canUpload = true, $uploader = null) {
 		$rtn = ['jsonrpc' => '2.0', 'done' => 0];
 		if (!$canUpload) {
 			$rtn['error'] = ['code' => 422, 'message' => '无权限上传文件'];
@@ -33,6 +37,7 @@ trait Plupload {
 		$chunk     = irqst('chunk');
 		$chunks    = irqst('chunks');
 		$name      = rqst('name');
+		$hasWater  = !rqset('nowater');
 		$targetDir = TMP_PATH . "plupload";
 		if (!is_dir($targetDir)) {
 			@mkdir($targetDir, 0755, true);
@@ -195,27 +200,31 @@ trait Plupload {
 					return $rtn;
 				}
 				//添加水印
-				//$water = $this->watermark();
-				$uploader = self::getUploader();
+				if ($hasWater && ImageTool::isImage($filePath)) {
+					$water = $this->watermark();
+					if ($water) {
+						$img = new ImageTool($filePath);
+						$img->watermark($water, App::cfg('watermark_pos@media', 'br'), App::cfg('watermark_min_size@media'));
+					}
+				}
+				$uploader = $uploader ? $uploader : self::getUploader();
 				if ($uploader) {
-					$rst = $uploader->save($filePath, $dest);
+					try {
+						$rst = $uploader->save($filePath, $dest);
+					} catch (\Exception $e) {
+						$rst = false;
+					}
 					if ($rst) {
-						if (in_array(strtolower($filext), [
-								'.jpeg',
-								'.jpg',
-								'.gif',
-								'.png'
-							]) && ($imgData = @getimagesize($filePath))) {
+						if (ImageTool::isImage($filePath) && ($imgData = @getimagesize($filePath))) {
 							$rst['width']  = $imgData[0];
 							$rst['height'] = $imgData[1];
 						}
-						$rst['size']    = $fsize;
-						$rtn ['result'] = $rst;
-						$rtn['done']    = 1;
+						$rst['size']   = $fsize;
+						$rtn['result'] = $rst;
+						$rtn['done']   = 1;
 					} else {
 						$rtn['error'] = ['code' => 422, 'message' => $uploader->get_last_error()];
 					}
-
 				} else {
 					$rtn['error'] = ['code' => 422, 'message' => '未配置文件上传器'];
 				}
@@ -242,6 +251,18 @@ trait Plupload {
 	}
 
 	/**
+	 * 系统可用文件上传器.
+	 *
+	 * @return \wulaphp\io\IUploader[]
+	 */
+	public static function uploaders() {
+		$uploaders = ['file' => new LocaleUploader(), 'ftp' => new FtpUploader()];
+		$uploaders = apply_filter('media\regUploaders', $uploaders);
+
+		return $uploaders;
+	}
+
+	/**
 	 * 是否可以上传.
 	 *
 	 * @param string $ext 文件扩展名
@@ -249,14 +270,28 @@ trait Plupload {
 	 * @return bool
 	 */
 	protected function allowed($ext) {
-		return true;
+		$allowed = App::cfg('upload_type@media', 'jpg,gif,png,bmp,jpeg,zip,rar,7z,tar,gz,bz2,doc,docx,txt,ppt,pptx,xls,xlsx,pdf,mp3,avi,mp4,flv,swf,apk');
+		$allowed = explode(',', $allowed);
+
+		return in_array(ltrim($ext, '.'), $allowed);
 	}
 
 	/**
-	 *
-	 * @return null
+	 * 水印图片
+	 * @return string|null
 	 */
 	protected function watermark() {
+		$enable_watermark = App::bcfg('enable_watermark@media', false);
+		if ($enable_watermark) {
+			$watermark = App::cfg('watermark@media');
+			if ($watermark) {
+				$watermark = WWWROOT . $watermark;
+				if (is_file($watermark)) {
+					return $watermark;
+				}
+			}
+		}
+
 		return null;
 	}
 }

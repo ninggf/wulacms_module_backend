@@ -28,7 +28,11 @@ class RadioField extends FormField {
 		if ($data) {
 			$values = $this->value;
 			if (!$values) {
-				$values = [];
+				if (is_numeric($values)) {
+					$values = [0];
+				} else {
+					$values = [];
+				}
 			}
 			if ($values && !is_array($values)) {
 				$values = explode(',', $values);
