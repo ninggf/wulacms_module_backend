@@ -127,7 +127,7 @@ class CaptchaCode {
 	public function setCode($code) {
 		if (is_array($code)) {
 			if (!isset ($code ['characters']) || !is_string($code ['characters'])) {
-				$code ['characters'] = 'A-H,J-L,M-N,P-Y,2-9';
+				$code ['characters'] = 'A-H,K-N,P-R,U-Y,2-4,6-9';
 			}
 			if (!(is_numeric($code ['length']) || $code ['length'] <= 0)) {
 				$code ['length'] = 4;
@@ -139,7 +139,7 @@ class CaptchaCode {
 				$code ['multicolor'] = false;
 			}
 		} else {
-			$code = ['characters' => 'A-H,J-L,M-N,P-Y,2-9', 'length' => 4, 'deflect' => true, 'multicolor' => false];
+			$code = ['characters' => 'A-H,K-N,P-R,U-Y,2-4,6-9', 'length' => 4, 'deflect' => true, 'multicolor' => false];
 		}
 
 		$this->code = $code;
