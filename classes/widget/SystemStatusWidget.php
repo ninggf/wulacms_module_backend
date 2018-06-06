@@ -56,6 +56,14 @@ class SystemStatusWidget extends Widget {
 		RtCache::add('sw_test_d', 1);
 		$data['rtcache'] = RtCache::get('sw_test_d') ? 'text-success' : 'icon-muted';
 
+		if (defined('GZIP_ENABLED') && GZIP_ENABLED && extension_loaded("zlib")) {
+			$data['gzip'] = '启用';
+			$data['gzipstatus'] = 'text-success';
+		}else{
+			$data['gzip'] = '禁用';
+			$data['gzipstatus'] = 'text-muted';
+		}
+
 		$system         = App::getModuleById('system');
 		$data['system'] = $system->getCurrentVersion();
 

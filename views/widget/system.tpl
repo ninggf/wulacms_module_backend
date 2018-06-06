@@ -36,9 +36,13 @@
                 <small class="text-uc {$cstatus}">
                     Cache: {$cache}
                 </small>
-                <br>
+                <br/>
                 <small class="{$rstatus} text-uc">
                     Redis: {$redis}
+                </small>
+                <br/>
+                <small class="text-uc {$gzipstatus}">
+                    GZIP: {$gzip}
                 </small>
             </a>
         </div>

@@ -85,6 +85,12 @@
                         <span class="layui-nav-more"></span>
                     </a>
                     <dl class="layui-nav-child">
+                        <dd class="tab-menu">
+                            <a href="javascript:" data-url="{'system/account/profile'|app}" data-title="{'Profile'|t}">
+                                <i class="iconfont" data-icon="&#xe623;">&#xe623;</i>
+                                <span>{'Profile'|t}</span>
+                            </a>
+                        </dd>
                         {foreach $user as $um}
                             <dd class="{$navi.textCls}">
                                 <a href="javascript:" {$um.h5datas} data-title="{$um.name}" style="{$navi.textStyle}">
@@ -94,12 +100,6 @@
                                 </a>
                             </dd>
                         {/foreach}
-                        <dd class="tab-menu">
-                            <a href="javascript:" data-url="{'system/account/profile'|app}" data-title="{'Profile'|t}">
-                                <i class="iconfont" data-icon="&#xe623;">&#xe623;</i>
-                                <span>{'Profile'|t}</span>
-                            </a>
-                        </dd>
                         <dd>
                             <a href="{'backend/auth/signout'|app}">
                                 <i class="iconfont" style="color: red">&#xe64b; </i>
