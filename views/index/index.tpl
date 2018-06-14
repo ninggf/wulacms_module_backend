@@ -11,8 +11,8 @@
     <meta name="format-detection" content="telephone=no">
     {loaduicss jqadmin="jqadmin.css" theme='black/theme.css'}
 </head>
-<body style="opacity: 0">
-<div class="layui-layout layui-layout-admin">
+<body>
+<div class="layui-layout layui-layout-admin" style="opacity: 0">
     <div class="layui-header">
         <div class="jqadmin-auxiliary-btn">
             <i class="layui-icon">&#xe671;</i>
@@ -31,46 +31,46 @@
             <ul class="layui-nav clearfix" id="menu" lay-filter="main-menu">
                 {foreach $menu.menus as $navi}
                     {if $navi.child}
-                    <li class="layui-nav-item head-nav-item" id="navi-{$navi.id}">
-                        <a href="javascript:" {$navi.h5datas} class="{$navi.textCls}" style="{$navi.textStyle}"
-                           data-title="{$navi.name}">
-                            <i class="iconfont {$navi.iconCls}"
-                               style="{$navi.iconStyle}">{$navi.icon|default:'&#xe637;'}</i>
-                            <span>{$navi.name}</span>
-                        </a>
-                    </li>
-                    {capture append="submenus"}
-                        <ul class="layui-nav layui-nav-tree">
-                            {foreach $navi.child as $nna}
-                                <li class="layui-nav-item">
-                                    <a href="javascript:" {$nna.h5datas} data-title="{$nna.name}"
-                                       class="{$nna.textCls}" style="{$nna.textStyle}">
-                                        <i class="iconfont {$nna.iconCls}" style="{$nna.iconStyle}"
-                                           data-icon="{$nna.icon|default:'&#xe618;'}">{$nna.icon|default:'&#xe618;'}</i><span>{$nna.name}</span>
+                        <li class="layui-nav-item head-nav-item" id="navi-{$navi.id}">
+                            <a href="javascript:" {$navi.h5datas} class="{$navi.textCls}" style="{$navi.textStyle}"
+                               data-title="{$navi.name}">
+                                <i class="iconfont {$navi.iconCls}"
+                                   style="{$navi.iconStyle}">{$navi.icon|default:'&#xe637;'}</i>
+                                <span>{$navi.name}</span>
+                            </a>
+                        </li>
+                        {capture append="submenus"}
+                            <ul class="layui-nav layui-nav-tree" data-formenu="navi-{$navi.id}">
+                                {foreach $navi.child as $nna}
+                                    <li class="layui-nav-item">
+                                        <a href="javascript:" {$nna.h5datas} data-title="{$nna.name}"
+                                           class="{$nna.textCls}" style="{$nna.textStyle}">
+                                            <i class="iconfont {$nna.iconCls}" style="{$nna.iconStyle}"
+                                               data-icon="{$nna.icon|default:'&#xe618;'}">{$nna.icon|default:'&#xe618;'}</i><span>{$nna.name}</span>
+                                            {if $nna.child}
+                                                <em class="layui-nav-more"></em>
+                                            {elseif $nna.badge}
+                                                <span class="layui-badge-dot"></span>
+                                            {/if}
+                                        </a>
                                         {if $nna.child}
-                                            <em class="layui-nav-more"></em>
-                                        {elseif $nna.badge}
-                                            <span class="layui-badge-dot"></span>
+                                            <dl class="layui-nav-child">
+                                                {foreach $nna.child as $ncd}
+                                                    <dd>
+                                                        <a href="javascript:" {$ncd.h5datas} class="{$ncd.textCls}"
+                                                           style="{$ncd.textStyle}" data-title="{$ncd.name}">
+                                                            <i class="iconfont {$ncd.iconCls}" style="{$ncd.iconStyle}"
+                                                               data-icon="{$ncd.icon|default:'&#xe618;'}">{$ncd.icon|default:'&#xe618;'}</i>
+                                                            <span>{$ncd.name}</span>
+                                                        </a>
+                                                    </dd>
+                                                {/foreach}
+                                            </dl>
                                         {/if}
-                                    </a>
-                                    {if $nna.child}
-                                        <dl class="layui-nav-child">
-                                            {foreach $nna.child as $ncd}
-                                                <dd>
-                                                    <a href="javascript:" {$ncd.h5datas} class="{$ncd.textCls}"
-                                                       style="{$ncd.textStyle}" data-title="{$ncd.name}">
-                                                        <i class="iconfont {$ncd.iconCls}" style="{$ncd.iconStyle}"
-                                                           data-icon="{$ncd.icon|default:'&#xe618;'}">{$ncd.icon|default:'&#xe618;'}</i>
-                                                        <span>{$ncd.name}</span>
-                                                    </a>
-                                                </dd>
-                                            {/foreach}
-                                        </dl>
-                                    {/if}
-                                </li>
-                            {/foreach}
-                        </ul>
-                    {/capture}
+                                    </li>
+                                {/foreach}
+                            </ul>
+                        {/capture}
                     {/if}
                 {/foreach}
             </ul>
@@ -132,9 +132,9 @@
         <div class="layui-tab layui-tab-card jqadmin-tab-box" id="jqadmin-tab" lay-filter="tabmenu" lay-notAuto="true">
             <div class="menu-type"><i class="iconfont">&#xe61a;</i></div>
             <ul class="layui-tab-title">
-                <li class="layui-this" id="admin-home" lay-id="0">
+                <li class="layui-this" id="admin-home" lay-id="0" style="min-width:0">
                     <i class="iconfont">&#xe622;</i>
-                    <em data-href="{'backend/home'|app}">{'Dashboard'|t}</em>
+                    <em data-href="{'backend/home'|app}" style="margin-left: 0"></em>
                 </li>
             </ul>
             <div class="tab-move-btn">
@@ -145,13 +145,6 @@
                     <iframe class="jqadmin-iframe" data-id="0"></iframe>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- 底部区域 -->
-    <div class="layui-footer jqadmin-foot">
-        <div class="layui-mian">
-            <p class="jqadmin-copyright">基于<a href="https://www.wulaphp.com" target="_blank">wulaphp</a>的<a
-                        target="_blank" href="https://www.wulacms.com">wulacms</a>强力驱动. </p>
         </div>
     </div>
 </div>
@@ -168,22 +161,21 @@
     </script>
 {/literal}
 {initjq config=1}
-<script>
+<script type="text/javascript">
 	layui.use(['jquery', 'jqmenu', 'layer', 'toastr'], function ($, menu, layer, toast) {
-		var mainMenu               = new menu(),
-			jqIndex                = function () {
+		var mainMenu              = new menu(),
+			jqIndex               = function () {
 			};
-		top.global                 = {
+		top.global                = {
 			menu : mainMenu,
 			toast: toast,
 			layer: layer
 		};
-		jqIndex.prototype.init     = function () {
+		jqIndex.prototype.init    = function () {
 			mainMenu.init();
-			this.showMenu();
 			this.refresh();
 		};
-		jqIndex.prototype.refresh  = function () {
+		jqIndex.prototype.refresh = function () {
 			$('.fresh-btn').bind("click", function () {
 				var iframe = $('.jqadmin-body .layui-show').children('iframe');
 				iframe.animate({
@@ -191,29 +183,21 @@
 				}, 50, function () {
 					iframe[0].contentWindow.location.reload(true);
 				});
-			})
-		};
-		jqIndex.prototype.showMenu = function () {
+			});
 			$('.menu-type').bind("click", function () {
-				if (window.localStorage) {
-					var storage  = window.localStorage;
-					var showType = storage.getItem("showType");
-					showType     = (showType == 1) ? 2 : 1;
-					storage.setItem("showType", showType);
-				}
 				mainMenu.menuShowType();
-			})
+			});
 		};
-		window.updateUsername      = function (name) {
+		window.updateUsername     = function (name) {
 			$('#username').text(name);
 		};
-		window.updateAvatar        = function (avatar) {
+		window.updateAvatar       = function (avatar) {
 			$('#my-avatar').attr('src', avatar);
 		};
 		(new jqIndex()).init();
-		$('body').animate({
+		$('.layui-layout-admin').animate({
 			opacity: 1
-		}, 600)
+		}, 500);
 	})
 </script>
 </body>
