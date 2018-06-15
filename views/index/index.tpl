@@ -162,6 +162,7 @@
 {/literal}
 {initjq config=1}
 <script type="text/javascript">
+    {minify type='js'}
 	layui.use(['jquery', 'jqmenu', 'layer', 'toastr'], function ($, menu, layer, toast) {
 		var mainMenu              = new menu(),
 			jqIndex               = function () {
@@ -177,11 +178,22 @@
 		};
 		jqIndex.prototype.refresh = function () {
 			$('.fresh-btn').bind("click", function () {
-				var iframe = $('.jqadmin-body .layui-show').children('iframe');
+				var iframe = $('.jqadmin-body .layui-show').children('iframe'), l;
+				l          = layer.load(2);
 				iframe.animate({
 					opacity: 0, marginTop: "50px"
 				}, 50, function () {
 					iframe[0].contentWindow.location.reload(true);
+				}).load(function () {
+					$(this).animate({
+						opacity: '1', marginTop: "0"
+					}, 50);
+					layer.close(l);
+				}).error(function () {
+					$(this).animate({
+						opacity: '1', marginTop: "0"
+					}, 50);
+					layer.close(l);
 				});
 			});
 			$('.menu-type').bind("click", function () {
@@ -197,8 +209,9 @@
 		(new jqIndex()).init();
 		$('.layui-layout-admin').animate({
 			opacity: 1
-		}, 500);
+		}, 200);
 	})
+    {/minify}
 </script>
 </body>
 </html>
