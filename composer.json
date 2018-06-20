@@ -3,9 +3,7 @@
   "description": "wualcms管理后台界面",
   "type": "wula-module",
   "require": {
-	"wula/wula-installer": "^2.0",
-	"wula/jqadmin": "^2.0",
-	"wula/wulaphp": "^2.0"
+	"wula/wula-installer": "^2.0"
   },
   "license": "MIT",
   "authors": [
