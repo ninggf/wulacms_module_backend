@@ -10,6 +10,7 @@
 
 namespace backend\classes;
 
+use backend\classes\widget\CacheWidget;
 use backend\classes\widget\SystemStatusWidget;
 use backend\classes\widget\WelcomeWidget;
 use wulaphp\app\App;
@@ -43,6 +44,7 @@ abstract class Widget implements Renderable {
 	public static function widgets() {
 		Widget::register('welcome', new WelcomeWidget());
 		Widget::register('system', new SystemStatusWidget());
+		Widget::register('cache', new CacheWidget());
 
 		return self::$WIDGETS;
 	}

@@ -347,4 +347,24 @@ class IndexController extends BackendController {
 
 		return Ajax::reload('document', '布局已重置');
 	}
+
+	public function clear($cc = null) {
+		if ($cc && is_array($cc)) {
+			foreach ($cc as $c) {
+				if ($c == 'mtpl') {
+					rmdirs(TMP_PATH . 'tpls_c');
+				} else if ($c == 'ttpl') {
+					rmdirs(TMP_PATH . 'themes_c');
+				} else {
+					try {
+						fire('clear_' . $c . '_cache');
+					} catch (\Exception $e) {
+
+					}
+				}
+			}
+		}
+
+		return Ajax::success("所选缓存已清空");
+	}
 }
