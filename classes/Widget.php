@@ -30,11 +30,11 @@ abstract class Widget implements Renderable {
 	/**
 	 * 注册一个小部件.
 	 *
-	 * @param string                  $name
+	 * @param string                  $id
 	 * @param \backend\classes\Widget $widget
 	 */
-	public static function register($name, Widget $widget) {
-		self::$WIDGETS[ $name ] = $widget;
+	public static function register($id, Widget $widget) {
+		self::$WIDGETS[ $id ] = $widget;
 	}
 
 	/**
@@ -42,9 +42,12 @@ abstract class Widget implements Renderable {
 	 * @return array id/widget
 	 */
 	public static function widgets() {
-		Widget::register('welcome', new WelcomeWidget());
-		Widget::register('system', new SystemStatusWidget());
-		Widget::register('cache', new CacheWidget());
+		if (empty(self::$WIDGETS)) {
+			Widget::register('welcome', new WelcomeWidget());
+			Widget::register('system', new SystemStatusWidget());
+			Widget::register('cache', new CacheWidget());
+			fire('on_register_widget');
+		}
 
 		return self::$WIDGETS;
 	}
@@ -65,6 +68,7 @@ abstract class Widget implements Renderable {
 	 * @param array  $data
 	 *
 	 * @return string
+	 * @throws
 	 */
 	public function load($tpl, $data = []) {
 		$tpl    = explode('/', $tpl);
