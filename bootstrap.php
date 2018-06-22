@@ -86,10 +86,10 @@ class BackendModule extends CmfModule {
 
 	public function getVersionList() {
 		$v['1.0.0'] = '管理后台的第一个版本';
+		$v['2.0.0'] = '不再支持 php 5.6.x版本';
 
 		return $v;
 	}
-
 }
 
 function get_system_settings() {

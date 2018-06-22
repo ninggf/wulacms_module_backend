@@ -23,7 +23,7 @@
 				var cls = $('#qcls').val().trim();
 				if (cls) {
 					cls           = cls.replace(/\\/g, '.');
-					location.href = "{'backend/doc/'|app}" + cls;
+					location.href = "{'backend/doc'|app}/" + cls;
 				} else {
 					wui.toast.warning('请填写类名')
 				}
