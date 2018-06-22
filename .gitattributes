@@ -1,2 +1,4 @@
 tests/ export-ignore
 phpunit.xml export-ignore
+
+composer.json merge=ours
