@@ -16,7 +16,7 @@
         <div class="wrapper bg-white-only">
             <div class="max1000">
                 <form name="SettingForm" id="setting-form"
-                      action="{'backend/setting/save'|app}/{$setting|escape}/{$group|escape}"
+                      action="{'backend/setting/save'|app}/{$setting|escape}/{$group|escape|default:0}"
                       data-validate="{$rules|escape}" data-ajax method="post" role="form"
                       class="form-horizontal {if $script}hidden{/if}" data-loading>
                     {$form|render}

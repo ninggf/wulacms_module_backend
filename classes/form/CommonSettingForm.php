@@ -17,6 +17,12 @@ class CommonSettingForm extends FormTable {
 	use JQueryValidator;
 	public $table = null;
 	/**
+	 * 应用名称
+	 * @var \backend\form\TextField
+	 * @type string
+	 */
+	public $brandName;
+	/**
 	 * 网站名称
 	 * @var \backend\form\TextField
 	 * @type string
@@ -49,7 +55,7 @@ class CommonSettingForm extends FormTable {
 	 * 系统离线时允许以下IP访问
 	 * @var \backend\form\TextareaField
 	 * @type string
-	 * @option {"row":10}
+	 * @option {"row":5}
 	 * @note   一行一个IP。
 	 */
 	public $allowedIps;
