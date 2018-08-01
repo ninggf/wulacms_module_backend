@@ -113,3 +113,31 @@ __参数:__
 __参数:__
 
 * $settings `array` key 为配置`setting`,value为Setting类的子类的实例.
+
+## 配置文件
+
+默认的配置文件`conf/config.php`:
+
+```php
+    return [
+    	'debug'     => env('debug', DEBUG_WARN),
+    	'domain'    => env('domain', ''),
+    	'name'      => env('name', '网站名称'),
+    	'brandName' => '网站品牌名',
+    	'resource'  => [
+    		'combinate' => env('resource.combinate', 1),
+    		'minify'    => env('resource.minify', 1)
+    	],
+    	'language'   => 'zh-CN'
+    ];
+```
+
+> 说明:
+>
+> * `debug` 调试级别，默认WARN
+> * `domain` 管理域名,一旦配置只能通过此域名访问管理后台
+> * `name` 网站名称
+> * `brandName` 品牌名，显示在管理后台的左上角
+> * `resource.combinate` 是否合并`combinate`区块中的JS，CSS文件
+> * `resource.minify` 是否压缩`minify`区块里的JS，CSS文件
+> * `language` 系统默认语言,默认为空，由浏览器的语言决定.

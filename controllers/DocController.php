@@ -137,6 +137,10 @@ class DocController extends IFramePageController {
 		return $this->render($data);
 	}
 
+	public function icon() {
+		return $this->render();
+	}
+
 	private function getDefaultValue($value) {
 		if ($value === null) {
 			return 'null';

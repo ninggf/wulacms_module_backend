@@ -85,15 +85,15 @@ abstract class Setting {
 	public abstract function getName();
 
 	public function getIcon() {
-		return '&#xe614;';
+		return '&#xe640;';
 	}
 
 	public function getIconCls() {
-		return 'layui-icon';
+		return 'alicon';
 	}
 
 	public function getIconStyle() {
-		return '';
+		return 'color:orange';
 	}
 
 	public function getURL() {

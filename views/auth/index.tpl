@@ -44,8 +44,8 @@
             </div>
             <div class="layui-row">
                 <div class="col-xs-12 clearfix for-btn">
-                    <a href="#" class="btn btn-link reset-password">
-                        <i class="layui-icon" aria-hidden="true">&#xe69c;</i> 忘记密码？
+                    <a href="https://www.wulacms.com/" target="_blank" class="btn btn-link reset-password">
+                        <i class="layui-icon" style="color:red" aria-hidden="true">&#xe756;</i> {'Powered by WulaCMS v%s'|t:$version}
                     </a>
                 </div>
             </div>

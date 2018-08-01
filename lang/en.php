@@ -8,5 +8,5 @@
  * file that was distributed with this source code.
  */
 return [
-	'Welcome back, ' => 'Wellcome back, %s'
+	'Welcome back, ' => 'Wellcome back, %s',
 ];

@@ -16,6 +16,8 @@ return [
 	'Shortcuts'                   => '快捷方式',
 	'Install'                     => '安装',
 	'Welcome back, '              => '欢迎回来，%s',
+	'Icons'                       => '图标',
+	'Powered by WulaCMS v%s'      => '由WulaCMS v%s驱动',
 	'@form'                       => [
 		'Text'              => '文本框',
 		'Checkbox'          => '开关组件',

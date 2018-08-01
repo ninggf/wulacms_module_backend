@@ -27,13 +27,16 @@ class IndexController extends BackendController {
 		$ui = new DashboardUI();
 		if ($this->passport->cando('m:system')) {
 			$system            = $ui->getMenu('system', __('System'), 999999);
-			$system->icon      = '&#xe696;';
+			$system->icon      = '&#xe607;';
+			$system->iconCls   = 'alicon';
 			$system->iconStyle = "color:orange";
 			// 设置
 			if ($this->passport->cando('m:system/setting')) {
-				$setting       = $system->getMenu('setting', __('Settings'), 999900);
-				$setting->icon = '&#xe689;';
-				$setting->url  = App::url('backend/setting');
+				$setting            = $system->getMenu('setting', __('Settings'), 999900);
+				$setting->icon      = '&#xe640;';
+				$setting->iconCls   = 'alicon';
+				$setting->iconStyle = 'color:orange';
+				$setting->url       = App::url('backend/setting');
 				//通知其它模块提供配置
 				$settings = get_system_settings();
 				if ($settings) {
@@ -58,7 +61,13 @@ class IndexController extends BackendController {
 			if ($this->passport->is('开发人员')) {
 				$doc              = $system->getMenu('helpdoc', __('Documents'), 999999);
 				$doc->data['url'] = App::url('backend/doc');
-				$doc->icon        = '&#xe6bc;';
+				$doc->icon        = '&#xe705;';
+				$doc->iconCls     = 'layui-icon';
+				$doc              = $system->getMenu('hicon', __('Icons'), 1999999);
+				$doc->data['url'] = App::url('backend/doc/icon');
+				$doc->iconCls     = 'layui-icon';
+				$doc->iconStyle   = 'color:green';
+				$doc->icon        = '&#xe62e;';
 			}
 		}
 		fire('dashboard\initUI', $ui);
