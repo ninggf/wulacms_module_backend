@@ -13,6 +13,9 @@
                 <label class="checkbox-inline">
                     <input type="checkbox" name="cc[]" value="idxc"> 首页缓存
                 </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="cc[]" value="rt"> 运行缓存
+                </label>
             </div>
         </div>
         <p>

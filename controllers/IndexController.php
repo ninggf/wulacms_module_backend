@@ -17,6 +17,7 @@ use backend\classes\WidgetSettingForm;
 use backend\form\BootstrapFormRender;
 use system\model\UserMetaModel;
 use wulaphp\app\App;
+use wulaphp\cache\RtCache;
 use wulaphp\io\Ajax;
 use wulaphp\util\ArrayCompare;
 use function backend\get_system_settings;
@@ -364,6 +365,8 @@ class IndexController extends BackendController {
 					rmdirs(TMP_PATH . 'tpls_c');
 				} else if ($c == 'ttpl') {
 					rmdirs(TMP_PATH . 'themes_c');
+				} else if ($c == 'rt') {
+					RtCache::clear();
 				} else {
 					try {
 						fire('clear_' . $c . '_cache');

@@ -314,7 +314,31 @@
             <div class="name">下载</div>
             <div class="code">&amp;#xe614;</div>
         </li>
-
+        <li>
+            <i class="icon alicon">&#xe60d;</i>
+            <div class="name">充值</div>
+            <div class="code">&amp;#xe60d;</div>
+        </li>
+        <li>
+            <i class="icon alicon">&#xe627;</i>
+            <div class="name">提现</div>
+            <div class="code">&amp;#xe627;</div>
+        </li>
+        <li>
+            <i class="icon alicon">&#xe6ac;</i>
+            <div class="name">收入</div>
+            <div class="code">&amp;#xe6ac;</div>
+        </li>
+        <li>
+            <i class="icon alicon">&#xe76a;</i>
+            <div class="name">兑换</div>
+            <div class="code">&amp;#xe76a;</div>
+        </li>
+        <li>
+            <i class="icon alicon">&#xe6ad;</i>
+            <div class="name">支出</div>
+            <div class="code">&amp;#xe6ad;</div>
+        </li>
         <li>
             <i class="icon alicon">&#xe645;</i>
             <div class="name">接入</div>

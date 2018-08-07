@@ -17,12 +17,6 @@ class CommonSettingForm extends FormTable {
 	use JQueryValidator;
 	public $table = null;
 	/**
-	 * 应用名称
-	 * @var \backend\form\TextField
-	 * @type string
-	 */
-	public $brandName;
-	/**
 	 * 网站名称
 	 * @var \backend\form\TextField
 	 * @type string
