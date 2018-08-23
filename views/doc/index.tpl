@@ -31,7 +31,7 @@
         </div>
     </aside>
     <script type="text/javascript">
-		layui.link("{'wula/jqadmin/css/md.min.css'|vendor}").use(['jquery', 'highlight'], function ($) {
+		layui.link("{'jqadmin/css/md.min.css'|vendor}").use(['jquery', 'highlight'], function ($) {
 			$('#dashboard-doc .markdown-body pre code').each(function (i, code) {
 				hljs.highlightBlock(code);
 			});

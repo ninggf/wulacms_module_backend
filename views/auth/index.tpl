@@ -3,7 +3,7 @@
 <head>
     <script> if (top !== self) top.location = self.location; </script>
     <meta charset="UTF-8">
-    <title>{'Login'|t} - {'wulacms'|t:$version}</title>
+    <title>{'Login'|t} - {$website.name} - {'Powered by WulaCMS v%s'|t:$version}</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -11,6 +11,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     {loaduicss j="jqadmin.css" l='login.css'}
+    {if $website.brandImg}
+        <style type="text/css">
+            .banner > .logo {
+                background-image: url("{$website.brandImg|media}")
+            }
+        </style>
+    {/if}
 </head>
 <body>
 <div class="banner containter">
@@ -45,7 +52,8 @@
             <div class="layui-row">
                 <div class="col-xs-12 clearfix for-btn">
                     <a href="https://www.wulacms.com/" target="_blank" class="btn btn-link reset-password">
-                        <i class="layui-icon" style="color:red" aria-hidden="true">&#xe756;</i> {'Powered by WulaCMS v%s'|t:$version}
+                        <i class="layui-icon" style="color:red"
+                           aria-hidden="true">&#xe756;</i> {'Powered by WulaCMS v%s'|t:$version}
                     </a>
                 </div>
             </div>
@@ -54,24 +62,26 @@
 </div>
 {initjq config=1}
 <script type="text/javascript">
-	layui.use(['jquery', 'layer', 'wulaui'], function ($, layer) {
-		$('#login-form').on('ajax.before', function () {
-			var username = $('input[name=username]'), uv = username.val();
-			if (!uv) {
-				layer.tips('请填写你的用户名', username, {
-					tips: 1
-				});
-				return false;
-			}
-			var passwd = $('input[name=passwd]'), pv = passwd.val();
-			if (!pv) {
-				layer.tips('请填写你的密码', passwd, {
-					tips: 1
-				});
-				return false;
-			}
-		});
-	});
+    {minify 'js'}
+    layui.use(['jquery', 'layer', 'wulaui'], function ($, layer) {
+        $('#login-form').on('ajax.before', function () {
+            var username = $('input[name=username]'), uv = username.val();
+            if (!uv) {
+                layer.tips('请填写你的用户名', username, {
+                    tips: 1
+                });
+                return false;
+            }
+            var passwd = $('input[name=passwd]'), pv = passwd.val();
+            if (!pv) {
+                layer.tips('请填写你的密码', passwd, {
+                    tips: 1
+                });
+                return false;
+            }
+        });
+    });
+    {/minify}
 </script>
 </body>
 </html>
