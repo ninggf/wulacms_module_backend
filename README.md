@@ -114,6 +114,22 @@ __参数:__
 
 * $settings `array` key 为配置`setting`,value为Setting类的子类的实例.
 
+### 3. backend\auth\loginTpl($tpl='')
+
+获取登录模板时触发，如果你需要自己的有个性的后台登录页面，请返回你的模板：
+
+```php
+bind('backend\auth\loginTpl',function($tpl){ 
+
+    $tpl = '~mymodule/views/login.tpl';
+    
+    return $tpl;
+});
+```
+__参数:__
+
+* $tpl `string` 登录页面模板，注意，要以`~`开头哦（因为你的登录模板文件肯定不在backend模块里）。
+
 ## 配置文件
 
 默认的配置文件`conf/config.php`:
@@ -124,6 +140,7 @@ __参数:__
     	'domain'    => env('domain', ''),
     	'name'      => env('name', '网站名称'),
     	'brandName' => '网站品牌名',
+    	'brandImg'  => '',
     	'resource'  => [
     		'combinate' => env('resource.combinate', 1),
     		'minify'    => env('resource.minify', 1)
@@ -138,6 +155,7 @@ __参数:__
 > * `domain` 管理域名,一旦配置只能通过此域名访问管理后台
 > * `name` 网站名称
 > * `brandName` 品牌名，显示在管理后台的左上角
+> * `brandImg` 品牌图片，显示在登录页
 > * `resource.combinate` 是否合并`combinate`区块中的JS，CSS文件
 > * `resource.minify` 是否压缩`minify`区块里的JS，CSS文件
 > * `language` 系统默认语言,默认为空，由浏览器的语言决定.
