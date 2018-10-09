@@ -14,21 +14,28 @@ use wulaphp\form\FormTable;
 use wulaphp\validator\JQueryValidator;
 
 class WidgetSettingForm extends FormTable {
-	use JQueryValidator;
-	public $table = null;
-	/**
-	 * 小部件标题
-	 * @var \backend\form\TextField
-	 * @type string
-	 * @required
-	 */
-	public $name;
-	/**
-	 * 宽度(1-12)
-	 * @var \backend\form\TextField
-	 * @type int
-	 * @required
-	 * @digits
-	 */
-	public $width;
+    use JQueryValidator;
+    public $table = null;
+    /**
+     * 小部件标题
+     * @var \backend\form\TextField
+     * @type string
+     * @required
+     */
+    public $name;
+    /**
+     * 宽度(1-12)
+     * @var \backend\form\TextField
+     * @type int
+     * @required
+     * @digits
+     */
+    public $width;
+
+    /**
+     * @param array $data
+     */
+    public function saveCfg($data) {
+
+    }
 }
