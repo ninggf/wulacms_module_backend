@@ -147,7 +147,7 @@ class BootstrapFormRender extends FormRender {
 						if (isset($field['label']) && $field['label']) {
 							$chunk[] = '<label class="control-label ' . $this->options['label-col'] . '">' . $field['label'] . '</label>';
 						} else {
-							$chunk[] = '<label class="control-label ' . $this->options['label-col'] . '">&nbsp;</label>';
+							$chunk[] = '<label style="height:0" class="control-label ' . $this->options['label-col'] . '">&nbsp;</label>';
 						}
 						$chunk[] = '<div class="' . $this->options['field-col'] . '">';//2
 						$chunk[] = '<div class="row">';
@@ -191,7 +191,7 @@ class BootstrapFormRender extends FormRender {
 						if (isset($field['label']) && !$checkbox) {
 							$chunk[] = '<label class="control-label ' . $this->options['label-col'] . '">' . $field['label'] . '</label>';
 						} else {
-							$chunk[] = '<label class="control-label ' . $this->options['label-col'] . '">&nbsp;</label>';
+							$chunk[] = '<label style="height:0"  class="control-label ' . $this->options['label-col'] . '">&nbsp;</label>';
 						}
 						$chunk[] = '<div class="' . $this->options['field-col'] . '">';//2
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>{$website.name} - {'wulacms'|t:$version}</title>
@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    {loaduicss jqadmin="jqadmin.css" theme='black/theme.css'}
+    {loaduicss jqadmin="jqadmin.css" theme="$theme/theme.css"}
 </head>
 <body>
 <div class="layui-layout layui-layout-admin" style="opacity: 0">
@@ -24,6 +24,9 @@
                     W<b class="text-danger">u</b>l<b class="text-success">a</b>C<b class="text-info">M</b>S{/if}<sup
                             style="color: red">&hearts;</sup><sub>{$version}</sub>
                 </h1>
+            </a>
+            <a class="img-logo" title="{if $brandName}{$brandName|escape}{else}WulaCMS{/if} v{$version}">
+                <img src="{'jqadmin/images/wula.png'|assets}">
             </a>
         </div>
         <!-- 主菜单区域 -->
@@ -78,11 +81,15 @@
         <!-- 头部右侧导航 -->
         <div class="header-right">
             <ul class="layui-nav jqadmin-header-item right-menu cloneDom">
-                <li class="layui-nav-item first cloneDom">
+                <li class="layui-nav-item layui-hide-xs first cloneDom" id="theme-picker">
+                    <a href="javascript:">
+                        <i class="layui-icon layui-icon-theme"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item cloneDom">
                     <a href="javascript:">
                         <img id="my-avatar" src="{$myPassport->avatar|media}" class="layui-nav-img"/>
                         <cite id="username">{$myPassport.nickname}</cite>
-                        <span class="layui-nav-more"></span>
                     </a>
                     <dl class="layui-nav-child">
                         <dd class="tab-menu">
@@ -102,7 +109,7 @@
                         {/foreach}
                         <dd>
                             <a href="{'backend/auth/signout'|app}">
-                                <i class="iconfont" style="color: red">&#xe64b; </i>
+                                <i class="iconfont" style="color: red">&#xe64b;</i>
                                 <span>{'Logout'|t}</span>
                             </a>
                         </dd>
@@ -115,7 +122,7 @@
         </div>
     </div>
     <!-- 左侧导航-->
-    <div class="layui-side layui-bg-black jqamdin-left-bar">
+    <div class="layui-side jqamdin-left-bar">
         <div class="layui-side-scroll">
             <div id="submenu">
                 {foreach $submenus as $sm}
@@ -153,64 +160,105 @@
     <script id="menu-list-tpl" type="text/html">
         {{# layui.each(d.list, function(index, item){ }}
         <li>
-            <a href="javascript:;" data-url="{{item.href}}" data-title="{{item.title}}">
+            <a href="javascript:" data-url="{{item.href}}" data-title="{{item.title}}">
                 <i class="{{item.cls}}" data-icon='{{item.icon}}'>{{item.icon}}</i>
                 <span>{{item.title}}</span>
             </a>
         </li>{{# }); }}
     </script>
+    <script id="theme-list-tpl" type="text/html">
+        <div class="layui-card-header"> 主题选择</div>
+        <div class="layui-card-body">
+            <ul class="theme-list">
+                {{# layui.each(d.themes, function(index, t){ }}
+                <li class="theme {{# if (d.theme == t.name){ }} layui-this {{# } }}" data-theme="{{t.name}}">
+                    <div class="lyt-h" style="background-color: {{t.header}}"></div>
+                    <div class="lyt-s" style="background-color: {{t.sidebar}}">
+                        <div class="lyt-l" style="background-color: {{t.logo}}"></div>
+                    </div>
+                </li>
+                {{# }); }}
+            </ul>
+        </div>
+    </script>
 {/literal}
+
 {initjq config=1}
 <script type="text/javascript">
     {minify type='js'}
-	layui.use(['jquery', 'jqmenu', 'layer', 'toastr'], function ($, menu, layer, toast) {
-		var mainMenu              = new menu(),
-			jqIndex               = function () {
-			};
-		top.global                = {
-			menu : mainMenu,
-			toast: toast,
-			layer: layer
-		};
-		jqIndex.prototype.init    = function () {
-			mainMenu.init();
-			this.refresh();
-		};
-		jqIndex.prototype.refresh = function () {
-			$('.fresh-btn').bind("click", function () {
-				var iframe = $('.jqadmin-body .layui-show').children('iframe'), l;
-				l          = layer.load(2);
-				iframe.animate({
-					opacity: 0, marginTop: "50px"
-				}, 50, function () {
-					iframe[0].contentWindow.location.reload(true);
-				}).load(function () {
-					$(this).animate({
-						opacity: '1', marginTop: "0"
-					}, 50);
-					layer.close(l);
-				}).error(function () {
-					$(this).animate({
-						opacity: '1', marginTop: "0"
-					}, 50);
-					layer.close(l);
-				});
-			});
-			$('.menu-type').bind("click", function () {
-				mainMenu.menuShowType();
-			});
-		};
-		window.updateUsername     = function (name) {
-			$('#username').text(name);
-		};
-		window.updateAvatar       = function (avatar) {
-			$('#my-avatar').attr('src', avatar);
-		};
-		(new jqIndex()).init();
-		$('.layui-layout-admin').animate({
-			opacity: 1
-		}, 200);
-	})
+    layui.use(['jquery', 'jqmenu', 'layer', 'toastr', 'laytpl'], function ($, menu, layer, toast, tpl) {
+        var mainMenu              = new menu(),
+            jqIndex               = function () {
+            };
+        top.global                = {
+            menu : mainMenu,
+            toast: toast,
+            layer: layer
+        };
+        jqIndex.prototype.init    = function () {
+            mainMenu.init();
+            this.refresh();
+        };
+        jqIndex.prototype.refresh = function () {
+            $('.fresh-btn').bind("click", function () {
+                var iframe = $('.jqadmin-body .layui-show').children('iframe'), l;
+                l          = layer.load(2);
+                iframe.animate({
+                    opacity: 0, marginTop: "50px"
+                }, 50, function () {
+                    iframe[0].contentWindow.location.reload(true);
+                }).load(function () {
+                    $(this).animate({
+                        opacity: '1', marginTop: "0"
+                    }, 50);
+                    layer.close(l);
+                }).error(function () {
+                    $(this).animate({
+                        opacity: '1', marginTop: "0"
+                    }, 50);
+                    layer.close(l);
+                });
+            });
+            $('.menu-type').bind("click", function () {
+                mainMenu.menuShowType();
+            });
+        };
+        window.updateUsername     = function (name) {
+            $('#username').text(name);
+        };
+        window.updateAvatar       = function (avatar) {
+            $('#my-avatar').attr('src', avatar);
+        };
+        (new jqIndex()).init();
+        $('.layui-layout-admin').animate({
+            opacity: 1
+        }, 200);
+
+        $('#theme-picker').on('click', 'a', function () {
+            tpl($('#theme-list-tpl').html()).render({
+                themes: {$themes},
+                theme : '{$theme}'
+            }, function (cnt) {
+                layer.open({
+                    type      : 1,
+                    title     : null,
+                    btn       : null,
+                    closeBtn  : 0,
+                    anim      : -1,
+                    area      : ['310px', ($(window).height() - 54) + 'px'],
+                    shadeClose: true,
+                    offset    : 'rb',
+                    content   : cnt
+                });
+            });
+            return false;
+        });
+        $('body').on('click', '.theme-list .theme', function () {
+            var theme       = $(this).data('theme');
+            document.cookie = "theme=" + theme + "; path=/";
+            location.reload();
+        });
+    });
     {/minify}
 </script>
 </body>

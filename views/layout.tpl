@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="app">
+<html class="{$htmlCls}">
 <head>
     <meta charset="UTF-8">
     <title>{$title}</title>

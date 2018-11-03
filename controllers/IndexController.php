@@ -92,6 +92,42 @@ class IndexController extends BackendController {
 
         $data['website']['name'] = App::cfg('name', 'Hello WulaCms');
         $data['brandName']       = App::cfg('brandName');
+        $theme                   = $_COOKIE['theme'] ?? 'blue';
+        if (!$theme) {
+            $theme = 'blue';
+        }
+        $data['theme']  = $theme;
+        $themes[]       = [
+            'name'    => 'blue',
+            'header'  => '#FFF',
+            'sidebar' => '#20222A',
+            'logo'    => '#1E9FFF'
+        ];
+        $themes[]       = [
+            'name'    => 'orange',
+            'header'  => '#FFF',
+            'sidebar' => '#20222A',
+            'logo'    => '#F78400'
+        ];
+        $themes[]       = [
+            'name'    => 'fred',
+            'header'  => '#FFF',
+            'sidebar' => '#28333E',
+            'logo'    => '#AA3130'
+        ];
+        $themes[]       = [
+            'name'    => 'black',
+            'header'  => '#23262E',
+            'sidebar' => '#23262E',
+            'logo'    => '#23262E'
+        ];
+        $themes[]       = [
+            'name'    => 'cblk',
+            'header'  => '#393D49',
+            'sidebar' => '#20222A',
+            'logo'    => '#20222A'
+        ];
+        $data['themes'] = json_encode($themes);
 
         return view($data);
     }
@@ -140,7 +176,6 @@ class IndexController extends BackendController {
         $data['alias']   = implode(',', $alias);
         $data['init']    = implode(';', $init);
         $data['modules'] = json_encode($modules);
-        $data['bodyCls'] = 'bg-light';
 
         return view('layout', $data);
     }
