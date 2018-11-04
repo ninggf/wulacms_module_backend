@@ -127,7 +127,47 @@ class IndexController extends BackendController {
             'sidebar' => '#20222A',
             'logo'    => '#20222A'
         ];
+        $themes[]       = [
+            'name'    => 'bbw',
+            'header'  => '#20222A',
+            'sidebar' => '#FFF',
+            'logo'    => '#20222A'
+        ];
+        $themes[]       = [
+            'name'    => 'bgw',
+            'header'  => '#20222A',
+            'sidebar' => '#FFF',
+            'logo'    => '#1E9FFF'
+        ];
+        $themes[]       = [
+            'name'    => 'obw',
+            'header'  => '#20222A',
+            'sidebar' => '#FFF',
+            'logo'    => '#F78400'
+        ];
+        $themes[]       = [
+            'name'    => 'fbw',
+            'header'  => '#20222A',
+            'sidebar' => '#FFF',
+            'logo'    => '#AA3130'
+        ];
         $data['themes'] = json_encode($themes);
+        $userMeta       = new UserMetaModel();
+        $favorites      = $userMeta->getStrMeta($this->passport->uid, 'favorites');
+        $favorites      = $favorites ? @json_decode($favorites, true) : [];
+        if (!is_array($favorites)) {
+            $favorites = [];
+        }
+        $fmenus = [];
+        foreach ($favorites as $fid => $v) {
+            $m = $ui->getMenu($fid);
+            if ($m->name && $m->data) {
+                $fm        = $m->data();
+                $fm['lid'] = $fid;
+                $fmenus[]  = $fm;
+            }
+        }
+        $data['favorites'] = $fmenus;
 
         return view($data);
     }
@@ -416,5 +456,30 @@ class IndexController extends BackendController {
         }
 
         return Ajax::success("所选缓存已清空");
+    }
+
+    public function setFav($mid) {
+        $userMeta = new UserMetaModel();
+        $meta     = $userMeta->getStrMeta($this->passport->uid, 'favorites');
+        $meta     = $meta ? @json_decode($meta, true) : [];
+        if (!is_array($meta)) {
+            $meta = [];
+        }
+        $mid = explode(':', $mid, 2);
+        if (count($mid) == 2 && $mid[1]) {
+            if ($mid[0] == 'add') {
+                $meta[ $mid[1] ] = 1;
+                $userMeta->setStrMeta($this->passport->uid, 'favorites', json_encode($meta));
+
+                return Ajax::success('快捷菜单已添加，请刷新页面');
+            } else {
+                unset($meta[ $mid[1] ]);
+                $userMeta->setStrMeta($this->passport->uid, 'favorites', json_encode($meta));
+
+                return Ajax::success('快捷菜单已删除，请刷新页面');
+            }
+        } else {
+            return Ajax::warn('未知操作');
+        }
     }
 }

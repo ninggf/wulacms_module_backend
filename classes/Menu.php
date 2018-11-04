@@ -130,7 +130,7 @@ class Menu {
                     if ($item->child) {
                         foreach ($item->child as $item1) {
                             $data1           = $item1->data($group);
-                            $data1['id']     = $this->id . '_' . $data1['id'];
+                            $data1['id']     = $item->id . '/' . $data1['id'];
                             $data['child'][] = $data1;
                         }
                     } else {
