@@ -34,14 +34,29 @@ class AuthController extends AdminController {
     public function index() {
         if ($this->passport->isLogin) {
             Response::redirect(App::url('backend'));
+        } else if (isset($_COOKIE['astoken'])) {
+            // 自动登录
+            $astokens = explode('/', $_COOKIE['astoken']);
+            if (count($astokens) == 2) {
+                $uid = intval($astokens[1]);
+                if ($this->passport->login($uid)) {
+                    if ($this->passport['astoken'] == $_COOKIE['astoken']) {
+                        Syslog::info('Auto Login', $this->passport->uid, 'accesslog');
+                        Response::redirect(App::url('backend'));
+                    }
+                }
+            }
+            Response::cookie('astoken', null);
         }
 
         $module = App::getModule('backend');
-        $tpl    = apply_filter('backend\auth\loginTpl', '');
+        $tpl    = apply_filter('backend\auth\loginTpl', 'auth/login');
+        $eCnt   = sess_get('errCnt', 0);
 
         return view([
-            'version' => $module->getCurrentVersion(),
-            'website' => [
+            'version'  => $module->getCurrentVersion(),
+            'needCode' => $eCnt >= 3,
+            'website'  => [
                 'name'     => App::cfg('brandName', 'WulaCms'),
                 'brandImg' => App::cfg('brandImg')
             ]
@@ -59,12 +74,32 @@ class AuthController extends AdminController {
      * @return \wulaphp\mvc\view\JsonView
      */
     public function indexPost($username, $passwd, $captcha = '') {
+        $eCnt = sess_get('errCnt', 0);
+        if ($eCnt >= 3) {
+            $auth_code_obj = new CaptchaCode ();
+            if (!$auth_code_obj->validate($captcha, false)) {
+                return Ajax::error(['message' => '验证码不正确', 'ent' => $eCnt], 'alert');
+            }
+        }
         if ($this->passport->login([$username, $passwd, $captcha])) {
             Syslog::info('Login', $this->passport->uid, 'accesslog');
+            sess_del('errCnt');
+
+            if (rqst('remember') == 'on') {
+                Response::cookie('astoken', $this->passport['astoken'], 315360000, '/');
+            } else {
+                Response::cookie('astoken', null);
+            }
 
             return Ajax::redirect(App::url('backend'));
         } else {
-            return Ajax::error($this->passport->error, 'alert');
+            $eCnt = sess_get('errCnt', 0);
+            if ($eCnt < 3) {
+                $eCnt += 1;
+            }
+            $_SESSION['errCnt'] = $eCnt;
+
+            return Ajax::error(['message' => $this->passport->error, 'ent' => $eCnt], 'alert');
         }
     }
 
@@ -77,7 +112,7 @@ class AuthController extends AdminController {
      * @param string $size
      * @param int    $font
      */
-    public function captcha($type = 'png', $size = '90x30', $font = 13) {
+    public function captcha($type = 'png', $size = '120x36', $font = 13) {
         Response::nocache();
         $size = explode('x', $size);
         if (count($size) == 1) {
@@ -121,6 +156,8 @@ class AuthController extends AdminController {
     public function signout() {
         Syslog::info('Logout', $this->passport->uid, 'accesslog');
         $this->passport->logout();
+        //清空自动登录
+        Response::cookie('astoken', null);
         if (Request::isAjaxRequest() || rqset('ajax')) {
             return Ajax::redirect(App::url('backend/auth'));
         }

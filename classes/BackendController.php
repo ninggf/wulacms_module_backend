@@ -15,13 +15,14 @@ use wulaphp\io\Response;
 use wulaphp\mvc\controller\AdminController;
 
 class BackendController extends AdminController {
-	public function beforeRun($action, $refMethod) {
-		$domain = App::cfg('domain');
-		if ($domain && $_SERVER['HTTP_HOST'] != $domain) {
-			Response::respond(404);
-		}
-		$view = parent::beforeRun($action, $refMethod);
+    public function beforeRun($action, $refMethod) {
+        $domain = App::cfg('domain');
+        if ($domain && $_SERVER['HTTP_HOST'] != $domain) {
+            Response::respond(404);
+        }
 
-		return $view;
-	}
+        $view = parent::beforeRun($action, $refMethod);
+
+        return $view;
+    }
 }
