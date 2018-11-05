@@ -234,7 +234,7 @@
         <div class="layui-card-header"> 功能导航</div>
         <div class="layui-card-body all-menus">
             <div class="layui-row">
-                <div class="layui-col-xs10 all-menu">
+                <div class="layui-col-xs10 all-menu" style="max-height: 635px;overflow-y: auto">
                     <ul class="clearfix">
                         {foreach $allmenus as $sm}
                             {$sm}
@@ -344,7 +344,7 @@
                 btn       : null,
                 anim      : -1,
                 closeBtn  : 0,
-                area      : ['1000px', 'auto'],
+                area      : ['1000px', '700px'],
                 shadeClose: true,
                 content   : $('#allmenus').html()
             });
