@@ -234,14 +234,14 @@
         <div class="layui-card-header"> 功能导航</div>
         <div class="layui-card-body all-menus">
             <div class="layui-row">
-                <div class="layui-col-xs10 all-menu" style="max-height: 635px;overflow-y: auto">
+                <div class="layui-col-xs10 all-menu" style="max-height: 600px;overflow-y: auto">
                     <ul class="clearfix">
                         {foreach $allmenus as $sm}
                             {$sm}
                         {/foreach}
                     </ul>
                 </div>
-                <div class="layui-col-xs2">
+                <div class="layui-col-xs2" style="max-height: 600px;overflow-y: auto">
                     <ul class="short-menu">
                         {foreach $favorites as $fav}
                             <li>
@@ -259,6 +259,7 @@
         </div>
     {/strip}
 </script>
+{strip}
 {initjq config=1}
 <script type="text/javascript">
     {minify type='js'}
@@ -344,7 +345,7 @@
                 btn       : null,
                 anim      : -1,
                 closeBtn  : 0,
-                area      : ['1000px', '700px'],
+                area      : ['1000px', 'auto'],
                 shadeClose: true,
                 content   : $('#allmenus').html()
             });
@@ -367,5 +368,6 @@
     });
     {/minify}
 </script>
+{/strip}
 </body>
 </html>
