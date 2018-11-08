@@ -234,14 +234,14 @@
         <div class="layui-card-header"> 功能导航</div>
         <div class="layui-card-body all-menus">
             <div class="layui-row">
-                <div class="layui-col-xs10 all-menu" style="max-height: 600px;overflow-y: auto">
+                <div class="layui-col-xs10 all-menu" style="max-height: 500px;overflow-y: auto">
                     <ul class="clearfix">
                         {foreach $allmenus as $sm}
                             {$sm}
                         {/foreach}
                     </ul>
                 </div>
-                <div class="layui-col-xs2" style="max-height: 600px;overflow-y: auto">
+                <div class="layui-col-xs2" style="max-height: 500px;overflow-y: auto">
                     <ul class="short-menu">
                         {foreach $favorites as $fav}
                             <li>
