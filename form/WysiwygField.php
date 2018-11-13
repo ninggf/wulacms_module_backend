@@ -27,7 +27,7 @@ class WysiwygField extends FormField {
 		$btns       = aryget('btns', $definition);
 		$hs         = "height:{$height}px;max-height:{$height}px";
 		$name       = $this->name;
-		$value      = $this->value ? $this->value : '<div>请在此编辑...</div>';
+		$value      = $this->value ? $this->value : '<p>请在此编辑...</p>';
 
 		return '<div class="wysiwyg">' . $this->getToolbar($btns, $id) . '<div id="' . $id . '_editorxx" style="' . $hs . '" for="#' . $id . '" data-wysiwyg ' . $readonly . ' data-placeholder="' . html_escape($pl) . '">' . $value . '</div><textarea style="' . $hs . '"  class="hidden" id="' . $id . '" name="' . $name . '" ' . $readonly . '></textarea></div>';
 	}

@@ -32,8 +32,9 @@ class AuthController extends AdminController {
      * @return \wulaphp\mvc\view\SmartyView
      */
     public function index() {
+        $landingPage = sess_get('loginBack', App::url('backend'));
         if ($this->passport->isLogin) {
-            Response::redirect(App::url('backend'));
+            Response::redirect($landingPage);
         } else if (isset($_COOKIE['astoken'])) {
             // 自动登录
             $astokens = explode('/', $_COOKIE['astoken']);
@@ -42,7 +43,7 @@ class AuthController extends AdminController {
                 if ($this->passport->login($uid)) {
                     if ($this->passport['astoken'] == $_COOKIE['astoken']) {
                         Syslog::info('Auto Login', $this->passport->uid, 'accesslog');
-                        Response::redirect(App::url('backend'));
+                        Response::redirect($landingPage);
                     }
                 }
             }
@@ -90,8 +91,9 @@ class AuthController extends AdminController {
             } else {
                 Response::cookie('astoken', null);
             }
+            $landingPage = sess_get('loginBack', App::url('backend'));
 
-            return Ajax::redirect(App::url('backend'));
+            return Ajax::redirect($landingPage);
         } else {
             $eCnt = sess_get('errCnt', 0);
             if ($eCnt < 3) {
