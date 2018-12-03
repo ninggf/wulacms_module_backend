@@ -72,18 +72,15 @@ class IndexController extends BackendController {
             }
         }
         fire('dashboard\initUI', $ui);
+        $ui->getMenu('apps', '', 1);
         $data = $ui->menuData();
-
         // 用户菜单
         $uileft = new DashboardUI();
         fire('dashboard\initUserMenu', $uileft);
-
         $lf           = $uileft->menuData();
         $data['user'] = $lf['menus'];
-
-        $module = App::getModuleById('backend');
-
-        $data = [
+        $module       = App::getModuleById('backend');
+        $data         = [
             'menu'    => $data,
             'ui'      => $ui,
             'appmode' => APP_MODE,
@@ -217,7 +214,7 @@ class IndexController extends BackendController {
         $data['init']    = implode(';', $init);
         $data['modules'] = json_encode($modules);
 
-        return view('layout', $data);
+        return view($data, 'layout');
     }
 
     /**
@@ -384,12 +381,11 @@ class IndexController extends BackendController {
     /**
      * 更新小部件排序.
      *
-     * @param string $ids
      *
      * @return \wulaphp\mvc\view\JsonView
      */
-    public function updateOrder($ids) {
-        $ids = explode(',', $ids);
+    public function updateOrder() {
+        $ids = explode(',', rqst('ids'));
         if ($ids) {
             $userMeta  = new UserMetaModel();
             $uid       = $this->passport->uid;

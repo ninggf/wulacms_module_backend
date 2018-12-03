@@ -18,7 +18,7 @@
             <form name="SettingForm" id="setting-form"
                   action="{'backend/setting/save'|app}/{$setting|escape}/{$group|escape|default:0}"
                   data-validate="{$rules|escape}" data-ajax method="post" role="form"
-                  class="form-horizontal {if $script}hidden{/if}" data-loading>
+                  class="form-horizontal {if $script || $javaScript}hidden{/if}" data-loading>
                 {$form|render}
                 <div class="form-group">
                     <div class="col-md-offset-2 col-sm-offset-3 col-xs-12 col-sm-9 col-md-10">

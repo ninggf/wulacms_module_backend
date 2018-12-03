@@ -59,6 +59,11 @@ class MultipleCheckboxFiled extends FormField {
 	}
 }
 
+/**
+ * Class MultipleCheckboxForm
+ * @package backend\form
+ * @internal
+ */
 class MultipleCheckboxForm extends FormTable {
 	public $table = null;
 	/**

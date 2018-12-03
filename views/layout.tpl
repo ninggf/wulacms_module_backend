@@ -11,7 +11,10 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
         {loaduicss bootstrap="bootstrap.min.css" animate="animate.min.css" main="page.css" theme="$page_style"}
-        {initjq loginpage='backend/auth' page='iframePage'}
+        {foreach $_css_files as $_css_file}
+            <link rel="stylesheet" href="{$_css_file}"/>
+        {/foreach}
+        {initjq loginpage='backend/auth'}
     </head>
     <body class="{$bodyCls}">
     {include "$workspaceView"}
@@ -24,6 +27,11 @@
             });
         });
     </script>
+    {if $javaScript}
+        <script type="text/javascript">
+            {$javaScript}
+        </script>
+    {/if}
     </body>
     </html>
 {/strip}

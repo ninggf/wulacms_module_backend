@@ -49,7 +49,7 @@
             connectWith         : '.portlet',
             iframeFix           : false,
             items               : '.portlet-item',
-            opacity             : 0.8,
+            opacity             : 0.65,
             helper              : 'original',
             revert              : true,
             handle              : 'header',
@@ -67,7 +67,7 @@
                 $('.portlet-item').each(function (i, e) {
                     ids[i] = $(e).data('id');
                 });
-                $.ajax("{'backend/update-order'|app}/" + ids.join(','));
+                $.ajax("{'backend/update-order'|app}?ids=" + ids.join(','));
             }, 3000);
         });
         $('.portlet-item').on('mouseenter', function () {

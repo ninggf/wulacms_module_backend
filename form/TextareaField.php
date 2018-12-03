@@ -38,6 +38,11 @@ class TextareaField extends FormField {
 	}
 }
 
+/**
+ * Class TextareaFieldForm
+ * @package backend\form
+ * @internal
+ */
 class TextareaFieldForm extends FormTable {
 	public $table = null;
 	/**

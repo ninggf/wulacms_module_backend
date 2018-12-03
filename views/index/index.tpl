@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>{$website.name} - {'wulacms'|t:$version}</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    {loaduicss jqadmin="jqadmin.css" theme="$theme/theme.css"}
-</head>
-<body>
 {strip}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{$website.name} - {'wulacms'|t:$version}</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        {loaduicss jqadmin="jqadmin.css" theme="$theme/theme.css"}
+    </head>
+    <body>
     <div class="layui-layout layui-layout-admin" style="opacity: 0">
         <div class="layui-header">
             <div class="jqadmin-auxiliary-btn">
@@ -102,6 +102,16 @@
                                     </li>
                                 {/foreach}
                             {/capture}
+                        {elseif $navi.data.submenus}
+                            <li class="layui-nav-item head-nav-item" id="navi-{$navi.id}">
+                                <a href="javascript:" {$navi.h5datas} class="{$navi.textCls}" data-title="{$navi.name}">
+                                    <i class="iconfont {$navi.iconCls}">{$navi.icon|default:'&#xe637;'}</i>
+                                    <span>{$navi.name}</span>
+                                </a>
+                            </li>
+                            {capture append="submenus"}
+                                <div data-formmenu="navi-{$navi.id}">{$navi.data.submenus}</div>
+                            {/capture}
                         {/if}
                     {/foreach}
                     {foreach $favorites as $fav}
@@ -167,7 +177,6 @@
         </div>
         <!-- 左侧导航-->
         <div class="layui-side jqamdin-left-bar">
-
             <div class="layui-side-scroll">
                 <div id="submenu">
                     {foreach $submenus as $sm}
@@ -202,35 +211,7 @@
         </div>
     </div>
     <ul class="menu-list" id="menu-list"></ul>
-{/strip}
-{literal}
-    <script id="menu-list-tpl" type="text/html">
-        {{# layui.each(d.list, function(index, item){ }}
-        <li>
-            <a href="javascript:" data-url="{{item.href}}" data-title="{{item.title}}">
-                <i class="{{item.cls}}" data-icon='{{item.icon}}'>{{item.icon}}</i>
-                <span>{{item.title}}</span>
-            </a>
-        </li>{{# }); }}
-    </script>
-    <script id="theme-list-tpl" type="text/html">
-        <div class="layui-card-header"> 主题选择</div>
-        <div class="layui-card-body">
-            <ul class="theme-list">
-                {{# layui.each(d.themes, function(index, t){ }}
-                <li class="theme {{# if (d.theme == t.name){ }} layui-this {{# } }}" data-theme="{{t.name}}">
-                    <div class="lyt-h" style="background-color: {{t.header}}"></div>
-                    <div class="lyt-s" style="background-color: {{t.sidebar}}">
-                        <div class="lyt-l" style="background-color: {{t.logo}}"></div>
-                    </div>
-                </li>
-                {{# }); }}
-            </ul>
-        </div>
-    </script>
-{/literal}
-<script type="text/html" id="allmenus">
-    {strip}
+    <script type="text/html" id="allmenus">
         <div class="layui-card-header"> 功能导航</div>
         <div class="layui-card-body all-menus">
             <div class="layui-row">
@@ -257,117 +238,142 @@
                 </div>
             </div>
         </div>
-    {/strip}
-</script>
-{strip}
-{initjq config=1}
-<script type="text/javascript">
-    {minify type='js'}
-    layui.use(['jquery', 'jqmenu', 'layer', 'toastr', 'laytpl'], function ($, menu, layer, toast, tpl) {
-        var mainMenu              = new menu(),
-            jqIndex               = function () {
+    </script>
+    {initjq config=1}
+    <script type="text/javascript">
+        {minify type='js'}
+        layui.use(['jquery', 'jqmenu', 'layer', 'toastr', 'laytpl'], function ($, menu, layer, toast, tpl) {
+            var mainMenu              = new menu(),
+                jqIndex               = function () {
+                };
+            top.global                = {
+                menu : mainMenu,
+                toast: toast,
+                layer: layer
             };
-        top.global                = {
-            menu : mainMenu,
-            toast: toast,
-            layer: layer
-        };
-        jqIndex.prototype.init    = function () {
-            mainMenu.init();
-            this.refresh();
-        };
-        jqIndex.prototype.refresh = function () {
-            $('.fresh-btn').bind("click", function () {
-                var iframe = $('.jqadmin-body .layui-show').children('iframe'), l;
-                l          = layer.load(2);
-                iframe.animate({
-                    opacity: 0, marginTop: "50px"
-                }, 50, function () {
-                    iframe[0].contentWindow.location.reload(true);
-                }).load(function () {
-                    $(this).animate({
-                        opacity: '1', marginTop: "0"
-                    }, 50);
-                    layer.close(l);
-                }).error(function () {
-                    $(this).animate({
-                        opacity: '1', marginTop: "0"
-                    }, 50);
-                    layer.close(l);
+            jqIndex.prototype.init    = function () {
+                mainMenu.init();
+                this.refresh();
+            };
+            jqIndex.prototype.refresh = function () {
+                $('.fresh-btn').bind("click", function () {
+                    var iframe = $('.jqadmin-body .layui-show').children('iframe'), l;
+                    l          = layer.load(2);
+                    iframe.animate({
+                        opacity: 0, marginTop: "50px"
+                    }, 50, function () {
+                        iframe[0].contentWindow.location.reload(true);
+                    }).load(function () {
+                        $(this).animate({
+                            opacity: '1', marginTop: "0"
+                        }, 50);
+                        layer.close(l);
+                    }).error(function () {
+                        $(this).animate({
+                            opacity: '1', marginTop: "0"
+                        }, 50);
+                        layer.close(l);
+                    });
                 });
-            });
-            $('.menu-type').bind("click", function () {
-                $('body').removeClass('pre-set');
-                mainMenu.menuShowType();
-            });
-        };
-        window.updateUsername     = function (name) {
-            $('#username').text(name);
-        };
-        window.updateAvatar       = function (avatar) {
-            $('#my-avatar').attr('src', avatar);
-        };
-        (new jqIndex()).init();
-        $('.layui-layout-admin').animate({
-            opacity: 1
-        }, 200);
+                $('.menu-type').bind("click", function () {
+                    $('body').removeClass('pre-set');
+                    mainMenu.menuShowType();
+                });
+            };
+            window.updateUsername     = function (name) {
+                $('#username').text(name);
+            };
+            window.updateAvatar       = function (avatar) {
+                $('#my-avatar').attr('src', avatar);
+            };
+            (new jqIndex()).init();
+            $('.layui-layout-admin').animate({
+                opacity: 1
+            }, 1000);
 
-        $('#theme-picker').on('click', 'a', function () {
-            tpl($('#theme-list-tpl').html()).render({
-                themes: {$themes},
-                theme : '{$theme}'
-            }, function (cnt) {
+            $('#theme-picker').on('click', 'a', function () {
+                tpl($('#theme-list-tpl').html()).render({
+                    themes: {$themes},
+                    theme : '{$theme}'
+                }, function (cnt) {
+                    layer.open({
+                        type      : 1,
+                        title     : null,
+                        btn       : null,
+                        closeBtn  : 0,
+                        anim      : -1,
+                        area      : ['310px', ($(window).height() - 54) + 'px'],
+                        shadeClose: true,
+                        offset    : 'rb',
+                        skin:"layui-anim layui-anim-rl layui-n-br",
+                        content   : cnt
+                    });
+                });
+                return false;
+            });
+
+            $('body').on('click', '.theme-list .theme', function () {
+                var theme       = $(this).data('theme');
+                document.cookie = "theme=" + theme + "; path=/";
+                location.reload();
+            }).on('click', '#menu-picker', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
                 layer.open({
                     type      : 1,
                     title     : null,
                     btn       : null,
-                    closeBtn  : 0,
                     anim      : -1,
-                    area      : ['310px', ($(window).height() - 54) + 'px'],
+                    closeBtn  : 0,
+                    area      : ['1000px', 'auto'],
                     shadeClose: true,
-                    offset    : 'rb',
-                    content   : cnt
+                    content   : $('#allmenus').html()
                 });
-            });
-            return false;
-        });
-
-        $('body').on('click', '.theme-list .theme', function () {
-            var theme       = $(this).data('theme');
-            document.cookie = "theme=" + theme + "; path=/";
-            location.reload();
-        }).on('click', '#menu-picker', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            layer.open({
-                type      : 1,
-                title     : null,
-                btn       : null,
-                anim      : -1,
-                closeBtn  : 0,
-                area      : ['1000px', 'auto'],
-                shadeClose: true,
-                content   : $('#allmenus').html()
-            });
-            return false;
-        }).on('click', '.all-menus .act', function () {
-            $.get('{'backend/set-fav'|app}', {
-                mid: $(this).data('mid')
-            }, function (data) {
-                if (data) {
-                    if (data.code == 200) {
-                        toast.success(data.message);
+                return false;
+            }).on('click', '.all-menus .act', function () {
+                $.get('{'backend/set-fav'|app}', {
+                    mid: $(this).data('mid')
+                }, function (data) {
+                    if (data) {
+                        if (data.code == 200) {
+                            toast.success(data.message);
+                        } else {
+                            toast.warning(data.message);
+                        }
                     } else {
-                        toast.warning(data.message);
+                        toast.warning('添加快捷功能失败');
                     }
-                } else {
-                    toast.warning('添加快捷功能失败');
-                }
-            }, 'json');
+                }, 'json');
+            });
         });
-    });
-    {/minify}
-</script>
+        {/minify}
+    </script>
+    {literal}
+        <script id="menu-list-tpl" type="text/html">
+            {{# layui.each(d.list, function(index, item){ }}
+            <li>
+                <a href="javascript:" data-url="{{item.href}}" data-title="{{item.title}}">
+                    <i class="{{item.cls}}" data-icon='{{item.icon}}'>{{item.icon}}</i>
+                    <span>{{item.title}}</span>
+                </a>
+            </li>{{# }); }}
+        </script>
+        <script id="theme-list-tpl" type="text/html">
+            <div class="layui-card-header"> 主题选择</div>
+            <div class="layui-card-body">
+                <ul class="theme-list">
+                    {{# layui.each(d.themes, function(index, t){ }}
+                    <li class="theme {{# if (d.theme == t.name){ }} layui-this {{# } }}" data-theme="{{t.name}}">
+                        <div class="lyt-h" style="background-color: {{t.header}}"></div>
+                        <div class="lyt-s" style="background-color: {{t.sidebar}}">
+                            <div class="lyt-l" style="background-color: {{t.logo}}"></div>
+                        </div>
+                    </li>
+                    {{# }); }}
+                </ul>
+            </div>
+        </script>
+    {/literal}
+    </body>
+    </html>
 {/strip}
-</body>
-</html>

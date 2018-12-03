@@ -33,7 +33,7 @@ class DashboardUI {
         $ids = explode('/', trim($id, '/'));
         $id  = array_shift($ids);
         //顶部只允许三个菜单:系统，应用，报表
-        if (!in_array($id, ['system', 'apps', 'reports'])) {
+        if (!in_array($id, ['system', 'apps', 'reports', 'wallet'])) {
             $hid = $id;//要被隐藏掉的id
             $id  = 'apps';
         }
@@ -62,6 +62,39 @@ class DashboardUI {
         } else if (!$menu->pos) {
             $menu->pos = $this->cpos++;
         }
+
+        return $menu;
+    }
+
+    /**
+     * 独立菜单.
+     *
+     * @param string   $id
+     * @param string   $name
+     * @param string   $html
+     * @param int|null $pos
+     *
+     * @return \backend\classes\Menu
+     */
+    public function &getCustomMenu($id, $name, $html, $pos = null) {
+        if (!$html) {
+            return null;
+        }
+        if (isset ($this->menus [ $id ])) {
+            $menu = $this->menus [ $id ];
+        } else {
+            $menu                = new Menu($id);
+            $this->menus [ $id ] = $menu;
+        }
+        if ($name) {
+            $menu->name = $name;
+        }
+        if ($pos != null) {
+            $menu->pos = $pos;
+        } else if (!$menu->pos) {
+            $menu->pos = $this->cpos++;
+        }
+        $menu->data['submenus'] = $html;
 
         return $menu;
     }

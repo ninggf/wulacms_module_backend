@@ -14,33 +14,33 @@ use wulaphp\form\FormField;
 use wulaphp\form\FormTable;
 
 class WysiwygField extends FormField {
-	public function getName() {
-		return _tr('Html Editor@form');
-	}
+    public function getName() {
+        return _tr('Html Editor@form');
+    }
 
-	public function renderWidget($opts = []) {
-		$definition = $this->options;
-		$id         = isset ($definition ['id']) ? $definition ['id'] : $definition ['name'];
-		$pl         = isset ($definition ['placeholder']) ? $definition ['placeholder'] : '';
-		$readonly   = isset ($definition ['readonly']) ? ' readonly="readonly" ' : '';
-		$height     = isset ($definition ['height']) && $definition ['height'] ? $definition ['height'] : 100;
-		$btns       = aryget('btns', $definition);
-		$hs         = "height:{$height}px;max-height:{$height}px";
-		$name       = $this->name;
-		$value      = $this->value ? $this->value : '<p>请在此编辑...</p>';
+    public function renderWidget($opts = []) {
+        $definition = $this->options;
+        $id         = isset ($definition ['id']) ? $definition ['id'] : $definition ['name'];
+        $pl         = isset ($definition ['placeholder']) ? $definition ['placeholder'] : '';
+        $readonly   = isset ($definition ['readonly']) ? ' readonly="readonly" ' : '';
+        $height     = isset ($definition ['height']) && $definition ['height'] ? $definition ['height'] : 100;
+        $btns       = aryget('btns', $definition);
+        $hs         = "height:{$height}px;max-height:{$height}px";
+        $name       = $this->name;
+        $value      = $this->value ? $this->value : '<p>请在此编辑...</p>';
 
-		return '<div class="wysiwyg">' . $this->getToolbar($btns, $id) . '<div id="' . $id . '_editorxx" style="' . $hs . '" for="#' . $id . '" data-wysiwyg ' . $readonly . ' data-placeholder="' . html_escape($pl) . '">' . $value . '</div><textarea style="' . $hs . '"  class="hidden" id="' . $id . '" name="' . $name . '" ' . $readonly . '></textarea></div>';
-	}
+        return '<div class="wysiwyg">' . $this->getToolbar($btns, $id) . '<div id="' . $id . '_editorxx" style="' . $hs . '" for="#' . $id . '" data-wysiwyg ' . $readonly . ' data-placeholder="' . html_escape($pl) . '">' . $value . '</div><textarea style="' . $hs . '"  class="hidden" id="' . $id . '" name="' . $name . '" ' . $readonly . '></textarea></div>';
+    }
 
-	public function getToolbar($btns, $id) {
-		if (!$btns) {
-			$btns = 'font,size,color,style';
-		}
-		$btns    = explode(',', $btns);
-		$toolbar = ['<div class="btn-toolbar" id="' . $id . '-editor-toolbar" data-role="editor-toolbar" data-target="#' . $id . '_editorxx">'];
+    public function getToolbar($btns, $id) {
+        if (!$btns) {
+            $btns = 'font,size,color,style';
+        }
+        $btns    = explode(',', $btns);
+        $toolbar = ['<div class="btn-toolbar" id="' . $id . '-editor-toolbar" data-role="editor-toolbar" data-target="#' . $id . '_editorxx">'];
 
-		if (in_array('font', $btns)) {
-			$toolbar [] = <<<EQL
+        if (in_array('font', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-original-title="Font"><i class="fa fa-font"></i><b class="caret"></b></a>
 <ul class="dropdown-menu">
@@ -58,10 +58,10 @@ class WysiwygField extends FormField {
   <li><a data-edit="fontName Times New Roman" style="font-family:'Times New Roman'">Times New Roman</a></li> 
 </ul></div>
 EQL;
-		}
+        }
 
-		if (in_array('size', $btns)) {
-			$toolbar [] = <<<EQL
+        if (in_array('size', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-original-title="Font Size"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
 <ul class="dropdown-menu">
@@ -72,9 +72,9 @@ EQL;
 </ul>
 </div>
 EQL;
-		}
-		if (in_array('color', $btns)) {
-			$toolbar [] = <<<EQL
+        }
+        if (in_array('color', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-original-title="Fore Color"><i class="fa fa-square" style="color:red"></i>&nbsp;<b class="caret"></b></a>
 <div class="dropdown-menu p-l-xs p-r-xs">
@@ -87,9 +87,9 @@ EQL;
 </div>
 </div>
 EQL;
-		}
-		if (in_array('style', $btns)) {
-			$toolbar [] = <<<EQL
+        }
+        if (in_array('style', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default" data-edit="bold"  data-original-title="Bold (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
 <a class="btn btn-default" data-edit="italic"  data-original-title="Italic (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
@@ -97,10 +97,10 @@ EQL;
 <a class="btn btn-default" data-edit="underline"  data-original-title="Underline (Ctrl/Cmd+U)"><i class="fa fa-underline"></i></a>
 </div>
 EQL;
-		}
+        }
 
-		if (in_array('list', $btns)) {
-			$toolbar [] = <<<EQL
+        if (in_array('list', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default" data-edit="insertunorderedlist"><i class="fa fa-list-ul"></i></a>
 <a class="btn btn-default" data-edit="insertorderedlist"><i class="fa fa-list-ol"></i></a>
@@ -108,9 +108,9 @@ EQL;
 <a class="btn btn-default" data-edit="indent"><i class="fa fa-indent"></i></a>
 </div>
 EQL;
-		}
-		if (in_array('align', $btns)) {
-			$toolbar [] = <<<EQL
+        }
+        if (in_array('align', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default" data-edit="justifyleft"  data-original-title="Align Left (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
 <a class="btn btn-default" data-edit="justifycenter"  data-original-title="Center (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
@@ -118,10 +118,10 @@ EQL;
 <a class="btn btn-default" data-edit="justifyfull"  data-original-title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
 </div>
 EQL;
-		}
+        }
 
-		if (in_array('link', $btns)) {
-			$toolbar [] = <<<EQL
+        if (in_array('link', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default" data-edit="unlink"><i class="fa fa-unlink"></i></a>
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink"><i class="fa fa-link"></i></a>
@@ -137,9 +137,9 @@ EQL;
 </div>
 </div>
 EQL;
-		}
-		if (in_array('img', $btns)) {
-			$toolbar [] = <<<EQL
+        }
+        if (in_array('img', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="插入图片" data-original-title="插入图片"><i class="fa fa-picture-o"></i></a>
 <div class="dropdown-menu aside-xxl">
@@ -158,17 +158,17 @@ EQL;
 </div>
 </div>
 EQL;
-		}
+        }
 
-		if (in_array('pager', $btns)) {
-			$toolbar [] = <<<EQL
+        if (in_array('pager', $btns)) {
+            $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default" data-act="pager" title="插入分页符" data-original-title="插入分页符"><i class="fa fa-copy"></i></a>
 </div>
 EQL;
-		}
+        }
 
-		$toolbar [] = <<<EQL
+        $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default" data-edit="removeFormat" title="" data-original-title="Remove Format (Ctrl/Cmd+F)"><i class="fa fa-eraser"></i></a>
 <a class="btn btn-default" data-edit="undo" title="" data-original-title="Undo (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
@@ -178,47 +178,52 @@ EQL;
 </div>
 EQL;
 
-		$toolbar[] = '</div>';
+        $toolbar[] = '</div>';
 
-		return implode('', $toolbar);
-	}
+        return implode('', $toolbar);
+    }
 
-	public function getOptionForm() {
-		return new WysiwygFieldForm(true);
-	}
+    public function getOptionForm() {
+        return new WysiwygFieldForm(true);
+    }
 }
 
+/**
+ * Class WysiwygFieldForm
+ * @package backend\form
+ * @internal
+ */
 class WysiwygFieldForm extends FormTable {
-	public $table = null;
-	/**
-	 * 编辑器高度
-	 * @var \backend\form\TextField
-	 * @digits
-	 * @type int
-	 * @layout 1,col-xs-4
-	 */
-	public $height = 200;
-	/**
-	 * 菜单栏功能按钮
-	 * @var \backend\form\MultipleCheckboxFiled
-	 * @type array
-	 * @layout 2,col-xs-12
-	 * @dsCfg ::btns
-	 * @option {"inline":1}
-	 */
-	public $toolbar = 'font,color,size,style';
+    public $table = null;
+    /**
+     * 编辑器高度
+     * @var \backend\form\TextField
+     * @digits
+     * @type int
+     * @layout 1,col-xs-4
+     */
+    public $height = 200;
+    /**
+     * 菜单栏功能按钮
+     * @var \backend\form\MultipleCheckboxFiled
+     * @type array
+     * @layout 2,col-xs-12
+     * @dsCfg ::btns
+     * @option {"inline":1}
+     */
+    public $toolbar = 'font,color,size,style';
 
-	public function btns() {
-		return [
-			'font'  => '字体',
-			'color' => '字段颜色',
-			'size'  => '字体大小',
-			'style' => '字体样式',
-			'list'  => '列表样式',
-			'align' => '对齐方式',
-			'link'  => '插入链接',
-			'img'   => '插入图片',
-			'pager' => '插入分页'
-		];
-	}
+    public function btns() {
+        return [
+            'font'  => '字体',
+            'color' => '字段颜色',
+            'size'  => '字体大小',
+            'style' => '字体样式',
+            'list'  => '列表样式',
+            'align' => '对齐方式',
+            'link'  => '插入链接',
+            'img'   => '插入图片',
+            'pager' => '插入分页'
+        ];
+    }
 }

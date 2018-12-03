@@ -35,6 +35,11 @@ class PasswordField extends FormField {
 	}
 }
 
+/**
+ * Class PasswordFieldForm
+ * @package backend\form
+ * @internal
+ */
 class PasswordFieldForm extends FormTable {
 	public $table = null;
 	/**

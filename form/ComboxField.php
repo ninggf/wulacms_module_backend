@@ -75,6 +75,11 @@ class ComboxField extends FormField {
     }
 }
 
+/**
+ * Class ComboxFieldForm
+ * @package backend\form
+ * @internal
+ */
 class ComboxFieldForm extends FormTable {
     public $table = null;
     /**

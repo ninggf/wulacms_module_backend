@@ -50,6 +50,11 @@ class DatepickerField extends FormField {
 
 }
 
+/**
+ * Class DatepickerFieldForm
+ * @package backend\form
+ * @internal
+ */
 class DatepickerFieldForm extends FormTable {
 	public $table = null;
 	/**

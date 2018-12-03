@@ -55,6 +55,10 @@ class IFramePageController extends BackendController {
         $data['bodyCls']    = $this->bodyCls;
         $data['page_style'] = $this->pageTheme;
 
+        bind('wula\jqadmin\reg_module', function ($modules) {
+            return $modules;
+        });
+
         return $data;
     }
 }

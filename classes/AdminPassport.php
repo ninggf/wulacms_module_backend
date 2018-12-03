@@ -87,6 +87,12 @@ class AdminPassport extends Passport {
         return false;
     }
 
+    /**
+     * 认证
+     * @param array|int|string $data [0=>username,1=>password] or uid
+     *
+     * @return bool
+     */
     protected function doAuth($data = null) {
         $table = new UserTable();
         if (is_numeric($data)) {
@@ -121,6 +127,11 @@ class AdminPassport extends Passport {
         $this->data['status']    = $user['status'];
         $this->data['lastip']    = $user['lastip'];
         $this->data['lastlogin'] = $user['lastlogin'];
+        if (isset($user['pid']) && $user['pid']) {
+            $this->data['pid'] = $user['pid'];
+        } else {
+            $this->data['pid'] = $this->uid;
+        }
         $this->data['logintime'] = time();
         $this->data['astoken']   = md5($user['uid'] . $user['hash'] . $user['username'] . $_SERVER['HTTP_USER_AGENT']) . '/' . $user['id'];
         foreach ($user['roles'] as $r) {

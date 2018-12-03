@@ -84,7 +84,11 @@ class SettingController extends IFramePageController {
             $cfg->load($form, $setting, $group);
             $module = $cfg->script($group);
             if ($module) {
-                $data['script'] = '{/}' . App::res($module);
+                if (is_array($module)) {
+                    $data['javaScript'] = implode("\n", $module);
+                } else {
+                    $data['script'] = '{/}' . App::res($module);
+                }
             }
 
             return $this->layoutCfg('htmlCls')->render($data);

@@ -16,86 +16,87 @@ use wulaphp\io\Response;
  * @group kernel
  */
 class BackendModule extends CmfModule {
-	public function getName() {
-		return '管理后台';
-	}
+    public function getName() {
+        return '管理后台';
+    }
 
-	public function getDescription() {
-		return '基于bootstrap&layui的管理后台。';
-	}
+    public function getDescription() {
+        return '基于bootstrap&layui的管理后台。';
+    }
 
-	public function getHomePageURL() {
-		return 'https://www.wulacms.com/modules/backend';
-	}
+    public function getHomePageURL() {
+        return 'https://www.wulacms.com/modules/backend';
+    }
 
-	public function getAuthor() {
-		return 'Leo Ning';
-	}
+    public function getAuthor() {
+        return 'Leo Ning';
+    }
 
-	/**
-	 * @param Passport $passport
-	 *
-	 * @filter passport\newAdminPassport
-	 *
-	 * @return Passport
-	 */
-	public static function createAdminPassport($passport) {
-		if ($passport instanceof Passport) {
-			$passport = new AdminPassport();
-		}
+    /**
+     * @param Passport $passport
+     *
+     * @filter passport\newAdminPassport
+     *
+     * @return Passport
+     */
+    public static function createAdminPassport($passport) {
+        if ($passport instanceof Passport) {
+            $passport = new AdminPassport();
+        }
 
-		return $passport;
-	}
+        return $passport;
+    }
 
-	/**
-	 * 需要登录才能操作.
-	 *
-	 * @param $view
-	 *
-	 * @filter mvc\admin\needLogin
-	 * @return \wulaphp\mvc\view\View
-	 */
-	public static function onNeedLogin($view) {
-		if (Request::isAjaxRequest()) {
-			Response::respond(401, __('Please login'));
-		} else {
-			App::redirect('backend/auth');
-		}
+    /**
+     * 需要登录才能操作.
+     *
+     * @param $view
+     *
+     * @filter mvc\admin\needLogin
+     * @return \wulaphp\mvc\view\View
+     */
+    public static function onNeedLogin($view) {
+        if (Request::isAjaxRequest()) {
+            Response::respond(401, __('Please login'));
+        } else {
+            App::redirect('backend/auth');
+        }
 
-		return $view;
-	}
+        return $view;
+    }
 
-	/**
-	 * @param mixed  $view
-	 * @param string $message
-	 *
-	 * @filter mvc\admin\onDenied $message
-	 * @return \wulaphp\mvc\view\View
-	 */
-	public static function onDenied($view, $message) {
-		if (!$view) {
-			if (Request::isAjaxRequest()) {
-				$view = Ajax::fatal($message ? $message : __('permission denied'), 403);
-			} else {
-				Response::respond(403, $message ? $message : __('permission denied'));
-			}
-		}
+    /**
+     * @param mixed  $view
+     * @param string $message
+     *
+     * @filter mvc\admin\onDenied $message
+     * @return \wulaphp\mvc\view\View
+     */
+    public static function onDenied($view, $message) {
+        if (!$view) {
+            if (Request::isAjaxRequest()) {
+                $view = Ajax::fatal($message ? $message : __('permission denied'), 403);
+            } else {
+                Response::respond(403, $message ? $message : __('permission denied'));
+            }
+        }
 
-		return $view;
-	}
+        return $view;
+    }
 
-	public function getVersionList() {
-		$v['1.0.0'] = '管理后台的第一个版本';
-		$v['2.0.0'] = '不再支持 php 5.6.x版本';
+    public function getVersionList() {
+        $v['1.0.0'] = '管理后台的第一个版本';
+        $v['2.0.0'] = '不再支持 php 5.6.x版本';
+        $v['2.1.0'] = '优化界面';
 
-		return $v;
-	}
+        return $v;
+    }
 }
 
 function get_system_settings() {
-	return apply_filter('backend/settings', [
-		'default' => new CommonSetting(),
-	]);
+    return apply_filter('backend/settings', [
+        'default' => new CommonSetting(),
+    ]);
 }
 
 App::register(new BackendModule());

@@ -17,8 +17,6 @@ use wulaphp\mvc\controller\AdminController;
 use wulaphp\router\Router;
 
 class BackendController extends AdminController {
-    protected $loginBack = false;// 登录后是否返回当前页面
-
     public function beforeRun($action, $refMethod) {
         $domain = App::cfg('domain');
         if ($domain && $_SERVER['HTTP_HOST'] != $domain) {

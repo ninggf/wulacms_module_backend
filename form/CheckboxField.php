@@ -39,6 +39,11 @@ class CheckboxField extends FormField {
 	}
 }
 
+/**
+ * Class CheckboxFieldForm
+ * @package backend\form
+ * @internal
+ */
 class CheckboxFieldForm extends FormTable {
 	public $table = null;
 	/**
