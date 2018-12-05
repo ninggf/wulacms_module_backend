@@ -33,7 +33,7 @@ class DashboardUI {
         $ids = explode('/', trim($id, '/'));
         $id  = array_shift($ids);
         //顶部只允许三个菜单:系统，应用，报表
-        if (!in_array($id, ['system', 'apps', 'reports', 'wallet'])) {
+        if (!in_array($id, ['system', 'apps', 'reports', 'wallet', 'site'])) {
             $hid = $id;//要被隐藏掉的id
             $id  = 'apps';
         }
