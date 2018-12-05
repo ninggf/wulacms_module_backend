@@ -72,7 +72,6 @@ class IndexController extends BackendController {
             }
         }
         fire('dashboard\initUI', $ui);
-        $ui->getMenu('apps', '', 1);
         $data = $ui->menuData();
         // 用户菜单
         $uileft = new DashboardUI();
