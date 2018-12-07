@@ -35,7 +35,15 @@ class FileUploaderField extends FormField {
         $multi   = isset ($definition ['multi']) ? ' data-multi="' . $definition['multi'] . '" ' : '';
         $noWater = isset ($definition ['noWater']) ? ' data-no-water ' : '';
         $local   = isset($definition['local']) ? ' data-local-store ' : '';
-        $skin    = isset($definition['skin']) ? ' class="skin1"' : '';
+        $skin    = isset($definition['skin']) ? $definition['skin'] : '';
+        if ($skin) {
+            $skin = $skin === 'file' ? 'input-group' : 'skin1';
+            if ($skin === 'input-group') {
+                $multi = '';
+                $auto  = '';
+            }
+        }
+        $skin = $skin ? ' class="' . $skin . '"' : '';
 
         if ($multi) {
             $value = html_escape(json_encode($this->value));
