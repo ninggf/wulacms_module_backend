@@ -30,16 +30,16 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    {if $script}
-    layui.extend({
-        'backend.setting': '{$script}'
-    });
-    layui.use(['jquery', 'wulaui', 'backend.setting'], function ($, w, setting) {
-        if (setting && setting.init) {
-            setting.init();
-        }
-        $('#setting-form').removeClass('hidden');
-    });
-    {/if}
-</script>
+{if $script}
+    <script type="text/javascript">
+        layui.extend({
+            'backend.setting': '{$script}'
+        });
+        layui.use(['jquery', 'wulaui', 'backend.setting'], function ($, w, setting) {
+            if (setting && setting.init) {
+                setting.init();
+            }
+            $('#setting-form').removeClass('hidden');
+        });
+    </script>
+{/if}

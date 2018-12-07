@@ -16,6 +16,7 @@ use backend\form\BootstrapFormRender;
 use wulaphp\app\App;
 use wulaphp\form\FormTable;
 use wulaphp\io\Ajax;
+use wulaphp\validator\JQueryValidatorController;
 use wulaphp\validator\ValidateException;
 use function backend\get_system_settings;
 
@@ -25,8 +26,11 @@ use function backend\get_system_settings;
  * @package dashboard\controllers
  * @roles   管理员
  * @acl     m:system/setting
+ * @accept  *
  */
 class SettingController extends IFramePageController {
+    use JQueryValidatorController;
+
     /**
      * 通用配置页.
      *
@@ -37,17 +41,17 @@ class SettingController extends IFramePageController {
      */
     public function index($setting = '', $group = '') {
         if (!$setting) {
-            return $this->render(['error' => '不存在的配置'], 'setting/error');
+            return $this->render('setting/error', ['error' => '不存在的配置']);
         }
         $cfg = $this->getSetting($setting);
         if (!$cfg) {
-            return $this->render(['error' => '不存在的配置'], 'setting/error');
+            return $this->render('setting/error', ['error' => '不存在的配置']);
         }
         if (!$cfg instanceof Setting) {
-            return $this->render(['error' => '配置不合法'], 'setting/error');
+            return $this->render('setting/error', ['error' => '配置不合法']);
         }
         if (!$this->passport->cando($setting . ':system/setting')) {
-            return $this->render(['error' => '你没权限进行此项配置'], 'setting/error');
+            return $this->render('setting/error', ['error' => '你没权限进行此项配置']);
         }
         //配置组
         $groups = $cfg->getGroups();
@@ -70,7 +74,7 @@ class SettingController extends IFramePageController {
         } else {
             $form = $cfg->getForm($group);
             if (!$form instanceof FormTable) {
-                return $this->render(['error' => '无法识别的表单'], 'setting/error');
+                return $this->render('setting/error', ['error' => '无法识别的表单']);
             }
             $data['rules'] = '';
             if (method_exists($form, 'encodeValidatorRule')) {
