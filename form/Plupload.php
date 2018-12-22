@@ -12,7 +12,6 @@ namespace backend\form;
 
 use media\classes\ImageTool;
 use wulaphp\app\App;
-use wulaphp\io\LocaleUploader;
 use wulaphp\io\Uploader;
 
 trait Plupload {
@@ -242,12 +241,14 @@ trait Plupload {
     }
 
     /**
-     * 取文件上传器.
+     * 取文件上传器
+     *
+     * @param string $id
      *
      * @return \wulaphp\io\IUploader
      */
-    public static function getUploader() {
-        return apply_filter('plupload\getUploader', new LocaleUploader());
+    public static function getUploader($id = '') {
+        return Uploader::getUploader($id);
     }
 
     /**

@@ -59,7 +59,7 @@ class IndexController extends BackendController {
                 }
                 $setting->url = '';
             }
-            if ($this->passport->is('开发人员')) {
+            if (APP_MODE == 'dev' && $this->passport->is('开发人员')) {
                 $doc              = $system->getMenu('helpdoc', __('Documents'), 999999);
                 $doc->data['url'] = App::url('backend/doc');
                 $doc->icon        = '&#xe705;';
