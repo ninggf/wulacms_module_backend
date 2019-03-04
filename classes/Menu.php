@@ -63,10 +63,13 @@ class Menu {
         if (!isset ($this->child [ $id ])) {
             $this->child[ $id ]        = new Menu($id);
             $this->child[ $id ]->level = $this->level + 1;
-            if ($name) {
-                $this->child[ $id ]->name = $name;
-            }
-            $this->child[ $id ]->pos = $pos == null ? $this->cpos++ : $pos;
+            $this->child[ $id ]->pos   = $pos == null ? $this->cpos++ : $pos;
+        }
+        if ($name) {
+            $this->child[ $id ]->name = $name;
+        }
+        if ($pos) {
+            $this->child[ $id ]->pos = $pos;
         }
 
         return $this->child[ $id ];

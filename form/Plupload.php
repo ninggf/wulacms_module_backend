@@ -10,22 +10,23 @@
 
 namespace backend\form;
 
-use media\classes\ImageTool;
 use wulaphp\app\App;
 use wulaphp\io\Uploader;
+use wulaphp\util\ImageTool;
 
 trait Plupload {
     /**
      * 保存通过Plupload上传的文件.
      *
-     * @param string|null           $dest      目标目录
-     * @param int                   $maxSize   最大上传体积
-     * @param bool                  $canUpload 是否可以上传
-     * @param \wulaphp\io\IUploader $uploader  使用指定文件上传器.
+     * @param string|null           $dest            目标目录
+     * @param int                   $maxSize         最大上传体积
+     * @param bool                  $canUpload       是否可以上传
+     * @param \wulaphp\io\IUploader $uploader        使用指定文件上传器.
+     * @param \Closure              $checkResolution 上传之前的回调
      *
      * @return array
      */
-    protected final function upload($dest = null, $maxSize = 10000000, $canUpload = true, $uploader = null) {
+    protected final function upload($dest = null, $maxSize = 10000000, $canUpload = true, $uploader = null, $checkResolution = null) {
         $rtn = ['jsonrpc' => '2.0', 'done' => 0];
         if (!$canUpload) {
             $rtn['error'] = ['code' => 422, 'message' => '无权限上传文件'];
@@ -137,7 +138,7 @@ trait Plupload {
 
             if (isset ($_FILES ['file'] ['tmp_name']) && is_uploaded_file($_FILES ['file'] ['tmp_name'])) {
                 if ($chunks == 1) {//直接上传
-                    if (!move_uploaded_file($_FILES['file']['tmp_name'], "{$filePath}.part")) {
+                    if (!@move_uploaded_file($_FILES['file']['tmp_name'], "{$filePath}.part")) {
                         $rtn['error'] = ['code' => 422, 'message' => '系统错误，无法保存临时文件'];
                     }
                 } else {//分片上传
@@ -198,13 +199,25 @@ trait Plupload {
 
                     return $rtn;
                 }
-                //添加水印
-                if ($hasWater && ImageTool::isImage($filePath)) {
-                    $water = $this->watermark();
-                    if ($water) {
+
+                $imgwh = ['width' => 0, 'height' => 0];
+                if (ImageTool::isImage($filePath)) {
+                    if (($imgData = @getimagesize($filePath))) {
+                        $imgwh['width']  = $imgData[0];
+                        $imgwh['height'] = $imgData[1];
+                    }
+                    //添加水印
+                    if ($hasWater && ($water = $this->watermark())) {
                         $img = new ImageTool($filePath);
                         $img->watermark($water, App::cfg('watermark_pos@media', 'br'), App::cfg('watermark_min_size@media'));
+                        unset($img);
                     }
+                }
+                if ($checkResolution instanceof \Closure && ($chkRst = $checkResolution(...$imgwh)) !== true) {
+                    $rtn['error'] = ['code' => 423, 'message' => $chkRst ? $chkRst : '图片尺寸不正确'];
+                    @unlink($filePath);
+
+                    return $rtn;
                 }
                 $uploader = $uploader ? $uploader : self::getUploader();
                 if ($uploader) {
@@ -214,27 +227,25 @@ trait Plupload {
                         $rst = false;
                     }
                     if ($rst) {
-                        if (ImageTool::isImage($filePath) && ($imgData = @getimagesize($filePath))) {
-                            $rst['width']  = $imgData[0];
-                            $rst['height'] = $imgData[1];
-                        }
                         $rst['size']   = $fsize;
                         $rtn['result'] = $rst;
                         $rtn['done']   = 1;
+                        $rtn['width']  = $imgwh['width'];
+                        $rtn['height'] = $imgwh['height'];
                     } else {
                         $rtn['error'] = ['code' => 422, 'message' => $uploader->get_last_error()];
                     }
                 } else {
                     $rtn['error'] = ['code' => 422, 'message' => '未配置文件上传器'];
                 }
+                @unlink($filePath);
             } else {
+                @unlink("{$filePath}.part");
                 $rtn['error'] = ['code' => 422, 'message' => '无法保存文件'];
             }
-            @unlink($filePath);
 
             return $rtn;
         }
-
         $rtn['error'] = ['code' => 102, 'message' => '数据不完整'];
 
         return $rtn;

@@ -87,7 +87,7 @@ abstract class Widget implements Renderable {
      * @return int
      */
     public function minWidth() {
-        return 1;
+        return 5;
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class Widget implements Renderable {
      * @return int
      */
     public function defaultWidth() {
-        return 6;
+        return $this->minWidth();
     }
 
     /**

@@ -25,7 +25,7 @@ class WelcomeWidget extends Widget {
 	}
 
 	public function defaultWidth() {
-		return 12;
+		return 4;
 	}
 
 	public function minWidth() {

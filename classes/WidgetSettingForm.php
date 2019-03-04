@@ -23,14 +23,6 @@ class WidgetSettingForm extends FormTable {
      * @required
      */
     public $name;
-    /**
-     * 宽度(1-12)
-     * @var \backend\form\TextField
-     * @type int
-     * @required
-     * @digits
-     */
-    public $width;
 
     /**
      * @param array $data

@@ -13,24 +13,10 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">宽度</label>
+            <label class="layui-form-label">位置</label>
             <div class="layui-input-block">
-                <input type="radio" name="width" value="1" title="1">
-                <input type="radio" name="width" value="2" title="2">
-                <input type="radio" name="width" value="3" title="3">
-                <input type="radio" name="width" value="4" title="4">
-                <input type="radio" name="width" value="5" title="5">
-            </div>
-            <div class="layui-input-block">
-                <input type="radio" name="width" value="6" title="6">
-                <input type="radio" name="width" value="7" title="7">
-                <input type="radio" name="width" value="8" title="8">
-                <input type="radio" name="width" value="9" title="9">
-                <input type="radio" name="width" value="10" title="10">
-            </div>
-            <div class="layui-input-block">
-                <input type="radio" name="width" value="11" title="11">
-                <input type="radio" name="width" value="12" title="12 (一整行)" checked>
+                <input type="radio" name="width" value="1" title="左" checked/>
+                <input type="radio" name="width" value="2" title="右"/>
             </div>
         </div>
     </form>

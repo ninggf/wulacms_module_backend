@@ -13,19 +13,19 @@ namespace backend\classes\widget;
 use backend\classes\Widget;
 
 class CacheWidget extends Widget {
-	public function render() {
-		return $this->load('backend/views/widget/cache');
-	}
+    public function render() {
+        return $this->load('backend/views/widget/cache');
+    }
 
-	public function name() {
-		return __('Cache');
-	}
+    public function name() {
+        return __('Cache');
+    }
 
-	public function defaultWidth() {
-		return 12;
-	}
+    public function defaultWidth() {
+        return 12;
+    }
 
-	public function minWidth() {
-		return 2;
-	}
+    public function minWidth() {
+        return 4;
+    }
 }

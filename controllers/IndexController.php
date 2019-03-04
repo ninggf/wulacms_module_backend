@@ -22,6 +22,11 @@ use wulaphp\io\Ajax;
 use wulaphp\util\ArrayCompare;
 use function backend\get_system_settings;
 
+/**
+ * Class IndexController
+ * @package  backend\controllers
+ * @roles    管理员
+ */
 class IndexController extends BackendController {
 
     public function index() {
@@ -196,12 +201,17 @@ class IndexController extends BackendController {
                 if (isset($w['cfg'])) {
                     $widget->setCfg($w['cfg']);
                 }
-                $w['widget']              = $widget;
-                $w['badge']               = $widget->badge();
-                $data['myWidgets'][ $id ] = $w;
-                $s                        = $widget->script();
+                $w['widget']   = $widget;
+                $w['badge']    = $widget->badge();
+                $w['minWidth'] = $widget->minWidth();
+                if ($w['width'] == '2') {
+                    $data['myWidgets2'][ $id ] = $w;
+                } else {
+                    $data['myWidgets'][ $id ] = $w;
+                }
+                $s = $widget->script();
                 if ($s) {
-                    $modules[ $id ] = '{/}' . App::res($s);
+                    $modules[ $id ] = '{/}' . $s;
                     $uses[]         = $id;
                     $alias[]        = '_$' . $id;
                     $init[]         = "_\${$id}.init()";
@@ -261,8 +271,11 @@ class IndexController extends BackendController {
             return Ajax::error('未知小部件');
         }
         /**@var Widget $w */
-        $w                    = $widgets[ $widget ];
-        $width                = max(intval($width), $w->minWidth());
+        $w  = $widgets[ $widget ];
+        $mw = $w->minWidth();
+        if ($mw > 4) {
+            $width = 1;
+        }
         $myWidgets[ $widget ] = ['id' => $widget, 'pos' => 999999, 'width' => $width, 'name' => $w->name()];
         $userMeta->setStrMeta($uid, 'widgets', json_encode($myWidgets));
 
@@ -384,18 +397,28 @@ class IndexController extends BackendController {
      * @return \wulaphp\mvc\view\JsonView
      */
     public function updateOrder() {
-        $ids = explode(',', rqst('ids'));
-        if ($ids) {
-            $userMeta  = new UserMetaModel();
-            $uid       = $this->passport->uid;
-            $myWidgets = $userMeta->myWidgets($uid);
-            foreach ($ids as $k => $id) {
+        $ids1      = explode(',', rqst('ids1'));
+        $ids2      = explode(',', rqst('ids2'));
+        $userMeta  = new UserMetaModel();
+        $uid       = $this->passport->uid;
+        $myWidgets = $userMeta->myWidgets($uid);
+        if ($ids1) {
+            foreach ($ids1 as $k => $id) {
                 if (isset($myWidgets[ $id ])) {
-                    $myWidgets[ $id ]['pos'] = $k;
+                    $myWidgets[ $id ]['pos']   = $k;
+                    $myWidgets[ $id ]['width'] = 1;
                 }
             }
-            $userMeta->setStrMeta($uid, 'widgets', json_encode($myWidgets));
         }
+        if ($ids2) {
+            foreach ($ids2 as $k => $id) {
+                if (isset($myWidgets[ $id ])) {
+                    $myWidgets[ $id ]['pos']   = $k + 100000;
+                    $myWidgets[ $id ]['width'] = 2;
+                }
+            }
+        }
+        $userMeta->setStrMeta($uid, 'widgets', json_encode($myWidgets, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
         return Ajax::success();
     }
@@ -404,9 +427,10 @@ class IndexController extends BackendController {
      * 重设小部件
      */
     public function reset() {
-        $widgets  = ['welcome' => ['id' => 'welcome', 'pos' => 1, 'width' => 12, 'name' => '欢迎']];
-        $userMeta = new UserMetaModel();
-        $uid      = $this->passport->uid;
+        $widgets           = ['welcome' => ['id' => 'welcome', 'pos' => 1, 'width' => 2, 'name' => '欢迎']];
+        $widgets['system'] = ['id' => 'system', 'pos' => 1, 'width' => 1, 'name' => '系统状态'];
+        $userMeta          = new UserMetaModel();
+        $uid               = $this->passport->uid;
         $userMeta->setStrMeta($uid, 'widgets', json_encode($widgets));
 
         return Ajax::reload('document', '布局已重置');
@@ -420,10 +444,8 @@ class IndexController extends BackendController {
         foreach ($myWidgets as $id => $w) {
             if (isset($widgets[ $id ])) {
                 /**@var Widget $widget */
-                $widget                    = $widgets[ $id ];
-                $myWidgets[ $id ]['name']  = $widget->name();
-                $myWidgets[ $id ]['width'] = $widget->defaultWidth();
-                unset($myWidgets[ $id ]['cfg']);
+                $widget                   = $widgets[ $id ];
+                $myWidgets[ $id ]['name'] = $widget->name();
             }
         }
         $userMeta->setStrMeta($uid, 'widgets', json_encode($myWidgets));

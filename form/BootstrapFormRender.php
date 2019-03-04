@@ -168,7 +168,7 @@ class BootstrapFormRender extends FormRender {
                             if (!$ignoreCol) {
                                 $chunk[] = '<div class="row">';//3
                             }
-                            foreach ($fields as $_field) {
+                            foreach ($fields as $idx => $_field) {
                                 /**@var \wulaphp\form\FormField $field */
                                 @list($field, $col) = $_field;
                                 if (!$ignoreCol) {
@@ -176,13 +176,17 @@ class BootstrapFormRender extends FormRender {
                                 }
                                 $checkbox = isset($field['checkbox']);
                                 if ($checkbox) {
-                                    $chunk[] = '<div class="checkbox"><label>' . $field->render($this->options) . $field['label'] . '</label></div>';
+                                    if ($idx) {
+                                        $chunk[] = '<div class="checkbox"><label>' . $field->render($this->options) . $field['label'] . '</label></div>';
+                                    } else {
+                                        $chunk[] = '<div class="checkbox"><label>' . $field->render($this->options) . '是</label></div>';
+                                    }
                                 } else {
                                     $chunk[] = $field->render($this->options);
                                 }
                                 if (isset($field['note']) && $field['note']) {
                                     $chunk[] = "<span class=\"help-block text-muted m-b-none\">" . $field['note'] . "</span>";
-                                } else {
+                                } else if ($idx) {
                                     $chunk[] = "<span class=\"help-block text-muted m-b-none\">" . $field['label'] . "</span>";
                                 }
                                 if (!$ignoreCol) {

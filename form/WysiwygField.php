@@ -125,9 +125,9 @@ EQL;
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default" data-edit="unlink"><i class="fa fa-unlink"></i></a>
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink"><i class="fa fa-link"></i></a>
-<div class="dropdown-menu aside-xl">
-	<div class="bg-white">
-		<div class="form-group wrapper m-b-none">
+<div class="dropdown-menu" style="width:400px">
+	<div style="background-color:#fff;color:#717171;padding:0 10px">
+		<div class="form-group" style="margin:0">
 			<div class="input-group">
                 <input class="form-control" placeholder="URL" type="text" data-edit="createLink">
                 <span class="input-group-btn"><button class="btn btn-primary btn-icon" type="button"><i class="fa fa-link"></i></button></span>
@@ -142,15 +142,15 @@ EQL;
             $toolbar [] = <<<EQL
 <div class="btn-group btn-group-sm">
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="插入图片" data-original-title="插入图片"><i class="fa fa-picture-o"></i></a>
-<div class="dropdown-menu aside-xxl">
-	<div class="bg-white">
-		<div class="form-group wrapper">
+<div class="dropdown-menu" style="width:400px">
+	<div style="background-color:#fff;color:#717171;padding:0 10px">
+		<div class="form-group" style="margin:0">
 			<div class="input-group">
                 <input class="form-control" placeholder="图片地址" type="text" value=""/>
                 <span class="input-group-btn"><a class="btn btn-default btn-icon ins-pic" href="javascript:"><i class="fa fa-picture-o"></i></a></span>
             </div>
         </div>
-        <div class="form-group layui-upload-drag wrapper m-t-xs m-b-none" style="width:90%;margin-left:15px" id="{$id}-uploader">
+        <div class="form-group layui-upload-drag" style="width: 100%;margin:10px 0 0;padding:30px" id="{$id}-uploader">
             <i class="layui-icon">&#xe67c;</i>
             <p>点击上传，或将文件拖拽到此处</p>
         </div>
