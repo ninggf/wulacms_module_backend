@@ -100,6 +100,7 @@ class AuthController extends AdminController {
                 $eCnt += 1;
             }
             $_SESSION['errCnt'] = $eCnt;
+            Syslog::warn('Login Fail: ' . $username, 0, 'accesslog');
 
             return Ajax::error(['message' => $this->passport->error, 'ent' => $eCnt], 'alert');
         }
@@ -152,12 +153,14 @@ class AuthController extends AdminController {
 
     /**
      * 登出.
-     *
+     * @nologin
      * @return null|\wulaphp\mvc\view\JsonView
      */
     public function signout() {
-        Syslog::info('Logout', $this->passport->uid, 'accesslog');
-        $this->passport->logout();
+        if ($this->passport->isLogin) {
+            Syslog::info('Logout', $this->passport->uid, 'accesslog');
+            $this->passport->logout();
+        }
         //清空自动登录
         Response::cookie('astoken', null);
         if (Request::isAjaxRequest() || rqset('ajax')) {

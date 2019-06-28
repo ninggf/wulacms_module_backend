@@ -10,7 +10,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
-        {loaduicss jqadmin="jqadmin.css" theme="$theme/theme.css"}
+        {loaduicss jqadmin="jqadmin.css" bar="simplebar.css" theme="$theme/theme.css"}
     </head>
     <body>
     <div class="layui-layout layui-layout-admin" style="opacity: 0">
@@ -27,7 +27,7 @@
                     </h1>
                 </a>
                 <a class="img-logo" title="{if $brandName}{$brandName|escape}{else}WulaCMS{/if} v{$version}">
-                    <img src="{'jqadmin/images/wula.png'|assets}">
+                    <img src="{'jqadmin/images/wula.png'|assets}" alt="Logo"/>
                 </a>
             </div>
             <!-- 主菜单区域 -->
@@ -177,7 +177,7 @@
         </div>
         <!-- 左侧导航-->
         <div class="layui-side jqamdin-left-bar">
-            <div class="layui-side-scroll">
+            <div class="layui-side-scroll" data-simplebar>
                 <div id="submenu">
                     {foreach $submenus as $sm}
                         <div class="sub-menu">
@@ -242,7 +242,7 @@
     {initjq config=1}
     <script type="text/javascript">
         {minify type='js'}
-        layui.use(['jquery', 'jqmenu', 'layer', 'toastr', 'laytpl'], function ($, menu, layer, toast, tpl) {
+        layui.use(['jquery', 'jqmenu', 'layer', 'toastr', 'laytpl','simplebar'], function ($, menu, layer, toast, tpl) {
             var mainMenu              = new menu(),
                 jqIndex               = function () {
                 };

@@ -2,18 +2,15 @@
     <form id="WidgetForm" action="{'backend/save-widget'|app}" data-ajax class="layui-form" role="form" lay-filter="form"
           data-ajax-done="close:me">
         <div class="layui-form-item">
-            <label class="layui-form-label">选择框</label>
+            <label class="layui-form-label text-left">部件</label>
             <div class="layui-input-block">
-                <select name="widget">
-                    <option value="">请选择一个小部件</option>
-                    {foreach $widgets as $wid=>$w}
-                        <option value="{$wid}">{$w->name()}</option>
-                    {/foreach}
-                </select>
+                {foreach $widgets as $wid=>$w}
+                    <input type="radio" name="widget" value="{$wid}" title="{$w->name()|escape}">
+                {/foreach}
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">位置</label>
+            <label class="layui-form-label text-left">位置</label>
             <div class="layui-input-block">
                 <input type="radio" name="width" value="1" title="左" checked/>
                 <input type="radio" name="width" value="2" title="右"/>

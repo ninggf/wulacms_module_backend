@@ -127,6 +127,17 @@ abstract class Widget implements Renderable {
     }
 
     /**
+     * 当前用户是否可见.
+     *
+     * @param \wulaphp\auth\Passport $passport
+     *
+     * @return bool
+     */
+    public function check($passport) {
+        return true;
+    }
+
+    /**
      * 小部件名称.
      * @return string
      */

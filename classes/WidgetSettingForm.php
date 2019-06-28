@@ -30,4 +30,8 @@ class WidgetSettingForm extends FormTable {
     public function saveCfg($data) {
 
     }
+
+    public function loadCfg($data) {
+        return $data;
+    }
 }

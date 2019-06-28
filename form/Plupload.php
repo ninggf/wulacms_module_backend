@@ -72,6 +72,7 @@ trait Plupload {
 
             return $rtn;
         }
+        $oname    = $name;
         $name     = thefilename($name);
         $filext   = strtolower(strrchr($name, '.'));
         $fileName = str_replace(['/', '+', '='], [
@@ -264,6 +265,7 @@ trait Plupload {
                         $rst = false;
                     }
                     if ($rst) {
+                        $rst['oname']  = $oname;
                         $rst['size']   = $fsize;
                         $rst['width']  = $imgwh['width'];
                         $rst['height'] = $imgwh['height'];
@@ -291,6 +293,7 @@ trait Plupload {
 
         return $rtn;
     }
+
     /**
      * 取文件上传器
      *

@@ -198,6 +198,9 @@ class IndexController extends BackendController {
             if (isset($widgets[ $id ])) {
                 /**@var Widget $widget */
                 $widget = $widgets[ $id ];
+                if (!$widget->check($this->passport)) {
+                    continue;
+                }
                 if (isset($w['cfg'])) {
                     $widget->setCfg($w['cfg']);
                 }
@@ -237,8 +240,9 @@ class IndexController extends BackendController {
         $myWidgets  = $userMeta->myWidgets($uid);
         $widgets    = Widget::widgets();
         $newWidgets = [];
+        /**@var  Widget $w */
         foreach ($widgets as $id => $w) {
-            if (!isset($myWidgets[ $id ])) {
+            if (!isset($myWidgets[ $id ]) && $w->check($this->passport)) {
                 $newWidgets[ $id ] = $w;
             }
         }
@@ -337,6 +341,7 @@ class IndexController extends BackendController {
         $cfg          = isset($wdata['cfg']) ? $wdata['cfg'] : [];
         $cfg['name']  = $wdata['name'];
         $cfg['width'] = $wdata['width'];
+        $cfg          = $form->loadCfg($cfg);
         $form->inflateByData($cfg);
 
         $data['form']  = BootstrapFormRender::v($form);

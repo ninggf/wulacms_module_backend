@@ -37,13 +37,13 @@ class AdminPassport extends Passport {
     /**
      * 用户可以有多个角色，角色可以继承其它角色，被继承的角色权限优先级低于当前角色.
      *
-     * @see table `acl`
-     *
      * @param string $op    操作
      * @param string $res   资源
      * @param array  $extra 额外数据
      *
      * @return bool
+     * @see table `acl`
+     *
      */
     protected function checkAcl($op, $res, $extra) {
         static $checked = [];
@@ -89,6 +89,7 @@ class AdminPassport extends Passport {
 
     /**
      * 认证
+     *
      * @param array|int|string $data [0=>username,1=>password] or uid
      *
      * @return bool
@@ -96,10 +97,10 @@ class AdminPassport extends Passport {
     protected function doAuth($data = null) {
         $table = new UserTable();
         if (is_numeric($data)) {
-            $user = $table->get(['id' => $data]);
+            $user = $table->findOne(['id' => $data]);
         } else {
             list($username, $password) = $data;
-            $user = $table->get(['username' => $username]);
+            $user = $table->findOne(['username' => $username]);
             if ($user['username'] != $username) {
                 $this->error = __('You entered an incorrect username or password.');
 
@@ -134,13 +135,50 @@ class AdminPassport extends Passport {
         }
         $this->data['logintime'] = time();
         $this->data['astoken']   = md5($user['uid'] . $user['hash'] . $user['username'] . $_SERVER['HTTP_USER_AGENT']) . '/' . $user['id'];
-        foreach ($user['roles'] as $r) {
-            $rid                         = $r['id'];
-            $this->data['roles'][ $rid ] = $r['name'];
-        }
         $table->updateLoginInfo($this->uid, $this->data['logintime']);
 
         return true;
+    }
+
+    public function restore() {
+        $this->data['roles'] = [];
+        $this->data['acls']  = null;
+        if ($this->uid) {
+            $table                = new UserTable();
+            $user                 = $table->findOne($this->uid);
+            $this->data['status'] = $user['status'];
+            if ($user['status'] == '0') {
+                $this->data['acls'] = [];
+                $this->error        = __('Your account is locked.');
+            } else {
+                if ($this->uid != 1 && $this->uid != $this->data['pid']) {//非超级管理员且不是一级用户
+                    $parent = $table->findOne($this->data['pid']);
+                    if ($parent['status'] == '0') {//父用户被锁
+                        $this->data['status'] = 0;
+                        $this->data['acls']   = [];
+                        $this->error          = __('Your account is locked.');
+                    }
+                    $proles = [];
+                    foreach ($parent['roles'] as $r) {
+                        $rid            = $r['id'];
+                        $proles[ $rid ] = $r['name'];
+                    }
+                    $this->data['parent']          = $parent->toArray();
+                    $this->data['parent']['roles'] = $proles;
+                }
+                $levels = [];
+                foreach ($user['roles'] as $r) {
+                    $rid                         = $r['id'];
+                    $levels[]                    = $r['level'];
+                    $this->data['roles'][ $rid ] = $r['name'];
+                }
+                if ($this->uid != $this->data['pid']) {
+                    $this->data['maxRoleLevel'] = max(0, max($levels) - 1);
+                } else {
+                    $this->data['maxRoleLevel'] = 999;
+                }
+            }
+        }
     }
 
     /**
@@ -149,20 +187,36 @@ class AdminPassport extends Passport {
     private function loadAcl() {
         $acls = [];
         if ($this->data['roles']) {
-            $acl = new AclTable();
-            foreach ($this->data['roles'] as $rid => $role) {
-                $ac = $acl->findAll(['role_id' => $rid], 'res,allowed,priority')->toArray();
+            $acl  = new AclTable();
+            $rids = array_keys($this->data['roles']);
+            $ac   = $acl->findAll(['role_id IN' => $rids], 'res,allowed,priority')->toArray();
+            foreach ($ac as $a) {
+                $res = $a['res'];
+                //priority越小优先级越高.
+                if (!isset($acls[ $res ]) || $acls[ $res ]['priority'] > $a['priority']) {
+                    $acls[ $res ] = $a;
+                }
+            }
+
+            if (isset($this->data['parent']) && $this->data['parent']['roles']) {
+                $rids  = array_keys($this->data['parent']['roles']);
+                $ac    = $acl->findAll(['role_id IN' => $rids], 'res,allowed,priority')->toArray();
+                $pacls = [];
                 foreach ($ac as $a) {
                     $res = $a['res'];
                     //priority越小优先级越高.
-                    if (!isset($acls[ $res ]) || $acls[ $res ]['priority'] > $a['priority']) {
-                        unset($a['res']);
+                    if (!isset($pacls[ $res ]) || $pacls[ $res ]['priority'] > $a['priority']) {
+                        $pacls[ $res ] = $a;
+                    }
+                }
+                foreach ($pacls as $res => $a) {//禁用
+                    if (!$a['allowed']) {
                         $acls[ $res ] = $a;
                     }
                 }
             }
         }
         $this->data['acls'] = $acls;
-        $this->store();
+        //$this->store();
     }
 }
