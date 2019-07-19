@@ -242,7 +242,7 @@
     {initjq config=1}
     <script type="text/javascript">
         {minify type='js'}
-        layui.use(['jquery', 'jqmenu', 'layer', 'toastr', 'laytpl','simplebar'], function ($, menu, layer, toast, tpl) {
+        layui.use(['jquery', 'jqmenu', 'layer', 'toastr', 'laytpl', 'simplebar'], function ($, menu, layer, toast, tpl) {
             var mainMenu              = new menu(),
                 jqIndex               = function () {
                 };
@@ -305,7 +305,7 @@
                         area      : ['310px', ($(window).height() - 54) + 'px'],
                         shadeClose: true,
                         offset    : 'rb',
-                        skin:"layui-anim layui-anim-rl layui-n-br",
+                        skin      : "layui-anim layui-anim-rl layui-n-br",
                         content   : cnt
                     });
                 });
@@ -313,9 +313,12 @@
             });
 
             $('body').on('click', '.theme-list .theme', function () {
-                var theme       = $(this).data('theme');
-                document.cookie = "theme=" + theme + "; path=/";
-                location.reload();
+                var theme = $(this).data('theme');
+                $.get('{'backend/set-theme'|app}', {
+                    theme: theme
+                }, function () {
+                    window.location.reload();
+                }, 'json');
             }).on('click', '#menu-picker', function (e) {
                 e.preventDefault();
                 e.stopPropagation();

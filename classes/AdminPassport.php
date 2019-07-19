@@ -217,6 +217,5 @@ class AdminPassport extends Passport {
             }
         }
         $this->data['acls'] = $acls;
-        //$this->store();
     }
 }

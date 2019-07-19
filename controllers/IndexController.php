@@ -93,11 +93,7 @@ class IndexController extends BackendController {
 
         $data['website']['name'] = App::cfg('name', 'Hello WulaCms');
         $data['brandName']       = App::cfg('brandName');
-        $theme                   = $_COOKIE['theme'] ?? 'blue';
-        if (!$theme) {
-            $theme = 'blue';
-        }
-        $data['theme']  = $theme;
+
         $themes[]       = [
             'name'    => 'blue',
             'header'  => '#FFF',
@@ -159,6 +155,13 @@ class IndexController extends BackendController {
         if (!is_array($favorites)) {
             $favorites = [];
         }
+
+        $theme = $userMeta->getStrMeta($this->passport->uid, 'myTheme');
+        if (!$theme) {
+            $theme = 'blue';
+        }
+        $data['theme'] = $theme;
+
         $fmenus = [];
         foreach ($favorites as $fid => $v) {
             $m = $ui->getMenu($fid);
@@ -503,5 +506,12 @@ class IndexController extends BackendController {
         } else {
             return Ajax::warn('未知操作');
         }
+    }
+
+    public function setTheme($theme) {
+        $userMeta = new UserMetaModel();
+        $userMeta->setStrMeta($this->passport->uid, 'myTheme', $theme);
+
+        return Ajax::success();
     }
 }
