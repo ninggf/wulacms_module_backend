@@ -1,25 +1,26 @@
 {
-  "name": "wulacms/backend",
-  "description": "wualcms管理后台界面",
-  "type": "wula-module",
-  "require": {
-	"wula/wula-installer": "^2.0",
-	"michelf/php-markdown": "^1.7"
-  },
-  "license": "MIT",
-  "authors": [
-	{
-	  "name": "Leo Ning",
-	  "email": "windywany@gmail.com"
-	}
-  ],
-  "extra": {
-	"branch-alias": {
-	  "dev-master": "1.0-dev"
-	}
-  },
-  "support": {
-	"issues": "https://github.com/ninggf/wulacms_module_backend/issues"
-  },
-  "homepage": "https://www.wulacms.com/modules/backend"
+    "name": "wulacms/backend",
+    "description": "wualcms管理后台界面",
+    "type": "wula-module",
+    "require": {
+        "wula/wula-installer": "^2.0",
+        "wulacms/system": "^3.0",
+        "michelf/php-markdown": "^1.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Leo Ning",
+            "email": "windywany@gmail.com"
+        }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/ninggf/wulacms_module_backend/issues"
+    },
+    "homepage": "https://www.wulacms.com/modules/backend"
 }
