@@ -1,0 +1,117 @@
+<!-- @ifdef SOMEVAR -->
+<html>
+<head>
+    <!-- @endif-->
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- @if env='pro' -->
+    <link rel="stylesheet" href="/css/layui.css">
+    <link rel="stylesheet" href="/css/coolay.css">
+    <script type="text/javascript" src="/layui.js"></script>
+    <!-- @endif -->
+    <!-- @if env='dev' -->
+    <link rel="stylesheet" href="/css/layui.dev.css">
+    <link rel="stylesheet" href="/css/coolay.dev.css">
+    <script type="text/javascript" src="/layui.dev.js"></script>
+    <!-- @endif -->
+    <script type="text/javascript" src="/demo/jquery-3.4.x.min.js"></script>
+    <script type="text/javascript">
+        layui.config({
+            devMode: "<!-- @if env='dev' -->1<!-- @endif -->",
+            base: '/demo/js/'
+        }).use('&coolay');
+    </script>
+</head>
+<body class="layui-layout-body">
+    <!--[if lte IE 9]>
+    <div id="noie9">
+        Coolay no longer actively supports this version of Internet Explorer. We suggest that you <a href="https://windows.microsoft.com/en-us/internet-explorer/download-ie" style="color:#fff;text-decoration:underline;">upgrade to a newer version</a> or <a href="https://browsehappy.com/" style="color:#fff;text-decoration:underline;">try a different browser</a>.
+    </div>
+    <![endif]-->
+
+    <!--loader-->
+    <div class="cl-loader-container">
+        <div class="cl-loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+            </svg>
+        </div>
+    </div>
+    <!--/loader-->
+
+    <div class="layui-layout cl-layout">
+        <header class="cl-header">
+            <div class="cl-toolbar">
+                <ul class="layui-nav">
+                    <li class="layui-nav-item layui-hide-xs">
+                        <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" />
+                    </li>
+                </ul>
+                <ul class="layui-nav layui-layout-right">
+                    <li class="layui-nav-item">
+                        <a lay-href="app/message/index.html" lay-text="消息中心">
+                            <i class="layui-icon layui-icon-notice"></i>
+                            <span class="layui-badge-dot"></span>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item layui-hide-xs">
+                        <a href="javascript:;" layadmin-event="theme">
+                            <i class="layui-icon layui-icon-theme"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item layui-hide-xs">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-note"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item layui-hide-xs">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-screen-full"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">
+                            <img src="/images/avatar.jpg" class="layui-nav-img" />
+                            CoolayUI
+                        </a>
+                        <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                            <dd><a lay-href="set/user/info.html">基本资料</a></dd>
+                            <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                            <dd><a>退出</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <aside class="cl-sidebar">
+            <div class="layui-side-scroll">
+                <div class="cl-brand">
+                    <img src="/images/logo.png" class="layui-nav-img"> <span>Coolay UI</span>
+                </div>
+                <div class="cl-handle">
+                    <i class="layui-icon layui-icon-shrink-right cl-shrink-hand"></i>
+                </div>
+                <ul class="cl-menu">
+                    <li>aaa</li>
+                    <li>bbb</li>
+                </ul>
+            </div>
+        </aside>
+
+        <section class="cl-body">
+            <div id="pjax-body" class="cl-main" data-simplebar>
+                <!-- @extendable -->
+            </div>
+        </section>
+    </div>
+
+    <!--overlay-->
+    <div class="cl-overlay" id="cl-overlay"></div>
+    <!--/overlay-->
+</body>
+</html>

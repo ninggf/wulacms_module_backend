@@ -1,0 +1,53 @@
+.cl-loader-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: transparent;
+
+  .cl-loader {
+    display: block;
+    width: 60px;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+
+    &:before {
+      content: "";
+      display: block;
+      padding-top: 100%;
+    }
+  }
+
+  .circular {
+    animation: rotate 2s linear infinite;
+    height: auto;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+  }
+}
+
+.loaded {
+  .cl-loader-container {
+    opacity: 0;
+    transition: all 2s cubic-bezier(0.23, 1, 0.320, 1) 0s;
+  }
+}
