@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/css/layui.dev.css">
+    <link rel="stylesheet" href="/css/install.dev.css">
+    <script type="text/javascript" src="/layui.dev.js"></script>
+    <script type="text/javascript" src="/demo/vue.min.js"></script>
+    <title>Install</title>
+</head>
+<body>
+    <div class="install " v-cloak>
+        <div class="install_body ">
+            <div class="install_left">
+                <p>logo</p>
+                <ul class="install_left__steps">
+                    <li v-for="(item,i) in steps" :class="[c_step==i?'checked':'']">{{item}}</li>
+                </ul>
+            </div>
+            <div class="install_right">
+                <div class="layui-form language" v-show="c_step==0">
+                    <p class="title">{{steps_titles[c_step]}}</p>
+                    <div class="tips layui-bg-orange">
+                        提示:tips<br>
+                    </div>
+                    <div class="select" v-show="c_step==0">
+                        <select name="city" lay-verify="required">
+                            <option value="0">中文</option>
+                            <option value="1">English</option>
+                        </select>
+                    </div>
+                    <div class="sub_title">
+                            Translations will be <em>downloaded</em> from the Drupal <em>Translation</em> website. If you do not want this, select English.
+                    </div>
+                   
+                </div>
+                <div class="layui-form radios" v-show="c_step==1">
+                    <p class="title">{{steps_titles[c_step]}}</p>
+                    <div v-for="(val,key) in radios.inputs">
+                        <input type="radio"  name="profile" :value="key" :title="key">
+                        <p class="radio_tips">{{val}}</p>
+                    </div>
+                </div>
+                <div class="layui-form verify" v-show="c_step==2">
+                    <p class="title">{{steps_titles[c_step]}}</p>
+                    <ul>
+                        <li>
+                            <div>
+                                <b>OK</b>
+                            </div>
+                            <hr class="layui-bg-gray">
+                        </li>
+                        <li v-for="(val,key) in verify.system">
+                            <div>
+                            <b>{{key}}</b>
+                            <p>{{val}}</p>
+                            </div>
+                            <hr class="layui-bg-gray">
+                        </li>
+                       
+                        
+                    </ul>
+                </div>
+                <div class="layui-form database" v-show="c_step==3">
+                    <p class="title">{{steps_titles[c_step]}}</p>
+                    <input type="radio" name="sql" value="0" title="MySQL, MariaDB, Percona Server, or equivalent" checked>
+                    <input type="radio" name="sql" value="1" title="SQLite">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="Database name" autocomplete="off" class="layui-input">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="Database username" autocomplete="off" class="layui-input">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="Database password" autocomplete="off" class="layui-input">
+                    <div class="layui-collapse " lay-accordion>
+                            <div class="layui-colla-item ">
+                              <h2 class="layui-colla-title layui-bg-cyan" @click="database.option.show=!database.option.show">Advanced options</h2>
+                              <div :class="[database.option.show?'layui-show':'','layui-colla-content']">
+                                    <input type="text" name="title" required  lay-verify="required" placeholder="Host" autocomplete="off" class="layui-input">
+                                    <input type="text" name="title" required  lay-verify="required" placeholder="Port number" autocomplete="off" class="layui-input">
+                                    <p>
+                                        If more than one application will be sharing this database, a unique table name prefix – such as drupal_ – will prevent collisions.  
+                                    </p>
+                              </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="layui-form progress" v-show="c_step==4">
+                    <p class="title">{{steps_titles[c_step]}}</p>
+                    <h1>{{install_progress==100?'finish':'installing...'}}</h1>
+                    <div class=" layui-progress layui-progress-big" lay-filter="install-progress" >
+                        <div class="layui-progress-bar" lay-percent="0%">{{install_progress}}%</div>
+                    </div>
+                </div>
+                <button :class="[c_step==0?'layui-btn layui-btn-disabled':'','layui-btn layui-btn-primary install_right__pre']" @click="c_step!=0?c_step--:''">上一步</button>
+                <button  class="layui-btn layui-btn-primary install_right__next"   @click="c_step++" v-show="c_step<4">继续</button>
+                <button  :class="[install_progress==100?'':'layui-btn-disabled','layui-btn layui-btn-primary install_right__next']"   @click="install_progress==100?alert('finfish'):''" v-show="c_step==4">完成</button>
+            </div>
+        </div>
+    </div>
+   
+</body>
+<script>
+    layui.config({
+        devMode: "<!-- @if env='dev' -->1<!-- @endif -->",
+        base: '/demo/js/'
+    });
+    layui.use(['layer', 'element', 'form', '&install'], function() {
+        var form = layui.form;
+        form.render();
+    })
+</script>
+</html>
