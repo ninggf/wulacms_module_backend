@@ -19,7 +19,7 @@ layui.define(['jquery'],(exports) => {
             status:0,//0提交验证 1验证中 //2验证通过//3禁止
             data:{
                 code:'',
-                config:'',
+                config:'pro',
                 db:'MYSQL',
                 dbname:'',
                 dbusername:'',
@@ -28,6 +28,7 @@ layui.define(['jquery'],(exports) => {
                 port:'',
                 username:'',
                 userpwd:'',
+                confirm_pwd:'',
             },
             current:'home',
             install_progress:0,
@@ -57,23 +58,9 @@ layui.define(['jquery'],(exports) => {
                     }
                 }
             },
-            verify(){
-                let $vm=this;
-                this.status=1;
-                $.post('installer/verify', {
-                    code:$vm.data.code,
-                },function (data) {
-                    if(data && data.status){
-                        $vm.status=2;
-                    }else{
-                        $vm.current=data.step;
-                        $vm.tips=data.msg||'tips';
-                        $vm.status=0;
-                    }
-                });
-            },
             setup(step){
-                var $vm=this,data={};
+                var $vm=this,data={},api="installer/setup";
+                this.status=1;
                 switch (step) {
                     case 'config':
                     data.config=$vm.data.config
@@ -90,16 +77,19 @@ layui.define(['jquery'],(exports) => {
                     data.username=$vm.data.username;
                     data.dbpwd=$vm.data.dbpwd;
                     break;
+                    case 'verify':
+                    data.code=$vm.data.code;
+                    api='installer/verify';
+                    break;
                 }
-                this.status=1;
-                $.post('installer/setup',data,function (data) {
-                    if(data.status==0){
+                $.post(api,api=="installer/setup"?{step:$vm.current,cfg:data,}:{code:$vm.data.code,step:$vm.current},function (data) {
+                    if(data && data.status){
+                        $vm.status=1;
+                        $vm.go('next');
+                    }else{
                         $vm.current=data.step;
                         $vm.tips=data.msg||'tips';
                         $vm.status=0;
-                    }else{
-                        $vm.status=2;
-
                     }
                 });
             },
