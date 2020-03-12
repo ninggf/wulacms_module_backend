@@ -16,23 +16,32 @@ layui.define(['jquery'],(exports) => {
             ],
             requirements:window.vueData.requirements,
             dirs:window.vueData.dirs,
+            page_step:window.vueData.step,
+            page_data:window.vueData.data,
             status:0,//0提交验证 1验证中 //2验证通过//3禁止
-            data:{
+            current:'home',
+            install_progress:0,
+            tips:"",
+            verify:{
                 code:'',
+            },
+            config:{
                 config:'pro',
-                db:'MYSQL',
+            },
+            db:{
+                type:'MYSQL',
                 dbname:'',
                 dbusername:'',
                 dbpwd:'',
                 host:'',
                 port:'',
-                username:'',
-                userpwd:'',
-                confirm_pwd:'',
             },
-            current:'home',
-            install_progress:0,
-            tips:"",
+            user:{
+                name:'',
+                pwd:'',
+                confirm_pwd:'',
+                url:'backend'
+            }
         },
         methods: {
             verifyNext(){
@@ -58,31 +67,13 @@ layui.define(['jquery'],(exports) => {
                     }
                 }
             },
-            setup(step){
-                var $vm=this,data={},api="installer/setup";
+            setup(name){
+                var $vm=this,api="installer/setup";
                 this.status=1;
-                switch (step) {
-                    case 'config':
-                    data.config=$vm.data.config
-                    break;
-                    case 'db':
-                    data.db=$vm.data.db;
-                    data.dbname=$vm.data.dbname;
-                    data.dbusername=$vm.data.dbusername;
-                    data.dbpwd=$vm.data.dbpwd;
-                    data.host=$vm.data.host;
-                    data.port=$vm.data.port;
-                    break;
-                    case 'user':
-                    data.username=$vm.data.username;
-                    data.dbpwd=$vm.data.dbpwd;
-                    break;
-                    case 'verify':
-                    data.code=$vm.data.code;
+                if(name=='verify'){
                     api='installer/verify';
-                    break;
                 }
-                $.post(api,api=="installer/setup"?{step:$vm.current,cfg:data,}:{code:$vm.data.code,step:$vm.current},function (data) {
+                $.post(api,api=="installer/setup"?{step:name,cfg:$vm[name]}:{step:name,code:$vm.verify.code},function (data) {
                     if(data && data.status){
                         $vm.status=1;
                         $vm.go('next');
@@ -106,6 +97,13 @@ layui.define(['jquery'],(exports) => {
             },
         },
         mounted() {
+            if(this.page_step){
+                for(var i in this.page_data){
+                    if(this.page_data[i] && this[i])
+                    this[i]=this.page_data[i];
+                }
+                this.current=this.page_step;
+            }
         },
         watch: {
             
