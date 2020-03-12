@@ -24,8 +24,8 @@ html,body{
         position: absolute;
         background: rgba(255,255,255,0.7);
         width: 75%;
-        max-width: 770px;
-        min-width: 500px;
+        max-width: 800px;
+        min-width: 600px;
         min-height: 350px;
         transform: translate(-50%,-50%);
         left: 50%;
@@ -91,15 +91,6 @@ html,body{
             position: relative;
             min-height: 350px;
             padding-bottom: 60px;
-            
-            
-            .tips{
-                font-size: 12px;
-                box-sizing: border-box;
-                line-height: 2;
-                padding-left: 10px;
-            }
-
             .title{
                 font-size: 18px;
                 font-weight: 700;
@@ -109,56 +100,27 @@ html,body{
                 width: 220px;
                 margin: 20px 0;
             }
-            .sub_title{
-                font-size: 13px;
-                em{
-                    color: #0074bd;
-                }
-            }
-            .radio_tips{
-                padding-left: 28px;
-                font-size: 13px;
-            }
             .layui-form-radio *{
                 font-size: 14px;
             }
             .layui-form-radio>i{
                 font-size: 18px;
             }
-            &.verify{
-                ul{
-                    margin-top: 30px;
-                    li{
-                        &:first-child{
-                            div{
-                                padding: 0;
-                                font-size: 16px;
-                            }
-                        }
-                    div{ padding-left: 20px;}
-                    }
-                }
+            
+            .layui-icon{
+                font-size: 14px;
+                vertical-align: middle;
             }
-            &.database{
-                input{
-                    width: 330px;
-                    margin: 18px;
-                    &:focus{
-                        border:skyblue solid 1px !important;
-                    }
-                }
-                .layui-collapse{
-                    .layui-colla-content{
-                        padding: 0;
-                    }
-                    .layui-show{
-                        p{
-                            padding-left: 18px;
-                            padding-bottom: 18px;
-                        }
-                    }
-                }
+
+            .tips{
+                line-height: 20px;
+                padding-left: 4px;
+                font-size: 12px;
             }
+            
+
+            input{margin:10px 0;}
+
             &.progress{
                 .layui-progress{
                     position: absolute;
@@ -186,16 +148,50 @@ html,body{
             }
             
         }
+
+
+        .install_right__verify{
+            .info,.info-title{
+                margin: 10px 0;
+                display: flex;
+                justify-content: space-around;
+                span{
+                    display: inline-block;
+                    width: 120px;
+                    text-overflow: ellipsis;
+                    overflow:hidden;
+                    white-space: nowrap;
+                    font-size: 13px;
+                    text-align: center;
+                    &:nth-child(1){
+                        text-align: left;
+                    }
+                }
+            }
+            
+        }
+
+
         .install_right__next,.install_right__pre{
-            width: 80px;
-            bottom: 30px;
+            min-width: 80px;
+            padding:0 10px;
+            bottom: 0;
             position: absolute;
         }
         .install_right__next{
-            right: 30px;
+            right: 0;
         }
         .install_right__pre{
-            left: 30px;
+            left: 0;
         }
+        .install_loading{
+            display: inline-block;
+            position: absolute;
+            right: 20px;
+            bottom: 0;
+            font-size: 20px !important;
+            line-height: 38px  !important;
+        }
+        
     }
 }
