@@ -1,5 +1,6 @@
-layui.define((exports) => {
+layui.define(['jquery'],(exports) => {
     'use strict';
+    const $ = layui.$;
     const app = new Vue({
         el: '.install',
         data: {
@@ -34,7 +35,7 @@ layui.define((exports) => {
         },
         methods: {
             verifyNext(){
-                var flag=1;
+                let flag=1;
                 this.requirements.map(function(v){
                     if(!(v[1].pass|v[1].optional))flag=0;
                     
@@ -46,7 +47,7 @@ layui.define((exports) => {
                 return flag;
             },
             go(type){
-                var $vm=this;
+                let $vm=this;
                     $vm.tips='';
                     $vm.status=0;
                 for(var i=0;i<$vm.step.length;i++){
@@ -57,12 +58,18 @@ layui.define((exports) => {
                 }
             },
             verify(){
-                var $vm=this;
+                let $vm=this;
                 this.status=1;
                 $.post('installer/verify', {
                     code:$vm.data.code,
                 },function (data) {
-                    $vm.status=2;
+                    if(data && data.status){
+                        $vm.status=2;
+                    }else{
+                        $vm.current=data.step;
+                        $vm.tips=data.msg||'tips';
+                        $vm.status=0;
+                    }
                 });
             },
             setup(step){
