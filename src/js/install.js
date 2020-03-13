@@ -60,16 +60,6 @@ layui.define(['jquery'],(exports) => {
                 let $vm=this;
                     $vm.tips='';
                     $vm.status=0;
-                if( ($vm.current=="db" || $vm.current=="user") && type=='next' ){
-                    for(var i in $vm[$vm.current]){
-                        if(!$vm[$vm.current][i] && i!="port" && i!="host"){
-                            $vm.tips="填写正确信息";
-                            return;              
-                        }
-                    }
-                }
-
-
                 for(var i=0;i<$vm.step.length;i++){
                     if($vm.step[i].name==$vm.current){
                         $vm.current=type=='next'?$vm.step[i+1].name:$vm.step[i-1].name;
@@ -77,9 +67,24 @@ layui.define(['jquery'],(exports) => {
                     }
                 }
             },
+
+
             setup(name){
                 var $vm=this,api="installer/setup";
                 this.status=1;
+                // 本地检查input填写
+                if( name=="db" || name=="user"){
+                    for(var i in $vm[name]){
+                        if(!$vm[name][i] && i!="port" && i!="host"){
+                            $vm.tips="填写正确信息";
+                            $vm.status=0;
+                            return;              
+                        }
+                    }
+                }
+
+
+
                 if(name=='verify'){
                     api='installer/verify';
                 }
