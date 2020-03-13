@@ -69,21 +69,28 @@ layui.define(['jquery'],(exports) => {
                     }
                 }
             },
-
+            removeTips(name){
+                $("input."+name).removeClass("tips");
+            },
 
             setup(name){
-                var $vm=this,api="installer/setup";
+                var $vm=this,api="installer/setup",tips_arr=[];
                 this.status=1;
                 // 本地检查input填写
                 if( name=="db" || name=="user"){
                     for(var i in $vm[name]){
                         if(!$vm[name][i] && i!="port" && i!="host"){
-                            $('input.'+i).addClass('tips')
-                            $vm.tips="填写正确信息";
-                            $vm.status=0;
-                            return;              
+                            tips_arr.push('input.'+i);
                         }
                     }
+                    while(tips_arr.length){
+                        $(tips_arr.shift()).addClass('tips');
+                        if(tips_arr.length==0){
+                            $vm.status=0;
+                            return;     
+                        }
+                    }
+                       
                 }
 
 
