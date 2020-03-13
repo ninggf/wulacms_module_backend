@@ -57,9 +57,11 @@ layui.define(['jquery'],(exports) => {
                 return flag;
             },
             go(type){
+                
                 let $vm=this;
                     $vm.tips='';
                     $vm.status=0;
+                    $("input").removeClass("tips");
                 for(var i=0;i<$vm.step.length;i++){
                     if($vm.step[i].name==$vm.current){
                         $vm.current=type=='next'?$vm.step[i+1].name:$vm.step[i-1].name;
@@ -76,6 +78,7 @@ layui.define(['jquery'],(exports) => {
                 if( name=="db" || name=="user"){
                     for(var i in $vm[name]){
                         if(!$vm[name][i] && i!="port" && i!="host"){
+                            $('input.'+i).addClass('tips')
                             $vm.tips="填写正确信息";
                             $vm.status=0;
                             return;              
