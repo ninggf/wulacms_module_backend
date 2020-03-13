@@ -60,11 +60,6 @@ const cmt = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> License 
 
             let gp = src(srcx)
 
-            if (options.env != 'pro')
-                gp = gp.pipe(rename({
-                    suffix: '.dev'
-                }))
-
             if (options.env == 'pro')
                 gp = gp.pipe(uglify())
 
@@ -83,11 +78,6 @@ const cmt = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> License 
             ]
 
             let gp = src(srcx)
-
-            if (options.env != 'pro')
-                gp = gp.pipe(rename({
-                    suffix: '.dev'
-                }))
 
             if (options.env == 'pro')
                 gp = gp.pipe(cleancss())
@@ -119,7 +109,7 @@ const cmt = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> License 
     }
 
 const cleanTask = cb => {
-    src(['lay/*', 'css/*', 'demo/*', 'font/*', 'images/*', 'layui.js', 'layui.dev.js'], {
+    src(['lay/*', 'css/*', 'demo/*', 'font/*', 'images/*', 'layui.js'], {
         read: true,
         allowEmpty: true
     }).pipe(clean())
@@ -131,10 +121,9 @@ const buildCss = cb => {
     let gp = src(['src/less/[^_]*.less'])
 
     if (options.env != 'pro') {
-        gp = gp.pipe(sourcemap.init()).pipe(identityMap()).pipe(rename({
-            suffix: '.dev'
-        }))
+        gp = gp.pipe(sourcemap.init()).pipe(identityMap());
     }
+
 
     gp = gp.pipe(less()).on('error', e => {
             console.error(e.message)
@@ -165,9 +154,7 @@ const buildJs = cb => {
     let gp = src(['src/js/*.js'])
 
     if (options.env != 'pro') {
-        gp = gp.pipe(sourcemap.init()).pipe(identityMap()).pipe(rename({
-            suffix: '.dev'
-        }))
+        gp = gp.pipe(sourcemap.init()).pipe(identityMap());
     }
 
     gp = gp.pipe(babel()).on('error', (e) => {

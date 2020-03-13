@@ -2,7 +2,7 @@ layui.define(['jquery'],(exports) => {
     'use strict';
     const $ = layui.$;
     const app = new Vue({
-        el: '.install',
+        el: '#install',
         data: {
             // 环境监测 
             step: [

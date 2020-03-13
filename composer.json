@@ -4,7 +4,6 @@
     "type": "wula-module",
     "require": {
         "wula/wula-installer": "^2.0",
-        "wulacms/system": "^3.0",
         "michelf/php-markdown": "^1.7"
     },
     "license": "MIT",
@@ -16,7 +15,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0"
+            "dev-master": "3.0-dev"
         }
     },
     "support": {
