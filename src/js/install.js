@@ -60,6 +60,16 @@ layui.define(['jquery'],(exports) => {
                 let $vm=this;
                     $vm.tips='';
                     $vm.status=0;
+                if( ($vm.current=="db" || $vm.current=="user") && type=='next' ){
+                    for(var i in $vm[$vm.current]){
+                        if(!$vm[$vm.current][i] && i!="port" && i!="host"){
+                            $vm.tips="填写正确信息";
+                            return;              
+                        }
+                    }
+                }
+
+
                 for(var i=0;i<$vm.step.length;i++){
                     if($vm.step[i].name==$vm.current){
                         $vm.current=type=='next'?$vm.step[i+1].name:$vm.step[i-1].name;
@@ -105,9 +115,7 @@ layui.define(['jquery'],(exports) => {
                 this.current=this.page_step;
             }
         },
-        watch: {
-            
-        },
+        
     });
 
     exports('&install', app);
