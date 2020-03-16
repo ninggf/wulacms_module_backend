@@ -12,7 +12,6 @@ layui.define(['jquery'], (exports) => {
                 {title: '数据库配置', name: 'db'},
                 {title: '创建管理员', name: 'user'},
                 {title: '安装', name: 'install'},
-                {title: '完成', name: 'finfish'},
             ],
             requirements    : window.vueData.requirements,
             dirs            : window.vueData.dirs,
@@ -22,6 +21,10 @@ layui.define(['jquery'], (exports) => {
             current         : 'home',
             install_progress: 0,
             tips            : "",
+            progress:{
+                percent:0,
+                list:[],
+            },
             verify          : {
                 code: '',
             },
@@ -119,7 +122,7 @@ layui.define(['jquery'], (exports) => {
                 let $vm = this, response_len = false, data = null;
                 $.get({
                     url      : 'installer/install',
-                    timeout  : 3000000,
+                    // timeout  : 3000000,
                     dataType : 'text',
                     xhrFields: {
                         onprogress: function (e) {
@@ -131,9 +134,28 @@ layui.define(['jquery'], (exports) => {
                                 response     = resp.substring(response_len);
                                 response_len = resp.length;
                             }
-                            console.log(response);
                             data = JSON.parse(response);
-                            console.log(data);
+                            // console.log(data);
+                            let flag=0;
+                            if(data.status==0){
+                                $vm.install_progress=-1;
+                            }
+                            if($vm.progress.list.length){
+                                for(let i=0;i<$vm.progress.list.length;i++){
+                                    let item=$vm.progress.list[i];
+                                    if(data && item.step==data.step && data.done==1){
+                                        $vm.progress.list.splice(i, 1, data);
+                                        flag=1;
+                                    }
+                                }
+                                if(!flag){
+                                    $vm.progress.list.push(data);
+                                }
+                                $vm.install_progress=$vm.progress.list[$vm.progress.list.length-1].percent;
+                                layui.element.progress('install-progress', $vm.install_progress+'%');
+                            }else{
+                                $vm.progress.list.push(data);
+                            }
                         }
                     }
                 }, (data) => {
