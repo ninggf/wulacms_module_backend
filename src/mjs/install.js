@@ -39,6 +39,7 @@ layui.define(['jquery'], (exports) => {
                 host      : '',
                 port      : '',
                 prefix    : '',
+                persistent: 0,
             },
             user            : {
                 name       : '',
@@ -63,6 +64,7 @@ layui.define(['jquery'], (exports) => {
                 return flag;
             },
             go(type) {
+
                 if (!type) return;
 
                 let $vm    = this;
@@ -90,7 +92,7 @@ layui.define(['jquery'], (exports) => {
                 // 本地检查input填写
                 if (name == "db" || name == "user") {
                     for (var i in $vm[name]) {
-                        if (!$vm[name][i] && i != "port" && i != "host") {
+                        if (!$vm[name][i] && i != "port" && i != "host" && i != "persistent") {
                             tips_arr.push('input.' + i);
                         }
                     }
@@ -138,11 +140,8 @@ layui.define(['jquery'], (exports) => {
                                 response_len = resp.length;
                             }
                             let responses = response.replace(/\}\{/g,'}]-[{').split(']-[');
-                            console.log(response);
-                            console.log(responses);
                                 responses.forEach(res => {
                                     $vm.installLog(res,$vm)
-    
                                 }); 
                             
                         }
@@ -191,8 +190,16 @@ layui.define(['jquery'], (exports) => {
                 }
                 this.current = this.page_step;
             }
+           
+        },
+        watch:{
+            'db.prefix':{
+               handler:function(newVal,oldVal){
+                   this.db.prefix =  this.db.prefix.replace(/[^A-Za-z]/g,'');
+               }
+            }
         }
     });
 
-    exports('&install', app);
+    exports('@backend.install', app);
 });

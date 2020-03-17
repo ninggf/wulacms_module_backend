@@ -183,6 +183,35 @@ const buildJs = cb => {
 
     cb();
 }
+const buildmJs = cb => {
+    let gp = src(['src/mjs/*.js'])
+
+    if (options.env != 'pro') {
+        gp = gp.pipe(sourcemap.init()).pipe(identityMap());
+    }
+
+    gp = gp.pipe(babel()).on('error', (e) => {
+        console.error(e.message)
+        notify.onError(e.message)
+    }).pipe(validate()).on('error', (e) => {
+        notify.onError(e.message)
+        console.error(e.message)
+    })
+
+    if (options.env != 'pro')
+        gp = gp.pipe(sourcemap.write())
+
+    if (options.env == 'pro')
+        gp = gp.pipe(relogger({
+            replaceWith: 'void 0'
+        })).pipe(uglify()).on('error', (e) => {
+            notify.onError(e.message)
+            console.error(e.message)
+        }).pipe(header.apply(null, note))
+
+    gp = gp.pipe(dest('js'))
+    cb();
+}
 
 const buildHtml = cb => {
     let gp = src(['src/html/**/*.{html,js}']).pipe(preprocess({
@@ -227,6 +256,7 @@ const watching = cb => {
 
     watch(['src/html/**/*.{html,js,htm}'], buildHtml)
     watch(['src/js/**/*.js'], buildJs)
+    watch(['src/mjs/**/*.js'], buildmJs)
     watch(['src/less/**/*.less'], buildCss)
     watch(['src/**/*.{png,jpg,gif,mp3,json,eot,svg,ttf,woff,woff2}'], mvAssets)
 
@@ -245,7 +275,7 @@ const buildLayui = fs.existsSync('layui/') ? parallel(layuiTasks.minjs, layuiTas
 
 exports.clean = cleanTask
 
-exports.build = parallel(buildCss, buildJs, buildHtml, mvAssets, buildLayui)
+exports.build = parallel(buildCss,buildmJs, buildJs, buildHtml, mvAssets, buildLayui)
 
 exports.buildLayui = buildLayui
 

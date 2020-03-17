@@ -60,14 +60,15 @@ class IndexController extends BackendController {
         $tpl    = apply_filter('backend\loginTpl', 'login');
         $eCnt   = sess_get('errCnt', 0);
 
-        return view([
+        return view(['winData'=>[
             'version'  => $module->getCurrentVersion(),
-            'needCode' => $eCnt >= 3,
+            'ent' => $eCnt,
             'website'  => [
                 'name'     => App::cfg('brandName', 'WulaCms'),
                 'brandImg' => App::cfg('brandImg')
-            ]
-        ], $tpl);
+            ],
+            'captcha' => App::url('backend/captcha')
+        ]], $tpl);
     }
 
     /**
