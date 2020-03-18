@@ -14,6 +14,12 @@
 <body style="" >
 {literal}
    <div id="login" >
+        <header>
+            <div>
+                <p>LOGO</p>
+                <i class="layui-icon layui-icon-home" ></i>  
+            </div>
+        </header>
         <form v-cloak>
             <h1>登录 </h1>
             <p class="error" v-show="errormsg">
@@ -36,6 +42,9 @@
                 <input type="button"  placeholder="登录"  value="登 录" @click="submit">
             </div>
         </form>
+        <footer>
+            <p>© 2016 - 2020 MIT <a href="https://www.wulacms.com/" target="_blank">WULACMS</a></p>
+        </footer>
    </div>
 {/literal}
 <script type="text/javascript">

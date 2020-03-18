@@ -1,0 +1,2 @@
+/** coolay-v1.0.0 MIT License By https://github.com/ninggf/coolayui */
+ ;layui.define(["jquery"],function(e){"use strict";layui.$;e("@backend.index",new Vue({el:"#index",data:{menu:{show:0,listshow:0,search_focus:0}},methods:{},mounted:function(){}}))});

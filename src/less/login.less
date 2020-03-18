@@ -19,6 +19,35 @@ html,body{
     overflow: hidden;
     position: relative;
     display: flex;
+    header{
+        box-sizing: border-box;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 999;
+        box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px 0px;
+        background: #fff;
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        &>div{
+            width: 1200px;
+            margin: 0 auto;
+            p{
+                line-height: 50px;
+                font-weight: 700;
+                display: inline-block;
+            }
+            i{
+                font-size: 20px;
+                line-height: 50px;
+                float: right;
+                cursor: pointer;
+            }
+        }
+    }
     form{
         width: 400px;
         align-self: center;
@@ -134,5 +163,22 @@ html,body{
         }
 
         
+    }
+    footer{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        p{
+            line-height: 30px;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+            color: rgba(0,0,0,.5);
+            a{
+                color: #333;
+                text-decoration: none;
+            }
+        }
     }
 }

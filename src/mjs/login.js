@@ -11,7 +11,7 @@ layui.define(['jquery'], (exports) => {
                 captcha:'',
                 // vcode_show:1,
                 vcode_show:window.winData.ent>=3,
-                captcha_src:window.winData.captcha+'?size=150x60&font=20',
+                captcha_src:window.winData.captcha+'?size=150x60&font=28',
                 autologin:1,
             },
             errormsg:"",
@@ -38,7 +38,7 @@ layui.define(['jquery'], (exports) => {
                     if(res&&res.code==500){
                         $vm.errormsg=res.message;
                         if(res.args.ent>=3){
-                            $vm.vcode_show=1;
+                            $vm.login.vcode_show=1;
                         }
                     }else if(res&&res.code==200){
                         location.href=res.target;
