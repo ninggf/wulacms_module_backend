@@ -19,7 +19,7 @@ use wulaphp\router\Router;
 class BackendController extends AdminController {
     public function beforeRun($action, $refMethod) {
         $domain = App::cfg('domain');
-        if ($domain && $_SERVER['HTTP_HOST'] != $domain) {
+        if ($domain && VISITING_DOMAIN != $domain) {
             Response::respond(404);
         }
 
