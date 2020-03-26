@@ -1,0 +1,2 @@
+/** coolay-v1.0.0 MIT License By https://github.com/ninggf/coolayui */
+ ;layui.define(["jquery"],function(i){"use strict";layui.$;i("@backend.module",new Vue({el:"#module",data:{list:[{title:"模块一",width:"25%",isadd:0},{title:"模块二",width:"50%",isadd:0},{title:"模块三",width:"75%",isadd:0}],module_list:[],hide_sid:1},methods:{addModule:function(t){var i,d={};d.width=t.width,d.title=t.title,t.isadd?(i=this.module_list.findIndex(function(i){return i.title==t.title}),this.module_list.splice(i,1)):this.module_list.push(d),t.isadd=!t.isadd}},mounted:function(){}}))});
