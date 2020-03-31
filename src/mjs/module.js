@@ -23,12 +23,12 @@ layui.define(['jquery'], (exports) => {
             ],
             module_list:[],
             //控制侧边栏开启关闭
-            hide_sid:1,
+            hide_sid:0,
+            sid_show:0,
         },
         methods: {
             addModule(m){
-                let el;
-                let item={};
+                let el,item={};
                     item.width=m.width;
                     item.title=m.title;
                     if(m.isadd){
