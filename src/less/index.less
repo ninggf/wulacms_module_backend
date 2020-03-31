@@ -7,6 +7,21 @@
     transform: translate(-50%,-50%);
 }
 
+// 滚动条样式
+*::-webkit-scrollbar {
+    width: 6px;
+}
+*::-webkit-scrollbar-track {
+    background-color:#fff;
+}
+*::-webkit-scrollbar-thumb {
+    border-radius:4px;
+    background:#999; 
+}
+*::-webkit-scrollbar-track{
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -191,7 +206,7 @@ body{
         aside{
             position: relative;
             z-index: 10;
-            box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px 0px;
+            box-shadow: rgba(0, 0, 0, 0.2) 4px 2px 4px 0px;
             background-color: rgb(255, 255, 255);
             width: 240px;
             height: 100%;
@@ -217,51 +232,69 @@ body{
                 }
             }
             ul{
-                li{
-                    cursor: pointer;
-                    transition: all 0.5s ease-in-out 0s;
-                    &:hover{
-                        background-color: rgba(0, 0, 0, 0.05);
-                        .layui-icon-close,.layui-icon-more-vertical{
-                            opacity: 1;
+                position: absolute;
+                width: 100%;
+                top: 48px;
+                bottom: 0;
+                overflow: auto;
+                // &::-webkit-scrollbar {
+                //     width: 6px;
+                // }
+                // &::-webkit-scrollbar-track {
+                //     background-color:#fff;
+                // }
+                // &::-webkit-scrollbar-thumb {
+                //     border-radius:4px;
+                //     background:#999; 
+                // }
+                // &::-webkit-scrollbar-track{
+                //     box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+                // }
+                    li{
+                        cursor: pointer;
+                        transition: all 0.5s ease-in-out 0s;
+                        &:hover{
+                            background-color: rgba(0, 0, 0, 0.05);
+                            .layui-icon-close,.layui-icon-more-vertical{
+                                opacity: 1;
+                            }
+                        }
+                        a{
+                            font-size: 14px;
+                            line-height: 48px;
+                            vertical-align: middle;
+                            display: inline-block;
+                        }
+                        i{
+                            font-size: 18px;
+                            line-height: 48px;
+                            width: 48px;
+                            text-align: center;
+                            display: inline-block;
+                            vertical-align: middle;
+                            transition: all 0.5s ease-in-out 0s;
+                        }
+                        .layui-icon-close{
+                            position: absolute;
+                            right: 18px;
+                            opacity: 0;
+                        }
+                        .layui-icon-more-vertical{
+                            width: 28px;
+                            position: absolute;
+                            right: 0;
+                            opacity: 0;
+                            cursor:move ;
                         }
                     }
-                    a{
-                        font-size: 14px;
-                        line-height: 48px;
-                        vertical-align: middle;
-                        display: inline-block;
+                    .bedrop{
+                        background-color:@main-color;
+                        opacity: 0.6;
+                        
+                        a{
+                            color: #fff;
+                        }
                     }
-                    i{
-                        font-size: 18px;
-                        line-height: 48px;
-                        width: 48px;
-                        text-align: center;
-                        display: inline-block;
-                        vertical-align: middle;
-                        transition: all 0.5s ease-in-out 0s;
-                    }
-                    .layui-icon-close{
-                        position: absolute;
-                        right: 18px;
-                        opacity: 0;
-                    }
-                    .layui-icon-more-vertical{
-                        width: 28px;
-                        position: absolute;
-                        right: 0;
-                        opacity: 0;
-                        cursor:move ;
-                    }
-                }
-                .bedrop{
-                    background-color:@main-color;
-                    opacity: 0.6;
-                    
-                    a{
-                        color: #fff;
-                    }
-                }
             }
         }
         .menu-list{
@@ -324,19 +357,19 @@ body{
                 scroll-behavior: smooth;
 
                 // 修改滚动条样式
-                &::-webkit-scrollbar {
-                    width: 6px;
-                }
-                &::-webkit-scrollbar-track {
-                    background-color:#fff;
-                }
-                &::-webkit-scrollbar-thumb {
-                    border-radius:4px;
-                    background:#999; 
-                }
-                &::-webkit-scrollbar-track{
-                    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-                }
+                // &::-webkit-scrollbar {
+                //     width: 6px;
+                // }
+                // &::-webkit-scrollbar-track {
+                //     background-color:#fff;
+                // }
+                // &::-webkit-scrollbar-thumb {
+                //     border-radius:4px;
+                //     background:#999; 
+                // }
+                // &::-webkit-scrollbar-track{
+                //     box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+                // }
                 &>div{
                     column-count: 3;
                     .menu-list--item{
