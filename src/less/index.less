@@ -65,8 +65,8 @@ body{
             position: relative;
             height: 50px;
             .icon{
-                width: 44px;
-                height: 32px;
+                width: 33px;
+                height: 24px;
                 .mid();
                 
             }
@@ -222,11 +222,15 @@ body{
                     transition: all 0.5s ease-in-out 0s;
                     &:hover{
                         background-color: rgba(0, 0, 0, 0.05);
+                        .layui-icon-close{
+                            opacity: 1;
+                        }
                     }
                     a{
                         font-size: 14px;
                         line-height: 48px;
                         vertical-align: middle;
+                        display: inline-block;
                     }
                     i{
                         font-size: 18px;
@@ -235,6 +239,18 @@ body{
                         text-align: center;
                         display: inline-block;
                         vertical-align: middle;
+                        transition: all 0.5s ease-in-out 0s;
+                    }
+                    .layui-icon-close{
+                        position: absolute;
+                        right: 18px;
+                        opacity: 0;
+                    }
+                    .layui-icon-more-vertical{
+                        width: 28px;
+                        position: absolute;
+                        right: 0;
+                        cursor:move ;
                     }
                 }
                 .bedrop{

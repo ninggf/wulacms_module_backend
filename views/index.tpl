@@ -62,10 +62,14 @@
                             draggable="true" 
                             @dragenter="dragenter(i)" 
                             @dragstart="dragstart(i)" 
-                            @dragend="dragend" :class="{'bedrop':drop.current==index}">
+                            @dragend="dragend" :class="{'bedrop':drop.current==index}" >
                             <p>
                                 <i class="layui-icon layui-icon-about"></i>  
                                 <a>{{i.name}}</a>
+
+                                <i class="layui-icon layui-icon-close" @click="collection(i)"></i>  
+                                <i class="layui-icon layui-icon-more-vertical"></i>  
+
                             </p>
                         </li>
                     </ul>
