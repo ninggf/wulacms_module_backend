@@ -218,7 +218,7 @@ const buildJs = cb => {
             replaceWith: 'void 0'
         })).pipe(uglify()).on('error', (e) => {
             notify.onError(e.message)
-            console.error(e.message)
+            console.error(['js',e.message])
         }).pipe(header.apply(null, note))
 
     gp = gp.pipe(dest('lay/exts'))
@@ -252,7 +252,7 @@ const buildmJs = cb => {
             replaceWith: 'void 0'
         })).pipe(uglify()).on('error', (e) => {
             notify.onError(e.message)
-            console.error(e.message)
+            console.error(['mjs',e.message,e])
         }).pipe(header.apply(null, note))
 
     gp = gp.pipe(dest('js'))
@@ -280,7 +280,7 @@ const buildVue = cb => {
             replaceWith: 'void 0'
         })).pipe(uglify()).on('error', (e) => {
             notify.onError(e.message)
-            console.error(e.message)
+            console.error(['vuejs',e.message])
         }).pipe(header.apply(null, note))
 
     gp = gp.pipe(dest('lay/exts'));
