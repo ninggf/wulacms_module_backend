@@ -28,6 +28,5 @@ layui.define(['jquery', 'element'], (exports) => {
             bodyE.removeClass('opened');
         }
     });
-
     exports('&coolay', _coolay);
 });

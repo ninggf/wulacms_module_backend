@@ -1,4 +1,4 @@
-@main-color:#6e89e4;
+@main-color:#293e53;
 // 居中
 .mid{
     position: absolute;
@@ -87,15 +87,17 @@ body{
             }
         }
         .logo{
-            margin-left: 10px;
-            width: 50px;
+            margin-left: 15px;
+            margin-top: 5px;
+            width: 40px;
             vertical-align: top;
+
         }
         .logo-name{
             line-height: 50px;
             font-weight: 700;
             display: inline-block;
-            background: linear-gradient(to right,#56b6eb,#6e89e4);
+            background: @main-color;
             background-clip: text;
             color: transparent;
             font-size: 20px;
@@ -145,8 +147,12 @@ body{
             line-height: 50px;
             padding:0 10px;
             cursor: pointer;
-            font-size: 30px;
             position: relative;
+            img{
+                width: 30px;
+                border-radius: 20px;
+            }
+
             &:hover{
                 &>ul{
                     visibility:visible;
@@ -497,13 +503,14 @@ body{
         position: fixed;
         z-index: 11;
         right: 0;
-        top: 60px;
+        top: 70px;
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
         height: 50px;
-        padding: 6px 2px;
+        padding-right: 2px;
         box-sizing: border-box;
         cursor: pointer;
+        text-align: center;
     }
     ul{
         background: #2F4056;
@@ -596,6 +603,8 @@ body{
         padding-left: 10px;
         box-sizing: border-box;
         align-content:flex-start;
+        overflow: scroll;
+        height: 100%;
         &>div{
             background: #fff;
             height: 20%;

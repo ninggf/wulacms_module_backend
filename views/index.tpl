@@ -6,23 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>WulaCms - 欢迎您使用wulacms！</title>
     <link rel="stylesheet" href="{'backend/css/layui.css'|res}">
-        <link rel="stylesheet" href="{'backend/css/index.css'|res}">
+    <link rel="stylesheet" href="{'backend/css/index.css'|res}">
     <script type="text/javascript" src="{'backend/layui.js'|res}"></script>
     <script type="text/javascript" src="{'backend/vue.min.js'|res}"></script>
+
 </head>
 <body>
 {literal}
     <!--顶部、侧边栏-->
     <header id="index"  v-cloak>
             <div class="nav-left">
-                <!--
-                    <i class="layui-icon layui-icon-spread-left" @mouseenter="menu.show=!menu.show;menu.listshow=0" ></i>
-                -->
                 <div>
                     <img class="icon" src="/modules/backend/images/icon.png" @mouseenter="menu.show=!menu.show;menu.listshow=0">
                 </div>
                 <img class="logo" src="/modules/backend/images/logo.png" >
-                <p class="logo-name">php</p>
+                <p class="logo-name">Cms</p>
             </div>
             <div class="nav-right">
                 <input type="text" class="search" placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
@@ -34,8 +32,9 @@
                     <li><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
                     <li><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
                 </ul>
-                <i class="layui-icon layui-icon-user nav-user">
-                    <ul >
+                <div class="nav-user">
+                    <img src="/modules/backend/images/avatar.jpg" >
+                    <ul>
                         <li>
                             <a href="javascript:;">菜单1</a>
                         </li>
@@ -46,7 +45,7 @@
                             <a href="./backend/logout" >退出登录</a>
                         </li>
                     </ul>
-                </i>
+                </div>
             </div>
             <div  :class="[menu.show?'menu--show':'','menu']" >
                 <div class="bg" @click="menu.show=!menu.show;menu.listshow=0"></div>
@@ -66,10 +65,8 @@
                             <p>
                                 <i class="layui-icon layui-icon-about"></i>  
                                 <a>{{i.name}}</a>
-
                                 <i class="layui-icon layui-icon-close" @click="collection(i)"></i>  
                                 <i class="layui-icon layui-icon-more-vertical"></i>  
-
                             </p>
                         </li>
                     </ul>
@@ -104,15 +101,10 @@
                 </div>
             </div>
     </header>
-    
-
-
     <!--模块自定义-->
     <div id="module" v-cloak>
-
         <!--控制自定义模块显示隐藏-->
-        <span class="module-show" @click="sid_show=!sid_show">自定义</span>
-        <transition name="fade">
+        <span class="module-show" @click="sid_show=!sid_show;hide_sid=0 ">自定义</span>
         <ul :class="{'hide':hide_sid}" v-show="sid_show">
             <i :class="[hide_sid?'layui-icon-right':'layui-icon-left','layui-icon']" @click="hide_sid=!hide_sid" ></i>  
             <li v-for="(item,index) in list" >
@@ -121,19 +113,19 @@
             </li>
             <li @click="hide_sid=1"><span>取消</span><span>保存</span></li>
         </ul>
-        </transition>
         <div class="module-list">
             <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width}">{{item.title}}</div>
         </div>
     </div>
-
+   
 {/literal}
 <script type="text/javascript">
     layui.config({
         base: "{'layui'|assets}",
         module:"{'/'|res}",
     });
-    layui.use(['layer','@backend.index','@backend.module'], function () {
+    layui.use(['&coolay-form','@backend.index','@backend.module'], function (home,mod) {
+     
     })
 </script>
 </body>
