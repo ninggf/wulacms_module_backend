@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{'backend/css/index.css'|res}">
     <script type="text/javascript" src="{'backend/layui.js'|res}"></script>
     <script type="text/javascript" src="{'backend/vue.min.js'|res}"></script>
-
 </head>
 <body>
 {literal}
@@ -53,7 +52,7 @@
                 <aside>
                     <p class="more" @click="menu.listshow=!menu.listshow">
                         <i class="layui-icon layui-icon-component icon-left"></i>  
-                        导航1
+                        功能导航
                         <i class="layui-icon layui-icon-right icon-right"></i>  
                     </p>
                     <ul>
@@ -81,12 +80,10 @@
                     <div class="menu-list--main">
                         <div>
                             <div v-for="(i,index) in menu.menu_list" class="menu-list--item">
-                                <a :class="{'check':menu.current_menu==index}" :name="i.title" >
-                                    {{i.title}}
-                                    <a v-for="item in i.list" href="javascript:;"  :class="{'isadd':item.isadd}">{{item.name}}
-                                        <!--添加到左侧列表-->
-                                        <i @click="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
-                                    </a>
+                                <a :class="{'check':menu.current_menu==index}" :name="i.title" > {{i.title}}</a>
+                                <a v-for="item in i.list" href="javascript" :class="{'isadd':item.isadd}">{{item.name}}
+                                    <!--添加到左侧列表-->
+                                    <i @click="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
                                 </a>
                             </div>
                         </div>
@@ -117,15 +114,18 @@
             <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width}">{{item.title}}</div>
         </div>
     </div>
-   
 {/literal}
 <script type="text/javascript">
+
     layui.config({
         base: "{'layui'|assets}",
         module:"{'/'|res}",
     });
-    layui.use(['&coolay-form','@backend.index','@backend.module'], function (home,mod) {
-     
+
+    layui.use(['@backend.index','@backend.module','@backend.user'], function (home,mod) {
+        //console.log(home)
+        home.init({})
+        //widget.init(widgets)
     })
 </script>
 </body>
