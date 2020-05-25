@@ -92,7 +92,7 @@ layui.define(['jquery'], (exports) => {
                 // 本地检查input填写
                 if (name == "db" || name == "user") {
                     for (var i in $vm[name]) {
-                        if (!$vm[name][i] && i != "port" && i != "host" && i != "persistent") {
+                        if (!$vm[name][i] && i!="prefix" && i != "port" && i != "host" && i != "persistent") {
                             tips_arr.push('input.' + i);
                         }
                     }
