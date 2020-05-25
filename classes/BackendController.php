@@ -23,7 +23,16 @@ class BackendController extends AdminController {
             Response::respond(404);
         }
 
-        return parent::beforeRun($action, $refMethod);
+        $view = parent::beforeRun($action, $refMethod);
+
+        if ($this->passport->uid && !$this->methodAnn->has('resetpasswd')) {
+            $resetPasswd = $_SESSION['resetPasswd'] ?? 0;
+            if ($resetPasswd) {
+                Response::redirect(App::url('backend/resetpasswd'));
+            }
+        }
+
+        return $view;
     }
 
     protected function needLogin($view) {
@@ -36,5 +45,16 @@ class BackendController extends AdminController {
         }
 
         return apply_filter('mvc\admin\needLogin', $view);
+    }
+
+    /**
+     * 用户锁定界面时.
+     *
+     * @param mixed $view
+     *
+     * @return mixed
+     */
+    protected function onScreenLocked($view) {
+        return $view ? $view : 'screen is locked';
     }
 }

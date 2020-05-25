@@ -13,6 +13,8 @@ namespace backend\controllers;
 use backend\classes\BackendController;
 use system\classes\CaptchaCode;
 use system\classes\Syslog;
+use system\model\UserMetaModel;
+use system\model\UserTable;
 use wulaphp\app\App;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
@@ -21,9 +23,10 @@ use wulaphp\io\Response;
 class IndexController extends BackendController {
 
     /**
-     * @nologin
+     * 后台首页
      */
     public function index() {
+
         return view('index');
     }
 
@@ -31,11 +34,17 @@ class IndexController extends BackendController {
      * 登录
      *
      * @nologin
+     * @sessWrite
      * @return \wulaphp\mvc\view\View
      */
     public function login() {
+        $from = rqst('from');
+        if ($from) {
+            $_SESSION['loginBack'] = $from;
+        }
         $landingPage = sess_get('loginBack', App::url('backend'));
         if ($this->passport->isLogin) {
+            sess_del('loginBack');
             Response::redirect($landingPage);
         } else if (isset($_COOKIE['astoken'])) {
             // 自动登录
@@ -46,6 +55,7 @@ class IndexController extends BackendController {
                     if ($this->passport->login($uid)) {
                         if ($this->passport['astoken'] == $_COOKIE['astoken']) {
                             Syslog::info('Auto Login', $this->passport->uid, 'accesslog');
+                            sess_del('loginBack');
                             Response::redirect($landingPage);
                         }
                     }
@@ -60,15 +70,17 @@ class IndexController extends BackendController {
         $tpl    = apply_filter('backend\loginTpl', 'login');
         $eCnt   = sess_get('errCnt', 0);
 
-        return view(['winData'=>[
-            'version'  => $module->getCurrentVersion(),
-            'ent' => $eCnt,
-            'website'  => [
-                'name'     => App::cfg('brandName', 'WulaCms'),
-                'brandImg' => App::cfg('brandImg')
-            ],
-            'captcha' => App::url('backend/captcha')
-        ]], $tpl);
+        return view([
+            'winData' => [
+                'version' => $module->getCurrentVersion(),
+                'ent'     => $eCnt,
+                'website' => [
+                    'name'     => App::cfg('brandName', 'WulaCms'),
+                    'brandImg' => App::cfg('brandImg')
+                ],
+                'captcha' => App::url('backend/captcha')
+            ]
+        ], $tpl);
     }
 
     /**
@@ -79,36 +91,59 @@ class IndexController extends BackendController {
      * @param string $passwd
      * @param string $captcha 验证码
      *
+     * @sessWrite
      * @return \wulaphp\mvc\view\JsonView
      */
     public function loginPost($username, $passwd, $captcha = '') {
         $eCnt = sess_get('errCnt', 0);
+        if ($eCnt < 3) {
+            $table              = new UserTable();
+            $user               = $table->findOne(['username' => $username], 'id');
+            $eCnt               = intval($user->meta()->where(['name' => 'errCnt'], true)->get('ivalue'));
+            $_SESSION['errCnt'] = $eCnt;
+            if ($eCnt >= 3) {
+                return Ajax::error(['ent' => $eCnt], 'alert');
+            }
+        }
         if ($eCnt >= 3) {
             $auth_code_obj = new CaptchaCode();
-            if (!$auth_code_obj->validate($captcha, false)) {
+            if (!$auth_code_obj->validate($captcha, false, false)) {
                 return Ajax::error(['message' => '验证码不正确', 'ent' => $eCnt], 'alert');
             }
         }
 
         try {
+            $userMeta = new UserMetaModel();
             if ($this->passport->login([$username, $passwd, $captcha])) {
                 Syslog::info('Login', $this->passport->uid, 'accesslog');
                 sess_del('errCnt');
-
-                if (rqst('remember') == 'on') {
+                $userMeta->setIntMeta($this->passport->uid, 'errCnt', 0);
+                if (rqst('autologin') != 'false') {
                     Response::cookie('astoken', $this->passport['astoken'], 315360000, '/');
                 } else {
                     Response::cookie('astoken', null);
                 }
-                $landingPage = sess_get('loginBack', App::url('backend'));
+                $resetPasswd  = $userMeta->getIntMeta($this->passport->uid, 'resetPasswd');
+                $passwdExpire = $userMeta->getIntMeta($this->passport->uid, 'passwdExpire');
+                if ($resetPasswd || ($passwdExpire > 0 && $passwdExpire <= time())) {
+                    $_SESSION['resetPasswd'] = 1;
+                    $landingPage             = App::url('backend/resetpasswd');
+                } else {
+                    $landingPage = sess_del('loginBack', App::url('backend'));
+                }
 
                 return Ajax::redirect($landingPage);
             } else {
-                $eCnt = sess_get('errCnt', 0);
                 if ($eCnt < 3) {
-                    $eCnt += 1;
+                    $eCnt               += 1;
+                    $_SESSION['errCnt'] = $eCnt;
+                    $table              = new UserTable();
+                    $user               = $table->findOne(['username' => $username], 'id');
+                    if ($user['id']) {
+                        $userMeta->setIntMeta($user['id'], 'errCnt', $eCnt);
+                    }
                 }
-                $_SESSION['errCnt'] = $eCnt;
+
                 Syslog::warn('Login Fail: ' . $username, 0, 'accesslog');
 
                 return Ajax::error(['message' => $this->passport->error, 'ent' => $eCnt], 'alert');
@@ -126,6 +161,8 @@ class IndexController extends BackendController {
      * @param string $type
      * @param string $size
      * @param int    $font
+     *
+     * @sessWrite
      */
     public function captcha($type = 'png', $size = '120x36', $font = 13) {
         Response::nocache();
@@ -145,7 +182,12 @@ class IndexController extends BackendController {
         $type          = in_array($type, ['gif', 'png']) ? $type : 'png';
         $auth_code_obj = new CaptchaCode (rqst('name', 'auth_code'));
         // 定义验证码信息
-        $arr ['code'] = ['characters' => 'A-H,J-K,M-N,P-Z,3-9', 'length' => 4, 'deflect' => true, 'multicolor' => true];
+        $arr ['code'] = [
+            'characters' => 'A-H,L-K,M-N,P-T,V-Z,3-6',
+            'length'     => 4,
+            'deflect'    => true,
+            'multicolor' => true
+        ];
         $auth_code_obj->setCode($arr ['code']);
         // 定义干扰信息
         $arr ['molestation'] = ['type' => 'both', 'density' => 'normal'];
@@ -166,13 +208,15 @@ class IndexController extends BackendController {
     /**
      * 退出
      * @nologin
+     * @resetpasswd
+     * @sessWrite
      */
     public function logout() {
         if ($this->passport->isLogin) {
             Syslog::info('Logout', $this->passport->uid, 'accesslog');
             $this->passport->logout();
         }
-
+        $this->destorySession();
         //清空自动登录
         Response::cookie('astoken', null);
         if (Request::isAjaxRequest() || rqset('ajax')) {
@@ -182,5 +226,23 @@ class IndexController extends BackendController {
 
             return null;
         }
+    }
+
+    /**
+     * 重置密码页面
+     * @resetpasswd
+     */
+    public function resetpasswd() {
+        // TODO： 制作重设密码页面
+        return 'reset password';
+    }
+
+    /**
+     * 重置密码
+     * @resetpasswd
+     */
+    public function resetpasswdPost() {
+        // TODO: 实现重设密码功能，要求和密码不能和上次密码相同的
+        return 'ok';
     }
 }
