@@ -31,6 +31,14 @@ class IndexController extends LoopController {
         return $this->render('index');
     }
 
+    public function test1(){
+        return $this->render('test1',['name'=>'test1']);
+    }
+
+    public function test2(){
+        return $this->render('test2',['name'=>'test2']);
+    }
+
     /**
      * 登录
      *
