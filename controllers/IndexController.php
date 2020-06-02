@@ -11,6 +11,7 @@
 namespace backend\controllers;
 
 use backend\classes\BackendController;
+use backend\classes\LoopController;
 use system\classes\CaptchaCode;
 use system\classes\Syslog;
 use system\model\UserMetaModel;
@@ -20,14 +21,14 @@ use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\io\Response;
 
-class IndexController extends BackendController {
+class IndexController extends LoopController {
 
     /**
      * 后台首页
      */
     public function index() {
 
-        return view('index');
+        return $this->render('index');
     }
 
     /**
