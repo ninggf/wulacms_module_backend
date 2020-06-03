@@ -47,7 +47,7 @@ class PjaxController extends BackendController {
         $data['bodyCls']   = $this->bodyCls;
         $data['pageStyle'] = $this->pageTheme;
         $menu              = new Menu();
-        $data['naviMenus'] = $menu->getMenu($this->passport);
+        $data['naviMenus'] = json_encode($menu->getMenu($this->passport),JSON_UNESCAPED_UNICODE);
 
         return $data;
     }
