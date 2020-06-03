@@ -11,6 +11,7 @@
 namespace backend\controllers;
 
 use backend\classes\BackendController;
+use backend\classes\Menu;
 use backend\classes\PjaxController;
 use system\classes\CaptchaCode;
 use system\classes\Syslog;
@@ -31,12 +32,28 @@ class IndexController extends PjaxController {
         return $this->render('index');
     }
 
-    public function test1(){
-        return $this->render('test1',['name'=>'test1']);
+    public function test1() {
+        return $this->render('test1', ['name' => 'test1']);
     }
 
-    public function test2(){
-        return $this->render('test2',['name'=>'test2']);
+    public function test2() {
+        return $this->render('test2', ['name' => 'test2']);
+    }
+
+    public function likeMenuPost() {
+        $menuId = rqst('menuId');
+        //1喜欢0不喜欢
+        $opt = irqst('opt', 0);
+        if (!$menuId || !in_array($opt, [0, 1])) {
+            return Ajax::error('参数缺失', 'alert');
+        }
+        $menuCls = new Menu();
+        $res     = $menuCls->setMyMenus($this->passport->uid, $menuId, $opt);
+        if (!$res) {
+            return Ajax::error('操作失败', 'alert');
+        }
+
+        return ['status' => 1];
     }
 
     /**

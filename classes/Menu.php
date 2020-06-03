@@ -92,13 +92,13 @@ class Menu {
      *
      * @param int    $uid    用户id
      * @param string $menuId 菜单id
-     * @param int    $opt    0添加 1删除
+     * @param int    $opt    1添加 0删除
      *
      * @return bool|int|\wulaphp\db\sql\UpdateSQL
      */
-    public function setMyMenus(int $uid, string $menuId, int $opt = 0) {
+    public function setMyMenus(int $uid, string $menuId, int $opt = 1) {
         $myMenus = $this->getMyLikes($uid);
-        if (!$opt) {
+        if ($opt) {
             $myMenus = array_unique(array_merge($myMenus, [$menuId]));
         } else {
             $key = array_search($menuId, $myMenus);
