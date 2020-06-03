@@ -47,7 +47,8 @@ class Menu {
                 $ms['type']  = $k;
                 foreach ($mu['items'] as $ck => $child) {
                     $child['like'] = false;
-                    $child['id']   = $k.'/'.$ck;
+                    $child['id']   = $k . '/' . $ck;
+                    $child['url']  = App::url($child['url']);
                     $ms['lists'][] = $child;
                 }
             }

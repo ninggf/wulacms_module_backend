@@ -4,7 +4,7 @@ namespace backend\classes;
 
 use wulaphp\mvc\controller\LayoutSupport;
 
-class LoopController extends BackendController {
+class PjaxController extends BackendController {
     use LayoutSupport;
     protected $layout    = 'backend/views/layout';
     protected $htmlCls   = 'app';

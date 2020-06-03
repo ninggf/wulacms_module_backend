@@ -11,7 +11,7 @@
 namespace backend\controllers;
 
 use backend\classes\BackendController;
-use backend\classes\LoopController;
+use backend\classes\PjaxController;
 use system\classes\CaptchaCode;
 use system\classes\Syslog;
 use system\model\UserMetaModel;
@@ -21,7 +21,7 @@ use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\io\Response;
 
-class IndexController extends LoopController {
+class IndexController extends PjaxController {
 
     /**
      * 后台首页
