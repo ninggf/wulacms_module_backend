@@ -31,6 +31,7 @@ namespace backend\classes;
 use system\model\UserMetaModel;
 use wulaphp\app\App;
 use wulaphp\auth\Passport;
+use wulaphp\util\Pinyin;
 
 class Menu {
     public $error;
@@ -60,6 +61,7 @@ class Menu {
                     $child['like'] = 0;
                     $child['id']   = $k . '/' . $ck;
                     $child['url']  = App::url($child['url']);
+                    $child['py_name'] = Pinyin::convert($child['name']);
                     if (in_array($child['id'], $myMenusId)) {
                         $child['like'] = 1;
                         $myMenus[]     = $child;
