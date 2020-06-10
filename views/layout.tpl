@@ -12,7 +12,11 @@
 </head>
 <body class="{$bodyCls}">
 {literal}
+    
     <header id="index"  v-cloak>
+        <div class="layui-progress" lay-filter="install-progress">
+            <div class="layui-progress-bar "  :class="[ajax.error?'layui-bg-red':'layui-bg-blue']" lay-percent="0%"></div>
+        </div>
         <div class="nav-left">
             <div>
                 <img class="icon" src="/modules/backend/images/icon.png" @mouseenter="menu.show=!menu.show;menu.listshow=0">
@@ -21,7 +25,7 @@
             <p class="logo-name">Cms</p>
         </div>
         <div class="nav-right">
-            <input type="text" class="search" placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
+            <input type="text" class="search"  placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
             <ul class="links" >
                 <li><a href="javascript:;">功能</a></li>
                 <li><a href="javascript:;">功能</a></li>
@@ -74,13 +78,23 @@
             <div :class="[menu.listshow?'menu-list--show':'','menu-list']">
                 <div class="search">
                     <i class="layui-icon layui-icon-search" :style="{color:(menu.search_focus?'#6e89e4':'')}"></i>
-                    <input type="text" placeholder="请输入关键字"  @focus="menu.search_focus=1" @blur="menu.search_focus=0">
+                    <input type="text" placeholder="请输入关键字"  @input="searchMenu($event)" v-model="search.search_val" @focus="menu.search_focus=1" @blur="menu.search_focus=0">
                 </div>
                 <div class="menu-list--main">
-                    <div>
-                        <div v-for="(i,index) in menu.menu_list" class="menu-list--item">
+                    <!--有搜索结果 -->
+                    <div v-show="search.res.length">
+                        <div v-for="(i,index) in search.res" class="menu-list--item"  >
                             <a :class="{'check':menu.current_menu==index}" :name="i.title" > {{i.title}}</a>
-                            <a v-for="item in i.list" href="javascript:;"  @click="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
+                            <a v-for="item in i.lists" :href="item.url?item.url:'javascript:;'"  @click.stop.prevent="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
+                                <i @click="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!--默认列表-->
+                    <div v-show="!search.res.length">
+                        <div v-for="(i,index) in menu.menu_list" class="menu-list--item"  >
+                            <a :class="{'check':menu.current_menu==index}" :name="i.title" > {{i.title}}</a>
+                            <a v-for="item in i.lists" :href="item.url?item.url:'javascript:;'"  @click.stop.prevent="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
                                 <!--添加到左侧列表-->
                                 <i @click="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
                             </a>
@@ -97,16 +111,12 @@
             </div>
         </div>
 
-        <!--模块展示区-->
+        <!--模块展示区
         <div id="mycp">
             <component  v-if="mycomp" v-bind:is="mycomp"></component>
         </div>
+        -->
     </header>
-{/literal}
-
-    {include "$workspaceView"}
-
-{literal}
     <div id="module" v-cloak>
         <!--控制自定义模块显示隐藏-->
         <span class="module-show" @click="sid_show=!sid_show;hide_sid=0 ">自定义</span>
@@ -123,15 +133,22 @@
         </div>
     </div>
 {/literal}
-</body>
 <script type="text/javascript">
+console.log({$naviMenus})
+    var menu={$naviMenus};
     layui.config({
         base: "{'layui'|assets}",
         module: "{'/'|res}",
     });
     layui.use(['@backend.index', '@backend.module'], function(home, mod) {
-        home.init({
-        })
+        home.init(menu.naviMenus)
     })
 </script>
+<div id="workspace">
+    
+    <div class="view">
+        {include "$workspaceView"}
+    </div>
+</div>
+</body>
 </html>

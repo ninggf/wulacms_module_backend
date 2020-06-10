@@ -33,7 +33,7 @@ layui.define(['jquery'], (exports) => {
                     this.errormsg = "请输入验证码";
                     return
                 }
-
+                $vm.login.autologin=$vm.login.autologin?1:0;
                 $.post('./login', $vm.login, function (res) {
                     if (res && res.code == 500) {
                         $vm.errormsg = res.message;
@@ -48,6 +48,7 @@ layui.define(['jquery'], (exports) => {
             }
         },
         mounted() {
+            console.log("login.js")
             if (this.vcode_show) {
                 this.captcha_src1 = this.captcha_src + '&t=' + Math.random();
             }
