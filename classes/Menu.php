@@ -58,9 +58,9 @@ class Menu {
                 $ms['title'] = $mu['name'];
                 $ms['type']  = $k;
                 foreach ($mu['items'] as $ck => $child) {
-                    $child['like'] = 0;
-                    $child['id']   = $k . '/' . $ck;
-                    $child['url']  = App::url($child['url']);
+                    $child['like']    = 0;
+                    $child['id']      = $k . '/' . $ck;
+                    $child['url']     = App::url($child['url']);
                     $child['py_name'] = Pinyin::convert($child['name']);
                     if (in_array($child['id'], $myMenusId)) {
                         $child['like'] = 1;
@@ -68,8 +68,8 @@ class Menu {
                     }
                     $ms['lists'][] = $child;
                 }
+                $menus[] = $ms;
             }
-            $menus[] = $ms;
         }
 
         return ['naviMenus' => $menus, 'myMenus' => $myMenus];
