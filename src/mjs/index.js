@@ -13,29 +13,6 @@ layui.define(['&coolay','jquery'], (exports) => {
                         module_show    : 0,
                         collection_list: [],
                         menu_list      : menu,
-                        // menu_list      : [
-                        //     {
-                        //         title:"系统菜单1",
-                        //         lists:[
-                        //             {name:"子菜单11",url:'/'},
-                        //             {name:"子菜单22",url:'/'},
-                        //         ],
-                        //     },
-                        //     {
-                        //         title:"系统菜单2",
-                        //         lists:[
-                        //             {name:"子菜单22",url:'/'},
-                        //             {name:"子菜单33",url:'/'},
-                        //         ],
-                        //     },
-                        //     {
-                        //         title:"系统菜单3",
-                        //         lists:[
-                        //             {name:"子菜单33",url:'/'},
-                        //             {name:"子菜单11",url:'/'},
-                        //         ],
-                        //     }
-                        // ],
                         res_list:{
                             title:"搜索结果",
                             lists:[],  
@@ -103,6 +80,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                     clickMenu(item){
                         this.getHtml(item);
                         history.pushState({comp: item}, item.url, item.url);
+                        this.menu.show=0;this.menu.listshow=0
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
@@ -151,42 +129,39 @@ layui.define(['&coolay','jquery'], (exports) => {
                             success:function(res){
                                 var workspace=$('#workspace .view')
                                     workspace.html(res);
-                                        layui.element.progress('install-progress', '100%');   
+                                    layui.element.progress('install-progress', '100%');   
                             },
                             complete:function(XMLHttpRequest,status){    
-                                console.log(XMLHttpRequest);                                
                                 //删除进度条
                                 setTimeout(() => {
                                     layui.element.progress('install-progress', '0');
                                     $('.layui-progress').hide();
+                                    $vm.ajax.error = 0;
                                 },2000);
                             },
-                            error:function(){
+                            error:function(res){
                                 //接口请求失败
-                                $vm.ajax.error = 1;
+                                console.log(res.responseText);
+                                var workspace=$('#workspace .view')
+                                workspace.html(res.responseText);
+                                layui.element.progress('install-progress', '100%');   
+                                setTimeout(function(){
+                                    $vm.ajax.error = 1;
+                                },500)
+                                
                             },
                             dataType:'html'
                         });
                     },
-                    pushStateInit(){
-                        //初始化根据 pushState 加载对应组件
-                        if(history.state){
-                            this.getHtml(history.state.comp)
-                        }   
-                    },
                 },
                
                 mounted() {
-                    console.log('indexjs')
-                    var $vm=this;
+                    let $vm=this;
                     window.onpopstate = function(e) {
                         if(e.state){
                             $vm.getHtml(e.state.comp)   
                         }
                     }
-                    this.pushStateInit();
-                    
-
                 }
             });
         }

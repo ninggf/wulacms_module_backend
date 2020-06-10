@@ -10,10 +10,9 @@
     <script type="text/javascript" src="{'backend/layui.js'|res}"></script>
     <script type="text/javascript" src="{'backend/vue.min.js'|res}"></script>
 </head>
-<body class="{$bodyCls}">
+<body style="padding:0;margin:0;">
 {literal}
-    
-    <header id="index"  v-cloak>
+    <header id="index" v-cloak>
         <div class="layui-progress" lay-filter="install-progress">
             <div class="layui-progress-bar "  :class="[ajax.error?'layui-bg-red':'layui-bg-blue']" lay-percent="0%"></div>
         </div>
@@ -38,12 +37,17 @@
                 <img src="/modules/backend/images/avatar.jpg" >
                 <ul>
                     <li>
+                        <p>账号信息</p>
+                    </li>
+                    <li>
+                        <a href="javascript:;">菜单1</a>
+                        <a href="javascript:;">菜单1</a>
                         <a href="javascript:;">菜单1</a>
                     </li>
                     <li>
                         <a href="javascript:;">菜单1</a>
                     </li>
-                    <li>
+                    <li class="logout">
                         <a href="./backend/logout" >退出登录</a>
                     </li>
                 </ul>
