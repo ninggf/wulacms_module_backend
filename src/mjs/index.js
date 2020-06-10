@@ -12,135 +12,34 @@ layui.define(['&coolay','jquery'], (exports) => {
                         search_focus   : 0,
                         module_show    : 0,
                         collection_list: [],
-                        menu_list      : [
-                            {
-                                title: '弹性计算',
-                                
-                                list : [
-                                    {name: "111",click:'event:aaaaaaa',},
-                                    {name: "222",url:'https://9944.com'},
-                                    {name: "333",click:'func:@backend.user#alert'},
-                                    {name: "444"},
-                                    {name: "555"},
-                                    {name: "666"},
-                                    {name: "777"},
-                                    {name: "888"},
-                                    {name: "999"},
-                                ],
-                            },
-                            {
-                                title: '分析',
-                                list : [
-                                    {name: "负载均衡"},
-                                    {name: "批量计算"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                ],
-                            },
-                            {
-                                title: '监控',
-                                list : [
-                                    {name: "负载均衡"},
-                                    {name: "批量计算"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                ],
-                            },
-                            {
-                                title: '管理',
-                                list : [
-                                    {name: "负载均衡"},
-                                    {name: "批量计算"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                ],
-                            },
-                            {
-                                title: '数据',
-                                list : [
-                                    {name: "负载均衡"},
-                                    {name: "批量计算"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                ],
-                            },
-                            {
-                                title: '应用',
-                                list : [
-                                    {name: "负载均衡"},
-                                    {name: "批量计算"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                ],
-                            },
-                            {
-                                title: '服务',
-                                list : [
-                                    {name: "负载均衡"},
-                                    {name: "批量计算"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                ],
-                            },
-                            {
-                                title: '安全',
-                                list : [
-                                    {name: "负载均衡"},
-                                    {name: "批量计算"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                    {name: "资源编排"},
-                                ],
-                            },
-                        ],
+                        menu_list      : menu,
+                        // menu_list      : [
+                        //     {
+                        //         title:"系统菜单1",
+                        //         lists:[
+                        //             {name:"子菜单11",url:'/'},
+                        //             {name:"子菜单22",url:'/'},
+                        //         ],
+                        //     },
+                        //     {
+                        //         title:"系统菜单2",
+                        //         lists:[
+                        //             {name:"子菜单22",url:'/'},
+                        //             {name:"子菜单33",url:'/'},
+                        //         ],
+                        //     },
+                        //     {
+                        //         title:"系统菜单3",
+                        //         lists:[
+                        //             {name:"子菜单33",url:'/'},
+                        //             {name:"子菜单11",url:'/'},
+                        //         ],
+                        //     }
+                        // ],
+                        res_list:{
+                            title:"搜索结果",
+                            lists:[],  
+                        },
                         current_menu   : -1,
                     },
                     // 拖动
@@ -148,7 +47,17 @@ layui.define(['&coolay','jquery'], (exports) => {
                         start  : '',
                         target : '',
                         current: -1,
+                    },
+                    ajax:{
+                        error:0,
+                        success:0,
+                    },
+                    search:{
+                        search_val:'',
+                        t:"",
+                        res:[],
                     }
+
                 },
                 methods: {
                     // 标签添加到左侧sider
@@ -191,10 +100,93 @@ layui.define(['&coolay','jquery'], (exports) => {
                         });
                         this.drop.target  = item;
                     },
-                    
+                    clickMenu(item){
+                        this.getHtml(item);
+                        history.pushState({comp: item}, item.url, item.url);
+                    },
+                    searchMenu(e){
+                        let [$vm,arr]=[this,[]]
+                        if(!$vm.search.search_val){
+                            $vm.search.res=[];
+                            return;
+                        }
+                        if($vm.search.t){
+                            window.clearTimeout($vm.search.t);
+                            $vm.search.t=0;
+                        }
+                        //设时延迟0.8s执行
+                        $vm.search.t=setTimeout(function(){    
+                            $vm.search.t=0;
+                            $vm.search.res=[];
+                            $vm.search.res=$vm.menu.menu_list.map(function(item,i,arr){
+                                arr=item.lists.filter(function(item_sub){
+                                    return item_sub.name.includes($vm.search.search_val);
+                                })
+                                return {
+                                    title:item.title,
+                                    lists:arr
+                                }
+                            })
+                            $vm.search.res=$vm.search.res.filter(function(item){
+                                return item.lists.length;
+                            })
+                        },800);
+
+                    },
+                    getHtml(item){
+                        var $vm=this;
+                        $.ajax({
+                            url:item.url,
+                            method:'GET',
+                            timeout:5000,
+                            beforeSend: function(req){
+                                req.setRequestHeader('PJAX','1')
+                                //初始化进度条
+                                $vm.ajax.error   = 0;
+                                $vm.ajax.success = 0;
+                                $('.layui-progress').show();
+                                layui.element.progress('install-progress', '0');
+
+                            },
+                            success:function(res){
+                                var workspace=$('#workspace .view')
+                                    workspace.html(res);
+                                        layui.element.progress('install-progress', '100%');   
+                            },
+                            complete:function(XMLHttpRequest,status){    
+                                console.log(XMLHttpRequest);                                
+                                //删除进度条
+                                setTimeout(() => {
+                                    layui.element.progress('install-progress', '0');
+                                    $('.layui-progress').hide();
+                                },2000);
+                            },
+                            error:function(){
+                                //接口请求失败
+                                $vm.ajax.error = 1;
+                            },
+                            dataType:'html'
+                        });
+                    },
+                    pushStateInit(){
+                        //初始化根据 pushState 加载对应组件
+                        if(history.state){
+                            this.getHtml(history.state.comp)
+                        }   
+                    },
                 },
+               
                 mounted() {
-                   
+                    console.log('indexjs')
+                    var $vm=this;
+                    window.onpopstate = function(e) {
+                        if(e.state){
+                            $vm.getHtml(e.state.comp)   
+                        }
+                    }
+                    this.pushStateInit();
+                    
+
                 }
             });
         }
