@@ -26,9 +26,14 @@
         <div class="nav-right">
             <input type="text" class="search"  placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
             <ul class="links" >
-                <li><a href="javascript:;">功能</a></li>
-                <li><a href="javascript:;">功能</a></li>
-                <li><a href="javascript:;">功能</a></li>
+
+
+                <li v-for="item in menu.menu_list" class="links_menu">
+                    <a href="javascript:;">{{item.title}}</a>
+                    <ul>
+                        <li v-for="sub_item in item.lists"><a href="javascript:;" @click.stop.prevent="clickMenu(sub_item)">{{sub_item.name}}</a></li>
+                    </ul>
+                </li>
                 <li><a href="javascript:;" title="消息"><i class="layui-icon layui-icon-notice"></i></a></li>
                 <li><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
                 <li><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
@@ -37,14 +42,18 @@
                 <img src="/modules/backend/images/avatar.jpg" >
                 <ul>
                     <li>
-                        <p>账号信息</p>
+                        <img src="/modules/backend/images/avatar.jpg" ><p>账号信息</p>
                     </li>
                     <li>
-                        <a href="javascript:;">菜单1</a>
-                        <a href="javascript:;">菜单1</a>
+                        <i class="layui-icon layui-icon-vercode"></i>   
                         <a href="javascript:;">菜单1</a>
                     </li>
                     <li>
+                        <i class="layui-icon layui-icon-key"></i>   
+                        <a href="javascript:;">菜单1</a>
+                    </li>
+                    <li>
+                        <i class="layui-icon layui-icon-diamond"></i>   
                         <a href="javascript:;">菜单1</a>
                     </li>
                     <li class="logout">
@@ -87,7 +96,7 @@
                 <div class="menu-list--main">
                     <!--有搜索结果 -->
                     <div v-show="search.res.length">
-                        <div v-for="(i,index) in search.res" class="menu-list--item"  >
+                        <div v-for="(i,index) in search.res" class ="menu-list--item"  >
                             <a :class="{'check':menu.current_menu==index}" :name="i.title" > {{i.title}}</a>
                             <a v-for="item in i.lists" :href="item.url?item.url:'javascript:;'"  @click.stop.prevent="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
                                 <i @click="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
