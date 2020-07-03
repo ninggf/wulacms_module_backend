@@ -26,15 +26,25 @@
         <div class="nav-right">
             <input type="text" class="search"  placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
             <ul class="links" >
-
-
+                <!--
                 <li v-for="item in menu.menu_list" class="links_menu">
                     <a href="javascript:;">{{item.title}}</a>
                     <ul>
-                        <li v-for="sub_item in item.lists"><a href="javascript:;" @click.stop.prevent="clickMenu(sub_item)">{{sub_item.name}}</a></li>
+                       <li v-for="sub_item in item.lists"><a href="javascript:;" @click.stop.prevent="clickMenu(sub_item)">{{sub_item.name}}</a></li>
                     </ul>
                 </li>
-                <li><a href="javascript:;" title="消息"><i class="layui-icon layui-icon-notice"></i></a></li>
+                -->
+                <li v-for="item in 3" class="links_menu">
+                    <a href="javascript:;">{{'系统菜单'+item}}</a>
+                    <ul>
+                        <li v-for="sub_item in 5"><a href="javascript:;" >{{'nav '+item}}</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;" title="消息">
+                        <i class="layui-icon layui-icon-notice has-notice " ><span class="layui-badge-dot"></span></i>
+                    </a>
+                </li>
                 <li><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
                 <li><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
             </ul>
@@ -133,17 +143,21 @@
     <div id="module" v-cloak>
         <!--控制自定义模块显示隐藏-->
         <span class="module-show" @click="sid_show=!sid_show;hide_sid=0 ">自定义</span>
-        <ul :class="{'hide':hide_sid}" v-show="sid_show">
-            <i :class="[hide_sid?'layui-icon-right':'layui-icon-left','layui-icon']" @click="hide_sid=!hide_sid" ></i>  
-            <li v-for="(item,index) in list" >
-                {{item.title}}
-                <i  @click="addModule(item,index)" :class="[item.isadd?'layui-icon-ok':'layui-icon-addition','layui-icon']" ></i>
-            </li>
-            <li @click="hide_sid=1"><span>取消</span><span>保存</span></li>
-        </ul>
-        <div class="module-list">
-            <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width}">{{item.title}}</div>
-        </div>
+        <transition name="up">
+            <ul :class="{'hide':hide_sid}" v-show="sid_show">
+                <i :class="[hide_sid?'layui-icon-right':'layui-icon-left','layui-icon']" @click="hide_sid=!hide_sid" ></i>  
+                <li v-for="(item,index) in list" >
+                    {{item.title}}
+                    <i  @click="addModule(item,index)" :class="[item.isadd?'layui-icon-ok':'layui-icon-addition','layui-icon']" ></i>
+                </li>
+                <li @click="hide_sid=1"><span>取消</span><span>保存</span></li>
+            </ul>
+        </transition>
+        <transition name="up">
+            <div class="module-list" v-show="sid_show">
+                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width}">{{item.title}}</div>
+            </div>
+        </transition>
     </div>
 {/literal}
 <script type="text/javascript">
@@ -154,7 +168,7 @@ console.log({$naviMenus})
         module: "{'/'|res}",
     });
     layui.use(['@backend.index', '@backend.module'], function(home, mod) {
-        home.init(menu.naviMenus)
+        home.init(menu.naviMenus,mod)
     })
 </script>
 <div id="workspace">

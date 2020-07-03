@@ -2,7 +2,7 @@ layui.define(['&coolay','jquery'], (exports) => {
     'use strict';
     let $ = layui.$,coolay = layui['&coolay']
     let menu = null,app= null,home = {
-        init (menu){
+        init (menu,mod){
             app = new Vue({
                 el     : '#index',
                 data   : {
@@ -19,6 +19,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                         },
                         current_menu   : -1,
                     },
+                    mod:mod,
                     // 拖动
                     drop: {
                         start  : '',
@@ -80,7 +81,10 @@ layui.define(['&coolay','jquery'], (exports) => {
                     clickMenu(item){
                         this.getHtml(item);
                         history.pushState({comp: item}, item.url, item.url);
-                        this.menu.show=0;this.menu.listshow=0
+                        //初始化界面
+                        this.menu.show=this.menu.listshow=this.mod.sid_show=0;
+                        // this.menu.listshow=0
+                        // this.mod.sid_show=0;
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
