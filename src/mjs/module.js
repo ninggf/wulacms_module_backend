@@ -6,18 +6,27 @@ layui.define(['jquery'], (exports) => {
         data   : {
             list:[
                 {
+                    id:1,
                     title:"模块一",
                     width:"25%",
                     isadd:0,
                 },
                 {
+                    id:2,
                     title:"模块二",
                     width:"50%",
                     isadd:0,
                 },
                 {
+                    id:3,
                     title:"模块三",
                     width:"75%",
+                    isadd:0,
+                },
+                {
+                    id:4,
+                    title:"模块四",
+                    width:"100%",
                     isadd:0,
                 },
             ],
@@ -25,12 +34,16 @@ layui.define(['jquery'], (exports) => {
             //控制侧边栏开启关闭
             hide_sid:0,
             sid_show:0,
+            //自定义模块主页面显示
+            mod_show:1,
         },
         methods: {
             addModule(m){
                 let el,item={};
-                    item.width=m.width;
-                    item.title=m.title;
+                    //item.width=m.width;
+                    //item.title=m.title;
+                    //item.id=m.id;
+                    item=m;
                     if(m.isadd){
                         // 删除
                         el=this.module_list.findIndex(function(c){
@@ -42,10 +55,37 @@ layui.define(['jquery'], (exports) => {
                         this.module_list.push(item);
                     }
                     m.isadd=!m.isadd;
-            }
+            },
+            saveModule(){
+                //if(!this.module_list.length){return}
+                //自定义模块保存暂时存入localstrog
+                if(!window.localStorage){
+                    alert("浏览器不支持localstorage");
+                    return false;
+                }else{
+                    window.localStorage.setItem('module_list',JSON.stringify(this.module_list));
+                    this.sid_show=1;
+                }
+            },
+            initModule(){
+                //获取本地localstorge数据,显示已添加模块
+                let stroge_module_list=JSON.parse(window.localStorage.getItem('module_list'));
+                if(stroge_module_list && stroge_module_list.length){
+                    this.module_list=stroge_module_list;
+                    for (let item of this.module_list) {
+                        let index=this.list.findIndex((val)=>{
+                            return val.id==item.id
+                        })
+                        this.list[index].isadd=1
+                    }
+                }
+            },
+            
         },
         mounted() {
-            console.log('module')
+            console.log('module执行')
+            this.initModule();
+
         },
     });
 

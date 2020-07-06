@@ -20,7 +20,7 @@
             <div>
                 <img class="icon" src="/modules/backend/images/icon.png" @mouseenter="menu.show=!menu.show;menu.listshow=0">
             </div>
-            <img class="logo" src="/modules/backend/images/logo.png" >
+            <img class="logo" src="/modules/backend/images/logo.png" @click="goHome" >
             <p class="logo-name">Cms</p>
         </div>
         <div class="nav-right">
@@ -140,25 +140,38 @@
         </div>
         -->
     </header>
-    <div id="module" v-cloak>
-        <!--控制自定义模块显示隐藏-->
+
+    <!--控制自定义模块显示隐藏-->
+    
+    <!-- -->
+    <div id="module" v-cloak v-show="mod_show">
         <span class="module-show" @click="sid_show=!sid_show;hide_sid=0 ">自定义</span>
-        <transition name="up">
+        <transition name="fade">
             <ul :class="{'hide':hide_sid}" v-show="sid_show">
                 <i :class="[hide_sid?'layui-icon-right':'layui-icon-left','layui-icon']" @click="hide_sid=!hide_sid" ></i>  
                 <li v-for="(item,index) in list" >
                     {{item.title}}
                     <i  @click="addModule(item,index)" :class="[item.isadd?'layui-icon-ok':'layui-icon-addition','layui-icon']" ></i>
                 </li>
-                <li @click="hide_sid=1"><span>取消</span><span>保存</span></li>
+                <li ><span @click="hide_sid=1">取消</span><span @click="saveModule">保存</span></li>
             </ul>
         </transition>
-        <transition name="up">
+
+        <!--自定义编辑-->
+        <transition name="fade">
             <div class="module-list" v-show="sid_show">
                 <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width}">{{item.title}}</div>
             </div>
         </transition>
+
+        <!--主页面显示-->
+        <transition name="fade">
+            <div class="module-list mian-module-list" v-show="!sid_show">
+                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width}">{{item.title}}</div>
+            </div>
+        </transition>
     </div>
+    
 {/literal}
 <script type="text/javascript">
 console.log({$naviMenus})
@@ -167,9 +180,25 @@ console.log({$naviMenus})
         base: "{'layui'|assets}",
         module: "{'/'|res}",
     });
+    
+    /*
     layui.use(['@backend.index', '@backend.module'], function(home, mod) {
         home.init(menu.naviMenus,mod)
     })
+    */
+
+    if(location.href.split('/')[location.href.split('/').length-1]=='backend'){
+        //主界面不加载module
+        layui.use(['@backend.index','@backend.module'], function(home,mod) {
+            home.init(menu.naviMenus,mod)
+        })
+    }else{
+        layui.use(['@backend.index'], function(home, mod) {
+            home.init(menu.naviMenus)
+        })
+    }
+
+
 </script>
 <div id="workspace">
     

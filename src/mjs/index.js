@@ -79,12 +79,15 @@ layui.define(['&coolay','jquery'], (exports) => {
                         this.drop.target  = item;
                     },
                     clickMenu(item){
-                        this.getHtml(item);
-                        history.pushState({comp: item}, item.url, item.url);
                         //初始化界面
-                        this.menu.show=this.menu.listshow=this.mod.sid_show=0;
-                        // this.menu.listshow=0
-                        // this.mod.sid_show=0;
+                        this.getHtml(item);
+                        
+                        // this.menu.show=this.menu.listshow=this.mod.sid_show=this.mod.mod_show=0;
+                        this.menu.show=this.menu.listshow=0;
+                        $('#module').remove();
+                        history.pushState({comp: item}, item.url, item.url);
+                        
+
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
@@ -145,7 +148,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                             },
                             error:function(res){
                                 //接口请求失败
-                                console.log(res.responseText);
+                                //console.log(res.responseText);
                                 var workspace=$('#workspace .view')
                                 workspace.html(res.responseText);
                                 layui.element.progress('install-progress', '100%');   
@@ -157,16 +160,21 @@ layui.define(['&coolay','jquery'], (exports) => {
                             dataType:'html'
                         });
                     },
+                    goHome(){
+                        console.log("回到首页")
+                        location.href="/backend"
+                    }
                 },
                
                 mounted() {
                     let $vm=this;
+                    console.log('index执行')
                     window.onpopstate = function(e) {
                         if(e.state){
                             $vm.getHtml(e.state.comp)   
                         }
                     }
-                }
+                },
             });
         }
     };
