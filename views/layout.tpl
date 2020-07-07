@@ -109,7 +109,7 @@
                         <div v-for="(i,index) in search.res" class ="menu-list--item"  >
                             <a :class="{'check':menu.current_menu==index}" :name="i.title" > {{i.title}}</a>
                             <a v-for="item in i.lists" :href="item.url?item.url:'javascript:;'"  @click.stop.prevent="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
-                                <i @click="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
+                                <i @click.stop.prevent="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
                             </a>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                             <a :class="{'check':menu.current_menu==index}" :name="i.title" > {{i.title}}</a>
                             <a v-for="item in i.lists" :href="item.url?item.url:'javascript:;'"  @click.stop.prevent="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
                                 <!--添加到左侧列表-->
-                                <i @click="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
+                                <i @click.stop.prevent="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']" ></i>
                             </a>
                         </div>
                     </div>

@@ -35,7 +35,6 @@ layui.define(['&coolay','jquery'], (exports) => {
                         t:"",
                         res:[],
                     }
-
                 },
                 methods: {
                     // 标签添加到左侧sider
@@ -165,7 +164,6 @@ layui.define(['&coolay','jquery'], (exports) => {
                         location.href="/backend"
                     }
                 },
-               
                 mounted() {
                     let $vm=this;
                     console.log('index执行')

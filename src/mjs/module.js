@@ -1,4 +1,4 @@
-layui.define(['jquery'], (exports) => {
+layui.define(['layer','jquery'], (exports) => {
     'use strict';
     const $   = layui.$;
     const app = new Vue({
@@ -65,6 +65,7 @@ layui.define(['jquery'], (exports) => {
                 }else{
                     window.localStorage.setItem('module_list',JSON.stringify(this.module_list));
                     this.sid_show=1;
+                    layer.msg("保存成功")
                 }
             },
             initModule(){
@@ -85,7 +86,7 @@ layui.define(['jquery'], (exports) => {
         mounted() {
             console.log('module执行')
             this.initModule();
-
+            console.log(layui)
         },
     });
 
