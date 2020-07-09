@@ -80,13 +80,8 @@ layui.define(['&coolay','jquery'], (exports) => {
                     clickMenu(item){
                         //初始化界面
                         this.getHtml(item);
-                        
-                        // this.menu.show=this.menu.listshow=this.mod.sid_show=this.mod.mod_show=0;
-                        this.menu.show=this.menu.listshow=0;
-                        $('#module').remove();
+                        this.menu.show=this.menu.listshow=this.mod.mod_show=this.mod.sid_show=this.mod.hide_sid=0;
                         history.pushState({comp: item}, item.url, item.url);
-                        
-
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
@@ -160,16 +155,27 @@ layui.define(['&coolay','jquery'], (exports) => {
                         });
                     },
                     goHome(){
-                        console.log("回到首页")
-                        location.href="/backend"
-                    }
+                        history.pushState({comp: {url:'/backend',}}, '/backend', '/backend');
+                        this.mod.mod_show=1;
+                        this.mod.sid_show=this.mod.hide_sid=0;
+                    },
+                    // init(){
+                    //     if(location.href.split('/')[location.href.split('/').length-1]!='backend'){
+                    //         this.mod.mod_show=0;
+                    //     }
+                    // }
                 },
                 mounted() {
-                    let $vm=this;
                     console.log('index执行')
+                    let $vm=this;
                     window.onpopstate = function(e) {
                         if(e.state){
-                            $vm.getHtml(e.state.comp)   
+                            if(e.state.comp.url=='/backend'){
+                                $vm.mod.mod_show=1; 
+                            }else{
+                                $vm.mod.mod_show=0; 
+                                $vm.getHtml(e.state.comp)  
+                            }
                         }
                     }
                 },

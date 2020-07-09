@@ -35,14 +35,11 @@ layui.define(['layer','jquery'], (exports) => {
             hide_sid:0,
             sid_show:0,
             //自定义模块主页面显示
-            mod_show:1,
+            mod_show:0,
         },
         methods: {
             addModule(m){
                 let el,item={};
-                    //item.width=m.width;
-                    //item.title=m.title;
-                    //item.id=m.id;
                     item=m;
                     if(m.isadd){
                         // 删除
@@ -69,6 +66,13 @@ layui.define(['layer','jquery'], (exports) => {
                 }
             },
             initModule(){
+
+                if(location.href.split('/')[location.href.split('/').length-1]!='backend'){
+                    this.mod_show=0;
+                }else{
+                    this.mod_show=1;
+                }
+
                 //获取本地localstorge数据,显示已添加模块
                 let stroge_module_list=JSON.parse(window.localStorage.getItem('module_list'));
                 if(stroge_module_list && stroge_module_list.length){
@@ -86,9 +90,7 @@ layui.define(['layer','jquery'], (exports) => {
         mounted() {
             console.log('module执行')
             this.initModule();
-            console.log(layui)
         },
     });
-
     exports('@backend.module', app);
 });

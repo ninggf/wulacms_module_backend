@@ -26,14 +26,6 @@
         <div class="nav-right">
             <input type="text" class="search"  placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
             <ul class="links" >
-                <!--
-                <li v-for="item in menu.menu_list" class="links_menu">
-                    <a href="javascript:;">{{item.title}}</a>
-                    <ul>
-                       <li v-for="sub_item in item.lists"><a href="javascript:;" @click.stop.prevent="clickMenu(sub_item)">{{sub_item.name}}</a></li>
-                    </ul>
-                </li>
-                -->
                 <li v-for="item in 3" class="links_menu">
                     <a href="javascript:;">{{'系统菜单'+item}}</a>
                     <ul>
@@ -96,7 +88,6 @@
                     </li>
                 </ul>
             </aside>
-
             <!--应用列表-->
             <div :class="[menu.listshow?'menu-list--show':'','menu-list']">
                 <div class="search">
@@ -133,27 +124,18 @@
                     </div>
             </div>
         </div>
-
-        <!--模块展示区
-        <div id="mycp">
-            <component  v-if="mycomp" v-bind:is="mycomp"></component>
-        </div>
-        -->
     </header>
-
-    <!--控制自定义模块显示隐藏-->
-    
-    <!-- -->
+     <!--控制自定义模块显示隐藏-->
     <div id="module" v-cloak v-show="mod_show">
         <span class="module-show" @click="sid_show=!sid_show;hide_sid=0 ">自定义</span>
         <transition name="fade">
             <ul :class="{'hide':hide_sid}" v-show="sid_show">
-                <i :class="[hide_sid?'layui-icon-right':'layui-icon-left','layui-icon']" @click="hide_sid=!hide_sid" ></i>  
-                <li v-for="(item,index) in list" >
+                <i :class="[hide_sid?'layui-icon-right':'layui-icon-left','layui-icon']" @click="hide_sid=!hide_sid"></i>
+                <li v-for="(item,index) in list">
                     {{item.title}}
-                    <i  @click="addModule(item,index)" :class="[item.isadd?'layui-icon-ok':'layui-icon-addition','layui-icon']" ></i>
+                    <i @click="addModule(item,index)" :class="[item.isadd?'layui-icon-ok':'layui-icon-addition','layui-icon']"></i>
                 </li>
-                <li ><span @click="hide_sid=1">取消</span><span @click="saveModule">保存</span></li>
+                <li><span @click="hide_sid=1">取消</span><span @click="saveModule">保存</span></li>
             </ul>
         </transition>
 
@@ -171,7 +153,6 @@
             </div>
         </transition>
     </div>
-    
 {/literal}
 <script type="text/javascript">
 console.log({$naviMenus})
@@ -180,15 +161,9 @@ console.log({$naviMenus})
         base: "{'layui'|assets}",
         module: "{'/'|res}",
     });
-    
+   
     /*
-    layui.use(['@backend.index', '@backend.module'], function(home, mod) {
-        home.init(menu.naviMenus,mod)
-    })
-    */
-
     if(location.href.split('/')[location.href.split('/').length-1]=='backend'){
-        //主界面不加载module
         layui.use(['@backend.index','@backend.module'], function(home,mod) {
             home.init(menu.naviMenus,mod)
         })
@@ -197,13 +172,18 @@ console.log({$naviMenus})
             home.init(menu.naviMenus)
         })
     }
+    */
+
+    layui.use(['@backend.index','@backend.module'], function(home,mod) {
+            home.init(menu.naviMenus,mod)
+        })
 
 
 </script>
 <div id="workspace">
     
     <div class="view">
-        {include "$workspaceView"}
+       {include "$workspaceView"}
     </div>
 </div>
 </body>
