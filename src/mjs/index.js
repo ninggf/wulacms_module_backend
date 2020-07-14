@@ -1,4 +1,4 @@
-layui.define(['&coolay','jquery','@backend.module'], (exports) => {
+layui.define(['&coolay','jquery'], (exports) => {
     'use strict';
     let $ = layui.$,coolay = layui['&coolay'];
     let menu = null,app= null,home = {
@@ -20,7 +20,6 @@ layui.define(['&coolay','jquery','@backend.module'], (exports) => {
                         current_menu   : -1,
                     },
                     mod:mod,
-                    // mod:mod.init(),
                     // 拖动
                     drop: {
                         start  : '',
@@ -81,7 +80,10 @@ layui.define(['&coolay','jquery','@backend.module'], (exports) => {
                     clickMenu(item){
                         //初始化界面
                         this.getHtml(item);
-                        this.menu.show=this.menu.listshow=this.mod.mod_show=this.mod.sid_show=this.mod.hide_sid=0;
+                        //this.menu.show=this.menu.listshow=this.mod.mod_show=this.mod.sid_show=this.mod.hide_sid=0;
+                        this.menu.show=this.menu.listshow=0;
+                        $('#module').hide();
+                        history.pushState({comp: item}, item.url, item.url);
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
@@ -114,7 +116,7 @@ layui.define(['&coolay','jquery','@backend.module'], (exports) => {
                     },
                     getHtml(item){
                         var $vm=this;
-                        history.pushState({comp: item}, item.url, item.url);
+                        //history.pushState({comp: item}, item.url, item.url);
                         $.ajax({
                             url:item.url,
                             method:'GET',
@@ -156,9 +158,11 @@ layui.define(['&coolay','jquery','@backend.module'], (exports) => {
                         });
                     },
                     goHome(){
-                        this.getHtml({url:'/backend',})
-                        this.mod.mod_show=1;
-                        this.mod.sid_show=this.mod.hide_sid=0;
+                        if(location.pathname=='/backend')return;
+                        this.getHtml({url:'/backend'})
+                        history.pushState({comp: {url:'/backend'}},'/backend','/backend');
+                        //this.mod.mod_show=1;
+                        //this.mod.sid_show=this.mod.hide_sid=0;
                         
                        
                     },
@@ -169,11 +173,6 @@ layui.define(['&coolay','jquery','@backend.module'], (exports) => {
                     history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
                     window.onpopstate = function(e) {
                         if(e.state){
-                            if(e.state.comp.url=='/backend'){
-                                $vm.mod.mod_show=1; 
-                            }else{
-                                $vm.mod.mod_show=0; 
-                            }
                             $vm.getHtml(e.state.comp)  
                         }
                     }

@@ -87,6 +87,7 @@ layui.define(['layer','jquery'], (exports) => {
                     
                 },
                 mounted() {
+                    console.log('module')
                     this.initModule();
                 },
             }); 

@@ -134,7 +134,7 @@ console.log({$naviMenus})
         module: "{'/'|res}",
     });
     layui.use(['@backend.index','@backend.module'], function(home,mod) {
-        home.init(menu.naviMenus,mod.init())
+         home.init(menu.naviMenus)
     })
 </script>
 <div id="workspace">
