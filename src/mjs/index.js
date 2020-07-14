@@ -1,6 +1,6 @@
-layui.define(['&coolay','jquery'], (exports) => {
+layui.define(['&coolay','jquery','@backend.module'], (exports) => {
     'use strict';
-    let $ = layui.$,coolay = layui['&coolay']
+    let $ = layui.$,coolay = layui['&coolay'];
     let menu = null,app= null,home = {
         init (menu,mod){
             app = new Vue({
@@ -20,6 +20,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                         current_menu   : -1,
                     },
                     mod:mod,
+                    // mod:mod.init(),
                     // 拖动
                     drop: {
                         start  : '',
@@ -81,7 +82,6 @@ layui.define(['&coolay','jquery'], (exports) => {
                         //初始化界面
                         this.getHtml(item);
                         this.menu.show=this.menu.listshow=this.mod.mod_show=this.mod.sid_show=this.mod.hide_sid=0;
-                        history.pushState({comp: item}, item.url, item.url);
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
@@ -114,6 +114,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                     },
                     getHtml(item){
                         var $vm=this;
+                        history.pushState({comp: item}, item.url, item.url);
                         $.ajax({
                             url:item.url,
                             method:'GET',
@@ -155,27 +156,25 @@ layui.define(['&coolay','jquery'], (exports) => {
                         });
                     },
                     goHome(){
-                        history.pushState({comp: {url:'/backend',}}, '/backend', '/backend');
+                        this.getHtml({url:'/backend',})
                         this.mod.mod_show=1;
                         this.mod.sid_show=this.mod.hide_sid=0;
+                        
+                       
                     },
-                    // init(){
-                    //     if(location.href.split('/')[location.href.split('/').length-1]!='backend'){
-                    //         this.mod.mod_show=0;
-                    //     }
-                    // }
                 },
                 mounted() {
                     console.log('index执行')
                     let $vm=this;
+                    history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
                     window.onpopstate = function(e) {
                         if(e.state){
                             if(e.state.comp.url=='/backend'){
                                 $vm.mod.mod_show=1; 
                             }else{
                                 $vm.mod.mod_show=0; 
-                                $vm.getHtml(e.state.comp)  
                             }
+                            $vm.getHtml(e.state.comp)  
                         }
                     }
                 },
