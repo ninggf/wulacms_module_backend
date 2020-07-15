@@ -24,12 +24,8 @@
 </div>
 <script>
     layui.use(['@backend.module'], function(mod) {
-        //console.log(history)
-        //if(history.state.comp.act=='gohome'){
                mod.init()
-        //}
         
     }) 
-
 </script>
 {/literal}

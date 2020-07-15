@@ -16,52 +16,54 @@
         <div class="layui-progress" lay-filter="install-progress">
             <div class="layui-progress-bar "  :class="[ajax.error?'layui-bg-red':'layui-bg-blue']" lay-percent="0%"></div>
         </div>
-        <div class="nav-left">
-            <div>
-                <img class="icon" src="/modules/backend/images/icon.png" @mouseenter="menu.show=!menu.show;menu.listshow=0">
+        <div class="nav">
+            <div class="nav-left">
+                <div>
+                    <img class="icon" src="/modules/backend/images/icon.png" @mouseenter="menu.show=!menu.show;menu.listshow=0">
+                </div>
+                <img class="logo" src="/modules/backend/images/logo.png" @click="goHome" >
+                <p class="logo-name">Cms</p>
             </div>
-            <img class="logo" src="/modules/backend/images/logo.png" @click="goHome" >
-            <p class="logo-name">Cms</p>
-        </div>
-        <div class="nav-right">
-            <input type="text" class="search"  placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
-            <ul class="links" >
-                <li v-for="item in 3" class="links_menu">
-                    <a href="javascript:;">{{'系统菜单'+item}}</a>
-                    <ul>
-                        <li v-for="sub_item in 5"><a href="javascript:;" >{{'nav '+item}}</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:;" title="消息">
-                        <i class="layui-icon layui-icon-notice has-notice " ><span class="layui-badge-dot"></span></i>
-                    </a>
-                </li>
-                <li><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
-                <li><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
-            </ul>
-            <div class="nav-user">
-                <img src="/modules/backend/images/avatar.jpg" >
-                <ul>
-                    <li>
-                        <img src="/modules/backend/images/avatar.jpg" ><p>账号信息</p>
+            <div class="nav-right">
+                <input type="text" class="search"  placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
+                <ul class="links" >
+                    <li v-for="item in 3" class="links_menu">
+                        <a href="javascript:;">{{'系统菜单'+item}}</a>
+                        <ul>
+                            <li v-for="sub_item in 5"><a href="javascript:;" >{{'nav '+item}}</a></li>
+                        </ul>
                     </li>
                     <li>
-                        <i class="layui-icon layui-icon-vercode"></i>   
-                        <a href="javascript:;">菜单1</a>
+                        <a href="javascript:;" title="消息">
+                            <i class="layui-icon layui-icon-notice has-notice " ><span class="layui-badge-dot"></span></i>
+                        </a>
                     </li>
-                    <li>
-                        <i class="layui-icon layui-icon-key"></i>   
-                        <a href="javascript:;">菜单1</a>
-                    </li>
-                    <li>
-                        <i class="layui-icon layui-icon-diamond"></i>   
-                        <a href="javascript:;">菜单1</a>
-                    </li>
-                    <li class="logout">
-                        <a href="./backend/logout" >退出登录</a>
-                    </li>
+                    <li><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
+                    <li><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
                 </ul>
+                <div class="nav-user">
+                    <img src="/modules/backend/images/avatar.jpg" >
+                    <ul>
+                        <li>
+                            <img src="/modules/backend/images/avatar.jpg" ><p>账号信息</p>
+                        </li>
+                        <li>
+                            <i class="layui-icon layui-icon-vercode"></i>   
+                            <a href="javascript:;">菜单1</a>
+                        </li>
+                        <li>
+                            <i class="layui-icon layui-icon-key"></i>   
+                            <a href="javascript:;">菜单1</a>
+                        </li>
+                        <li>
+                            <i class="layui-icon layui-icon-diamond"></i>   
+                            <a href="javascript:;">菜单1</a>
+                        </li>
+                        <li class="logout">
+                            <a href="./backend/logout" >退出登录</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div  :class="[menu.show?'menu--show':'','menu']" >

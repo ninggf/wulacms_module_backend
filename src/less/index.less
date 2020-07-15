@@ -49,228 +49,234 @@ body{
     top: 0px;
     left: 0px;
     z-index: 100;
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px 0px;
+    
     background-color: #fff;
     width: 100%;
     height: 50px;
     display: flex;
     justify-content: space-between;
-    padding-right: 10px;
     min-width: 980px;
     *{
         font-size: 0;
         line-height: 1;
     }
-    
-    .nav-left{
-        i{
-            font-size: 30px;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            background:linear-gradient(to right, #6e89e4,#56b6eb);
-            display: inline-block;
-            color: #fff;
-            line-height: 50px;
-            text-align: center;
-        }
-        &>div{
-            display: inline-block;
-            background-color: @main-color;
-            width: 50px;
-            text-align: center;
-            position: relative;
-            height: 50px;
-            cursor: pointer;
-            .icon{
-                width: 33px;
-                height: 24px;
-                .mid();
-                
-            }
-        }
-        .logo{
-            margin-left: 15px;
-            margin-top: 10px;
-            width: 30px;
-            vertical-align: top;
-            cursor: pointer;
-        }
-        .logo-name{
-            line-height: 50px;
-            font-weight: 700;
-            display: inline-block;
-            background: @main-color;
-            background-clip: text;
-            color: transparent;
-            font-size: 20px;
-            vertical-align: top;
-        }
-
-    }
-    .nav-right{
+    .nav{
         display: flex;
-        transition: all 0.25s ease-in-out 0s;
-        .search{
-            line-height: 28px;
-            height: 28px;
-            border: 1px solid #ccc;
-            background: #f5f5f5;
-            align-self: center;
-            width: 300px;
-
-            font-size: 14px;
-            color: #666;
-            padding-left: 10px;
-            margin-right: -20px;
-            border-radius: 2px;
-            transition: all 1s;
-           
-        }
-        .layui-icon-search{
-            align-self: center;
-            font-size: 16px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-        .links{
-            display: flex;
-            &>li{
+        justify-content: space-between;
+        width: 100%;
+        position: relative;
+        z-index: 2;
+        box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 4px 0px;
+        .nav-left{
+            i{
+                font-size: 30px;
+                width: 50px;
+                height: 50px;
+                cursor: pointer;
+                background:linear-gradient(to right, #6e89e4,#56b6eb);
+                display: inline-block;
+                color: #fff;
+                line-height: 50px;
+                text-align: center;
+            }
+            &>div{
+                display: inline-block;
+                background-color: @main-color;
+                width: 50px;
+                text-align: center;
                 position: relative;
-                &>a{
-                    line-height: 50px;
-                    font-size: 12px;
-                    text-align: center;
-                    padding: 0 10px;
+                height: 50px;
+                cursor: pointer;
+                .icon{
+                    width: 33px;
+                    height: 24px;
+                    .mid();
+                    
                 }
-                i{
-                    font-size: 18px;
-                    &>span{
-                        position: absolute;
-                        top: 15px;
-                        right: 3px;
+            }
+            .logo{
+                margin-left: 15px;
+                margin-top: 10px;
+                width: 30px;
+                vertical-align: top;
+                cursor: pointer;
+            }
+            .logo-name{
+                line-height: 50px;
+                font-weight: 700;
+                display: inline-block;
+                background: @main-color;
+                background-clip: text;
+                color: transparent;
+                font-size: 20px;
+                vertical-align: top;
+            }
+
+        }
+        .nav-right{
+            display: flex;
+            transition: all 0.25s ease-in-out 0s;
+            .search{
+                line-height: 28px;
+                height: 28px;
+                border: 1px solid #ccc;
+                background: #f5f5f5;
+                align-self: center;
+                width: 300px;
+
+                font-size: 14px;
+                color: #666;
+                padding-left: 10px;
+                margin-right: -20px;
+                border-radius: 2px;
+                transition: all 1s;
+            
+            }
+            .layui-icon-search{
+                align-self: center;
+                font-size: 16px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            .links{
+                display: flex;
+                &>li{
+                    position: relative;
+                    &>a{
+                        line-height: 50px;
+                        font-size: 12px;
+                        text-align: center;
+                        padding: 0 10px;
                     }
-                    &.has-notice{
-                        &::before{
-                            display: inline-block;
-                            border-radius: 50%;
-                            animation:notice-ant-2 0.4s ease-in infinite alternate;
+                    i{
+                        font-size: 18px;
+                        &>span{
+                            position: absolute;
+                            top: 15px;
+                            right: 3px;
+                        }
+                        &.has-notice{
+                            &::before{
+                                display: inline-block;
+                                border-radius: 50%;
+                                animation:notice-ant-2 0.4s ease-in infinite alternate;
+                            }
                         }
                     }
+                    &:hover{
+                        &>ul{
+                            visibility:visible;
+                            opacity: 1;
+                            top: 50px;
+                            li:hover{
+                                    background: rgba(46, 62, 83, 0.1);
+                                }
+                        }
+                    }
+                &>ul{
+                    position: absolute;
+                    right: 0;
+                    top: 60px;
+                    visibility: hidden;
+                    opacity: 0;
+                    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+                    background-color: rgb(255, 255, 255);
+                    min-width: 100px;
+                    font-size: 12px;
+                    color: rgb(51, 51, 51);
+                    transition: all 360ms ease 0s;
+                    z-index: 10;
+                    li{
+                        display: block;
+                        a{
+                            display: block;
+                            font-size: 12px;
+                            text-align: center;
+                            line-height: 40px;
+                            transition: all .4s;
+                            
+                        }
+                    }
+                } 
+                }
+            }
+            .nav-user{
+                line-height: 50px;
+                padding:0 10px;
+                cursor: pointer;
+                position: relative;
+                &>img{
+                    width: 30px;
+                    border-radius: 20px;
                 }
                 &:hover{
                     &>ul{
                         visibility:visible;
                         opacity: 1;
-                        top: 50px;
-                        li:hover{
-                                background: rgba(46, 62, 83, 0.1);
-                            }
+                        top: 50px
                     }
                 }
-               &>ul{
-                position: absolute;
-                right: 0;
-                top: 60px;
-                visibility: hidden;
-                opacity: 0;
-                box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
-                background-color: rgb(255, 255, 255);
-                min-width: 100px;
-                font-size: 12px;
-                color: rgb(51, 51, 51);
-                transition: all 360ms ease 0s;
-                z-index: 10;
-                li{
-                    display: block;
-                    a{
-                        display: block;
-                        font-size: 12px;
-                        text-align: center;
-                        line-height: 40px;
-                        transition: all .4s;
-                        
-                    }
-                }
-               } 
-            }
-        }
-        .nav-user{
-            line-height: 50px;
-            padding:0 10px;
-            cursor: pointer;
-            position: relative;
-            &>img{
-                width: 30px;
-                border-radius: 20px;
-            }
-            &:hover{
                 &>ul{
-                    visibility:visible;
-                    opacity: 1;
-                    top: 50px
-                }
-            }
-            &>ul{
-                background: #f1f1f1;
-                position: absolute;
-                right: -20%;
-                top: 60px;
-                visibility: hidden;
-                opacity: 0;
-                box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
-                background-color: rgb(255, 255, 255);
-                min-width: 300px;
-                font-size: 12px;
-                color: rgb(51, 51, 51);
-                transition: all 360ms ease 0s;
-                z-index: 10;
-                li{
-                    padding: 0 10px;
-                    &:hover{
-                        background: rgba(46, 62, 83, 0.1);
-                    }
-                    &.logout{
-                        background: #293e53;
-                        &>a{
-                            color: #fff;
-                            margin: 0 auto;
+                    background: #f1f1f1;
+                    position: absolute;
+                    right: -20%;
+                    top: 60px;
+                    visibility: hidden;
+                    opacity: 0;
+                    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+                    background-color: rgb(255, 255, 255);
+                    min-width: 300px;
+                    font-size: 12px;
+                    color: rgb(51, 51, 51);
+                    transition: all 360ms ease 0s;
+                    z-index: 10;
+                    li{
+                        padding: 0 10px;
+                        &:hover{
+                            background: rgba(46, 62, 83, 0.1);
+                        }
+                        &.logout{
+                            background: #293e53;
+                            &>a{
+                                color: #fff;
+                                margin: 0 auto;
+                            }
+                        }
+                        a{
+                            display: inline-block;
+                            font-size: 12px;
+                            text-align: center;
+                            line-height: 40px;
+                            transition: all .4s;
+                        }
+                        &>i{
+                            font-size: 14px;
+                            vertical-align: sub;
+                            margin-right: 4px;
+                        }
+                        &>img{
+                            width: 30px;
+                            border-radius: 20px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            margin-right: 8px;
+                        }
+                        &>p{
+                            line-height: 30px;
+                            vertical-align: middle;
+                            font-size: 12px;
+                            display: inline-block;
+                        }
+                        &:first-child{
+                            padding: 10px;
+                            border-bottom: 1px solid #dbd8d8;
                         }
                     }
-                    a{
-                        display: inline-block;
-                        font-size: 12px;
-                        text-align: center;
-                        line-height: 40px;
-                        transition: all .4s;
-                    }
-                    &>i{
-                        font-size: 14px;
-                        vertical-align: sub;
-                        margin-right: 4px;
-                    }
-                    &>img{
-                        width: 30px;
-                        border-radius: 20px;
-                        display: inline-block;
-                        vertical-align: middle;
-                        margin-right: 8px;
-                    }
-                    &>p{
-                        line-height: 30px;
-                        vertical-align: middle;
-                        font-size: 12px;
-                        display: inline-block;
-                    }
-                    &:first-child{
-                        padding: 10px;
-                        border-bottom: 1px solid #dbd8d8;
-                    }
+                    
                 }
-                
             }
+        
         }
-      
     }
     .menu{
         box-sizing: border-box;
