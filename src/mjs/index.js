@@ -78,10 +78,10 @@ layui.define(['&coolay','jquery'], (exports) => {
                         this.drop.target  = item;
                     },
                     clickMenu(item){
+                        this.menu.show=this.menu.listshow=0;
+                        if(location.pathname==item.url)return;
                         //初始化界面
                         this.getHtml(item);
-                        //this.menu.show=this.menu.listshow=this.mod.mod_show=this.mod.sid_show=this.mod.hide_sid=0;
-                        this.menu.show=this.menu.listshow=0;
                         $('#module').hide();
                         history.pushState({comp: item}, item.url, item.url);
                     },
@@ -161,8 +161,6 @@ layui.define(['&coolay','jquery'], (exports) => {
                         if(location.pathname=='/backend')return;
                         this.getHtml({url:'/backend'})
                         history.pushState({comp: {url:'/backend'}},'/backend','/backend');
-                        //this.mod.mod_show=1;
-                        //this.mod.sid_show=this.mod.hide_sid=0;
                         
                        
                     },
