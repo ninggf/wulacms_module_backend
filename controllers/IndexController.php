@@ -10,7 +10,6 @@
 
 namespace backend\controllers;
 
-use backend\classes\BackendController;
 use backend\classes\Menu;
 use backend\classes\PjaxController;
 use system\classes\CaptchaCode;
@@ -28,16 +27,22 @@ class IndexController extends PjaxController {
      * 后台首页
      */
     public function index() {
-
-        return $this->render('index');
     }
 
+    /**
+     * @title Test1-${site}-${ver}
+     * @return \wulaphp\mvc\view\View
+     */
     public function test1() {
-        return $this->render('test1', ['name' => 'test1']);
+        return $this->layuiUse('abc', ['site' => 'wulacms demo', 'ver' => "1.0"]);
     }
 
+    /**
+     * @title Test2-${site}-${ok}
+     * @return \wulaphp\mvc\view\View
+     */
     public function test2() {
-        return $this->render('test2', ['name' => 'test2']);
+        return $this->layuiUse('def', ['site' => 'wulacms Demo', 'ver' => '1.0']);
     }
 
     public function likeMenuPost() {

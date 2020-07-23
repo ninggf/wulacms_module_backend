@@ -1,0 +1,1 @@
+<script type="text/javascript">{$use_script_code}</script>

@@ -3,13 +3,32 @@
 namespace backend\classes;
 
 use wulaphp\mvc\controller\LayoutSupport;
+use wulaphp\mvc\view\View;
 
 class PjaxController extends BackendController {
     use LayoutSupport;
+
     protected $layout    = 'backend/views/layout';
     protected $htmlCls   = 'app';
     protected $bodyCls   = '';
     protected $pageTheme = '';
+
+    /**
+     * 使用组件.
+     *
+     * @param string $comp 组件名（必须符合wulacms的组件规范)
+     * @param array  $data 数据
+     *
+     * @return \wulaphp\mvc\view\View
+     */
+    protected final function layuiUse(string $comp, array $data = []): View {
+        $fullComp                = '@' . $this->module->getNamespace() . '.' . $comp;
+        $uses                    = "['" . $fullComp . "']";
+        $code                    = 'layui.use(' . $uses . ', function(' . $comp . ') {' . $comp . '.init()})';
+        $data['use_script_code'] = $code;
+
+        return $this->render('~backend/views/layuse', $data);
+    }
 
     /**
      * 配置布局数。
@@ -47,7 +66,7 @@ class PjaxController extends BackendController {
         $data['bodyCls']   = $this->bodyCls;
         $data['pageStyle'] = $this->pageTheme;
         $menu              = new Menu();
-        $data['naviMenus'] = json_encode($menu->getMenu($this->passport),JSON_UNESCAPED_UNICODE);
+        $data['naviMenus'] = json_encode($menu->getMenu($this->passport), JSON_UNESCAPED_UNICODE);
 
         return $data;
     }
