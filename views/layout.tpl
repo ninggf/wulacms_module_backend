@@ -135,7 +135,7 @@ console.log({$naviMenus})
         base: "{'layui'|assets}",
         module: "{'/'|res}",
     });
-    layui.use(['@backend.index','@backend.module'], function(home,mod) {
+    layui.use(['@backend.index'], function(home) {
          home.init(menu.naviMenus)
     })
 </script>

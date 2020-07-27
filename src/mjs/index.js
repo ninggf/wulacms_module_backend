@@ -135,7 +135,9 @@ layui.define(['&coolay','jquery'], (exports) => {
                                     workspace.html(res);
                                     layui.element.progress('install-progress', '100%');   
                             },
-                            complete:function(XMLHttpRequest,status){    
+                            complete:function(XMLHttpRequest){    
+                                let subtitle=XMLHttpRequest.getResponseHeader('PageTitle');
+                                if(subtitle) document.title=`WulaCms - ${subtitle}`;
                                 //删除进度条
                                 setTimeout(() => {
                                     layui.element.progress('install-progress', '0');
