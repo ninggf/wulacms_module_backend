@@ -80,10 +80,12 @@ layui.define(['&coolay','jquery'], (exports) => {
                     clickMenu(item){
                         this.menu.show=this.menu.listshow=0;
                         if(location.pathname==item.url)return;
-                        //初始化界面
-                        this.getHtml(item);
+
+                        //初始化界面 根据 参数选择打开方式，默认使用改变hash
+                         this.getHtml(item);
                         $('#module').hide();
                         history.pushState({comp: item}, item.url, item.url);
+
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
@@ -137,8 +139,12 @@ layui.define(['&coolay','jquery'], (exports) => {
                             },
                             complete:function(XMLHttpRequest){    
                                 let subtitle=XMLHttpRequest.getResponseHeader('PageTitle');
-                                if(subtitle) document.title=`WulaCms - ${subtitle}`;
-                                //删除进度条
+                                if(subtitle){
+                                    document.title=`WulaCms - ${subtitle}`;
+                                }else{
+                                    document.title=`WulaCms - 欢迎您使用wulacms！`
+                                }
+                                    //删除进度条
                                 setTimeout(() => {
                                     layui.element.progress('install-progress', '0');
                                     $('.layui-progress').hide();

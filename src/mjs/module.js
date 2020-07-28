@@ -2,33 +2,33 @@ layui.define(['layer','jquery'], (exports) => {
     'use strict';
     const $   = layui.$;
     let module={
-        init(){
+        init(wlist){
             return new Vue({
                 el     : '#module',
                 data   : {
                     list:[
                         {
                             id:1,
-                            title:"模块一",
-                            width:"25%",
+                            name:"模块一",
+                            width:"25",
                             isadd:0,
                         },
                         {
                             id:2,
-                            title:"模块二",
-                            width:"50%",
+                            name:"模块二",
+                            width:"50",
                             isadd:0,
                         },
                         {
                             id:3,
-                            title:"模块三",
-                            width:"75%",
+                            name:"模块三",
+                            width:"75",
                             isadd:0,
                         },
                         {
                             id:4,
-                            title:"模块四",
-                            width:"100%",
+                            name:"模块四",
+                            width:"100",
                             isadd:0,
                         },
                     ],
@@ -46,7 +46,7 @@ layui.define(['layer','jquery'], (exports) => {
                             if(m.isadd){
                                 // 删除
                                 el=this.module_list.findIndex(function(c){
-                                    return c.title==m.title
+                                    return c.name==m.name
                                 })
                                 this.module_list.splice(el,1);
                             }else{
@@ -84,11 +84,25 @@ layui.define(['layer','jquery'], (exports) => {
                             }
                         }
                     },
+                    rander(){
+                        let $vm=this;
+                        wlist.forEach(item => {
+                            
+                            layui.use([item.name], function(widget) {
+                                widget.cfg.isadd=item.isadd
+                                $vm.list.push(widget.cfg)
+                                $vm.initModule();
+                            }) 
+                        });
+                        console.log($vm.list)
+
+                    }
                     
                 },
                 mounted() {
                     console.log('module')
-                    this.initModule();
+                    this.rander();
+                    // this.initModule();
                 },
             }); 
         }
