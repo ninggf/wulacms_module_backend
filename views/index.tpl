@@ -5,6 +5,7 @@
         <ul :class="{'hide':hide_sid}" v-show="sid_show">
             <i :class="[hide_sid?'layui-icon-right':'layui-icon-left','layui-icon']" @click="hide_sid=!hide_sid"></i>
             <li v-for="(item,index) in list">
+                <!--{{item.name}}-->
                 {{item.name}}
                 <i @click="addModule(item,index)" :class="[item.isadd?'layui-icon-ok':'layui-icon-addition','layui-icon']"></i>
             </li>
@@ -24,7 +25,10 @@
 </div>
 <script>
     layui.use(['@backend.module'], function(mod) {
-               mod.init(['@demo.widget','@demo.widget2'])
+               mod.init([
+                   {id:1,name:'demo.widget',isadd:0,width:100},
+                   {id:2,name:'demo.widget2',isadd:0,width:50},
+               ])
         
     }) 
 </script>

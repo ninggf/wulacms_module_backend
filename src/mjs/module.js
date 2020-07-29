@@ -7,30 +7,30 @@ layui.define(['layer','jquery'], (exports) => {
                 el     : '#module',
                 data   : {
                     list:[
-                        {
-                            id:1,
-                            name:"模块一",
-                            width:"25",
-                            isadd:0,
-                        },
-                        {
-                            id:2,
-                            name:"模块二",
-                            width:"50",
-                            isadd:0,
-                        },
-                        {
-                            id:3,
-                            name:"模块三",
-                            width:"75",
-                            isadd:0,
-                        },
-                        {
-                            id:4,
-                            name:"模块四",
-                            width:"100",
-                            isadd:0,
-                        },
+                        // {
+                        //     id:1,
+                        //     name:"模块一",
+                        //     width:"25",
+                        //     isadd:0,
+                        // },
+                        // {
+                        //     id:2,
+                        //     name:"模块二",
+                        //     width:"50",
+                        //     isadd:0,
+                        // },
+                        // {
+                        //     id:3,
+                        //     name:"模块三",
+                        //     width:"75",
+                        //     isadd:0,
+                        // },
+                        // {
+                        //     id:4,
+                        //     name:"模块四",
+                        //     width:"100",
+                        //     isadd:0,
+                        // },
                     ],
                     module_list:[],
                     //控制侧边栏开启关闭
@@ -41,7 +41,7 @@ layui.define(['layer','jquery'], (exports) => {
                 },
                 methods: {
                     addModule(m){
-                        let el,item={};
+                        let el,item={},$vm=this;
                             item=m;
                             if(m.isadd){
                                 // 删除
@@ -51,9 +51,14 @@ layui.define(['layer','jquery'], (exports) => {
                                 this.module_list.splice(el,1);
                             }else{
                                 //添加
-                                this.module_list.push(item);
+                                layui.use('@'+item.name, function(widget) {
+                                    $vm.module_list.push(item);
+                                }) 
                             }
                             m.isadd=!m.isadd;
+
+
+
                     },
                     saveModule(){
                         //自定义模块保存暂时存入localstrog
@@ -81,6 +86,7 @@ layui.define(['layer','jquery'], (exports) => {
                                     return val.id==item.id
                                 })
                                 this.list[index].isadd=1
+                                layui.use('@'+this.list[index].name, function(widget) {}) 
                             }
                         }
                     },
@@ -98,8 +104,8 @@ layui.define(['layer','jquery'], (exports) => {
                 },
                 mounted() {
                     console.log('module')
-                    this.rander();
-                    // this.initModule();
+                    this.list=wlist;
+                    this.initModule();
                 },
             }); 
         }
