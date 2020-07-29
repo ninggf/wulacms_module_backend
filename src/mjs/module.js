@@ -86,16 +86,13 @@ layui.define(['layer','jquery'], (exports) => {
                     },
                     rander(){
                         let $vm=this;
-                        wlist.forEach(item => {
-                            
-                            layui.use([item.name], function(widget) {
-                                widget.cfg.isadd=item.isadd
-                                $vm.list.push(widget.cfg)
-                                $vm.initModule();
-                            }) 
-                        });
-                        console.log($vm.list)
-
+                        layui.use(wlist, function(...widget) {
+                            console.log(widget)
+                            widget.forEach(item => {
+                                $vm.list.push(item.cfg)
+                            })
+                            $vm.initModule();
+                        }) 
                     }
                     
                 },

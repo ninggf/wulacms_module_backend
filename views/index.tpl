@@ -24,9 +24,7 @@
 </div>
 <script>
     layui.use(['@backend.module'], function(mod) {
-               mod.init([
-                    {name:'@demo.widget',isadd:0},
-                   ])
+               mod.init(['@demo.widget','@demo.widget2'])
         
     }) 
 </script>
