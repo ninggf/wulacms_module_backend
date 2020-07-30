@@ -27,19 +27,19 @@
             <div class="nav-right">
                 <input type="text" class="search"  placeholder="搜索文档、控制台、API" ><i class="layui-icon layui-icon-search"></i>
                 <ul class="links" >
-                    <li v-for="item in 3" class="links_menu">
-                        <a href="javascript:;">{{'系统菜单'+item}}</a>
+                    <li v-for="item in links" class="links_menu">
+                        <a href="javascript:;">{{item.title}}</a>
                         <ul>
-                            <li v-for="sub_item in 5"><a href="javascript:;" >{{'nav '+item}}</a></li>
+                            <li v-for="sub_item in item.navs"><a @click.stop.prevent="clickMenu(sub_item)" :href="sub_item.url" >{{sub_item.name}}</a></li>
                         </ul>
                     </li>
-                    <li>
+                    <li v-show="notice.show">
                         <a href="javascript:;" title="消息">
-                            <i class="layui-icon layui-icon-notice has-notice " ><span class="layui-badge-dot"></span></i>
+                            <i :class="[notice.new?'has-notice':'','layui-icon layui-icon-notice']" ><span v-show="notice.new" class="layui-badge-dot"></span></i>
                         </a>
                     </li>
-                    <li><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
-                    <li><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
+                    <li  v-show="cart.show"><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
+                    <li  v-show="faq.show"><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
                 </ul>
                 <div class="nav-user">
                     <img src="/modules/backend/images/avatar.jpg" >
@@ -129,16 +129,51 @@
     </header>
 {/literal}
 <script type="text/javascript">
-console.log({$naviMenus})
     var menu={$naviMenus};
+    console.log(menu)
     layui.config({
         base: "{'layui'|assets}",
         module: "{'/'|res}",
     });
+    {literal}
     layui.use(['@backend.index'], function(home) {
-         home.init(menu.naviMenus)
+         home.init({
+                 menu:menu.naviMenus,
+                 links:[
+                     {
+                        title:"系统菜单1",
+                        navs:[
+                            {name:"nav1",url:"/backend/test1"},
+                            {name:"nav1",url:"/backend/test1"},
+                        ]
+                     },
+                     {
+                        title:"系统菜单2",
+                        navs:[
+                            {name:"nav2",url:"/backend/test2"},
+                            {name:"nav2",url:"/backend/test2"},
+                        ]
+                     },
+                 ],
+                 notice:{
+                     show:1,//显示
+                     new:1,//是否有新消息
+                     url:"",
+                 },
+                 cart:{
+                     show:0,//显示
+                     url:"",
+                 },
+                 faq:{
+                     show:1,//显示
+                     url:"",
+                 },
+
+         })
     })
+    {/literal}
 </script>
+
 <div id="workspace">
     <div class="view">
        {include "$workspaceView"}

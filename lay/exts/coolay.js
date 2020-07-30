@@ -1,2 +1,0 @@
-/** coolay-v1.0.0 MIT License By https://github.com/ninggf/coolayui */
- ;layui.define(["jquery","element"],function(o){"use strict";function t(){}var e=layui.$,n=(e("body").addClass("loaded"),e("#cl-overlay"));t.prototype.overlay=function(o){"show"==o?n.addClass("show"):n.removeClass("show")},t.prototype.alert=function(o){alert("cool + "+o)},t.prototype.dialog=function(o){},t.prototype.apiGet=function(o){return""},t.prototype.url=function(o){return""};var r=new t;o("&coolay",window.Coolayui=r)});
