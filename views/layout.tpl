@@ -107,7 +107,7 @@
                     <div v-show="!search.res.length">
                         <div v-for="(i,index) in menu.menu_list" class="menu-list--item">
                             <a :class="{'check':menu.current_menu==index}" :name="i.title"> {{i.title}}</a>
-                            <a v-for="item in i.lists" :href="item.url?item.url:'javascript:;'" @click.stop.prevent="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
+                            <a v-for="item in i.items" :href="item.url?item.url:'javascript:;'" @click.stop.prevent="clickMenu(item)" :class="{'isadd':item.isadd}">{{item.name}}
                                 <!--添加到左侧列表-->
                                 <i @click.stop.prevent="collection(item)" :class="[item.isadd?'layui-icon-rate-solid':'layui-icon-rate','layui-icon']"></i>
                             </a>
@@ -128,7 +128,9 @@
 <script type="text/javascript">
     window.pageMeta = {$pageMeta|json_encode:64};
     window.userMeta = {$userMeta|json_encode:64};
+    //console.log(window.pageMeta)
     layui.config(pageMeta.laycfg).use(['&coolay', '@backend.index'], function (cool, home) {
+        console.log(pageMeta.naviCfg)
         home.init(pageMeta.naviCfg)
     })
 </script>
