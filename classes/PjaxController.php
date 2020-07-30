@@ -2,6 +2,7 @@
 
 namespace backend\classes;
 
+use wulaphp\app\App;
 use wulaphp\mvc\controller\LayoutSupport;
 use wulaphp\mvc\view\View;
 
@@ -62,11 +63,31 @@ class PjaxController extends BackendController {
      * @return mixed
      */
     protected function onInitLayoutData($data) {
-        $data['htmlCls']   = $this->htmlCls;
-        $data['bodyCls']   = $this->bodyCls;
-        $data['pageStyle'] = $this->pageTheme;
-        $menu              = new Menu();
-        $data['naviMenus'] = json_encode($menu->getMenu($this->passport), JSON_UNESCAPED_UNICODE);
+        $cmsVer = App::getModuleById('backend')->getCurrentVersion();
+        // 页面样式
+        $meta['htmlCls']   = $this->htmlCls;
+        $meta['bodyCls']   = $this->bodyCls;
+        $meta['pageStyle'] = $this->pageTheme;
+        // 全局配置(可配置)
+        $meta['themedir']     = App::cfg('site.theme_base', WWWROOT_DIR . THEME_DIR . '/');
+        $meta['moduledir']    = App::cfg('site.module_base', WWWROOT_DIR . MODULE_DIR . '/');
+        $meta['assetsdir']    = App::cfg('site.assets_base', WWWROOT_DIR . ASSETS_DIR . '/');
+        $meta['siteName']     = App::cfg('site.name', 'WulaCMS');
+        $meta['defaultTitle'] = App::cfg('site.defaultTitle', 'WulaCMS');
+        $meta['titleSuffix']  = App::cfg('site.titleSuffix', ' - 欢迎使用WulaCMS v' . $cmsVer);
+        // 插件可以修改meta数据
+        $meta = apply_filter('init_layout_meta', $meta);
+        // layui config
+        $meta['laycfg']['base']   = $meta['assetsdir'] . 'layui/';
+        $meta['laycfg']['module'] = $meta['moduledir'];
+        $meta['laycfg']['theme']  = $meta['themedir'];
+        // menu and route
+        $meta['naviCfg']  = (new Menu())->getMenu($this->passport);
+        $meta['id2dir']   = App::id2dir();
+        $meta['prefix']   = App::$prefix;
+        $meta['cmsVer']   = $cmsVer;
+        $data['pageMeta'] = $meta;
+        $data['userMeta'] = $this->passport->info();
 
         return $data;
     }

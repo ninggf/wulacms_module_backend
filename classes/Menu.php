@@ -47,7 +47,6 @@ class Menu {
         $menus     = [];
         $modules   = App::modules();
         $myMenusId = $this->getMyLikes($passport->uid);
-        $myMenus   = [];
         foreach ($modules as $module) {
             $ms         = [];
             $moduleMenu = $module->menu();
@@ -58,21 +57,58 @@ class Menu {
                 $ms['title'] = $mu['name'];
                 $ms['type']  = $k;
                 foreach ($mu['items'] as $ck => $child) {
-                    $child['like']    = 0;
-                    $child['id']      = $k . '/' . $ck;
-                    $child['url']     = App::url($child['url']);
-                    $child['py_name'] = Pinyin::convert($child['name']);
+                    $child['like'] = 0;
+                    $child['id']   = $k . '/' . $ck;
+                    $child['url']  = App::url($child['url']);
+                    $child['py']   = Pinyin::convert($child['name']);
                     if (in_array($child['id'], $myMenusId)) {
                         $child['like'] = 1;
-                        $myMenus[]     = $child;
                     }
-                    $ms['lists'][] = $child;
+                    $ms['items'][] = $child;
                 }
                 $menus[] = $ms;
             }
         }
 
-        return ['naviMenus' => $menus, 'myMenus' => $myMenus];
+        /**
+         * 其它字段:
+         *
+         * umenu:[{
+         *      title: "顶部快捷菜单",
+         *      url: "/backend/test1",
+         *      icon:"",,
+         *      style:""
+         * }],
+         * links: [
+         * {
+         *  title: "顶部快捷菜单",
+         *  navs : [
+         *  {name: "nav1", url: "/backend/test1",sytle:""},
+         *  {name: "nav1", url: "/backend/test1",sytle:""},
+         *  ]
+         * }
+         * ],
+         * notice: {
+         *  show: 1,//显示
+         *  new : 1//是否有新消息
+         * },
+         * cart  : {
+         *  show: 0,//显示
+         *  url : "",
+         * },
+         * faq   : {
+         *  show: 1,//显示
+         *  url : "",
+         * }
+         */
+        return [
+            'menu'   => $menus,
+            'umenu'  => [],// 用户菜单
+            'tmenu'  => [],// 顶部导航
+            'notice' => ['show' => 1, 'new' => 1],
+            'cart'   => ['show' => 0, 'url' => '#', 'cnt' => 0],
+            'faq'    => ['show' => 1, 'url' => '#']
+        ];
     }
 
     /**

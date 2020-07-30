@@ -100,9 +100,10 @@ class IndexController extends PjaxController {
         $module = App::getModule('backend');
         $tpl    = apply_filter('backend\loginTpl', 'login');
         $eCnt   = sess_get('errCnt', 0);
+        $cmsVer = App::getModuleById('backend')->getCurrentVersion();
 
         return view([
-            'winData' => [
+            'winData'  => [
                 'version' => $module->getCurrentVersion(),
                 'ent'     => $eCnt,
                 'website' => [
@@ -110,6 +111,11 @@ class IndexController extends PjaxController {
                     'brandImg' => App::cfg('brandImg')
                 ],
                 'captcha' => App::url('backend/captcha')
+            ],
+            'pageMeta' => [
+                'titleSuffix' => App::cfg('site.titleSuffix', ' - 欢迎使用WulaCMS ' . $cmsVer),
+                'siteName'    => App::cfg('site.name', 'WulaCMS'),
+                'cmsVer'      => $cmsVer
             ]
         ], $tpl);
     }

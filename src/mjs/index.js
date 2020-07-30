@@ -2,7 +2,7 @@ layui.define(['&coolay','jquery'], (exports) => {
     'use strict';
     let $ = layui.$,coolay = layui['&coolay'];
     let menu = null,app= null,home = {
-        init (menu,mod){
+        init (data){
             app = new Vue({
                 el     : '#index',
                 data   : {
@@ -12,14 +12,18 @@ layui.define(['&coolay','jquery'], (exports) => {
                         search_focus   : 0,
                         module_show    : 0,
                         collection_list: [],
-                        menu_list      : menu,
+                        menu_list      :data.menu,
                         res_list:{
                             title:"搜索结果",
                             lists:[],  
                         },
                         current_menu   : -1,
                     },
-                    mod:mod,
+                    links:data.links,
+                    notice:data.notice,
+                    cart:data.cart,
+                    faq:data.faq,
+                    //mod:mod,
                     // 拖动
                     drop: {
                         start  : '',
@@ -118,7 +122,6 @@ layui.define(['&coolay','jquery'], (exports) => {
                     },
                     getHtml(item){
                         var $vm=this;
-                        //history.pushState({comp: item}, item.url, item.url);
                         $.ajax({
                             url:item.url,
                             method:'GET',
