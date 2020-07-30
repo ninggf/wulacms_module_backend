@@ -75,8 +75,10 @@ class PjaxController extends BackendController {
         $meta['siteName']     = App::cfg('site.name', 'WulaCMS');
         $meta['defaultTitle'] = App::cfg('site.defaultTitle', 'WulaCMS');
         $meta['titleSuffix']  = App::cfg('site.titleSuffix', ' - 欢迎使用WulaCMS v' . $cmsVer);
+        $meta['logo']         = App::cfg('site.logo', App::res('backend/images/logo.png'));
+        $meta['projectName']  = App::cfg('site.projectName', 'Cms');
         // 插件可以修改meta数据
-        $meta = apply_filter('init_layout_meta', $meta);
+        $meta = apply_filter('init_layout_page_meta', $meta);
         // layui config
         $meta['laycfg']['base']   = $meta['assetsdir'] . 'layui/';
         $meta['laycfg']['module'] = $meta['moduledir'];
@@ -87,7 +89,16 @@ class PjaxController extends BackendController {
         $meta['prefix']   = App::$prefix;
         $meta['cmsVer']   = $cmsVer;
         $data['pageMeta'] = $meta;
-        $data['userMeta'] = $this->passport->info();
+        // 用户元数据
+        $info              = $this->passport->info();
+        $info              = apply_filter('init_layout_user_meta', $info);
+        $umeta['id']       = $info['id'];
+        $umeta['username'] = $info['username'];
+        $umeta['nickname'] = $info['nickname'];
+        $umeta['avatar']   = $info['avatar'] ? $info['avatar'] : App::res('backend/images/avatar.jpg');
+        $umeta['email']    = $info['email'];
+        $umeta['phone']    = $info['phone'];
+        $data['userMeta']  = $umeta;
 
         return $data;
     }
