@@ -126,10 +126,9 @@
     </header>
 {/literal}
 <script type="text/javascript">
-    window.pageMeta = {$pageMeta|json_encode:64};
-    window.userMeta = {$userMeta|json_encode:64};
-    layui.config(pageMeta.laycfg).use(['&coolay', '@backend.index'], function (cool, home) {
-        home.init(pageMeta.naviCfg)
+    layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index'], function (cool, home) {
+        cool.init({$pageMeta|json_encode:64},{$userMeta|json_encode:64})
+        home.init(cool.naviCfg)
     })
 </script>
 <div id="workspace">

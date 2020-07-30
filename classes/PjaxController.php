@@ -80,13 +80,16 @@ class PjaxController extends BackendController {
         // 插件可以修改meta数据
         $meta = apply_filter('init_layout_page_meta', $meta);
         // layui config
-        $meta['laycfg']['base']   = $meta['assetsdir'] . 'layui/';
-        $meta['laycfg']['module'] = $meta['moduledir'];
-        $meta['laycfg']['theme']  = $meta['themedir'];
+        $data['layuiCfg']['base']   = $meta['assetsdir'] . 'layui/';
+        $data['layuiCfg']['module'] = $meta['moduledir'];
+        $data['layuiCfg']['theme']  = $meta['themedir'];
         // menu and route
-        $meta['naviCfg']  = (new Menu())->getMenu($this->passport);
-        $meta['id2dir']   = App::id2dir();
-        $meta['prefix']   = App::$prefix;
+        $meta['naviCfg'] = (new Menu())->getMenu($this->passport);
+        $meta['id2dir']  = App::id2dir();
+        $meta['prefix']  = App::$prefix;
+        unset($meta['prefix']['check']);
+        $meta['basedir']  = App::url('/');
+        $meta['apiUrl']   = App::url('api');
         $meta['cmsVer']   = $cmsVer;
         $data['pageMeta'] = $meta;
         // 用户元数据
