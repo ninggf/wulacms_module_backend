@@ -39,7 +39,7 @@ const knownOptions = {
       },
       options      = minimist(process.argv.slice(2), knownOptions)
 
-const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> License By <%= pkg.homepage %> */' + os.EOL + ' <%= js %>',
+const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> License By https://www.wulacms.com */' + os.EOL + ' <%= js %>',
       note       = [cmt, {
           pkg: pkg,
           js : ';'

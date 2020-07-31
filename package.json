@@ -1,26 +1,29 @@
 {
-    "name": "coolay",
-    "version": "1.0.0",
-    "description": "an admin UI based on layui",
+    "name": "wulacms",
+    "version": "3.0.0",
+    "description": "a conent manager system powered by wulaphp.",
     "scripts": {},
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ninggf/coolayui.git"
+        "url": "git+https://github.com/ninggf/wulacms.git"
     },
     "keywords": [
         "admin",
         "layui",
         "backend",
         "dashboard",
-        "controll-panel",
-        "ui"
+        "php",
+        "ui",
+        "cms",
+        "vue",
+        "vuejs"
     ],
     "author": "ningGf",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/ninggf/coolayui/issues"
+        "url": "https://github.com/ninggf/wulacms/issues"
     },
-    "homepage": "https://github.com/ninggf/coolayui",
+    "homepage": "https://github.com/ninggf/wulacms",
     "devDependencies": {
         "@babel/core": "^7.8.7",
         "@babel/preset-env": "^7.8.7",
