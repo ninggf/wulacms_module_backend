@@ -19,7 +19,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                         },
                         current_menu   : -1,
                     },
-                    links:data.links,
+                    links:data.tmenu,
                     notice:data.notice,
                     cart:data.cart,
                     faq:data.faq,
@@ -178,6 +178,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                 },
                 mounted() {
                     console.log('index执行')
+                    console.log(this.menu.menu_list)
                     let $vm=this;
                     history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
                     window.onpopstate = function(e) {

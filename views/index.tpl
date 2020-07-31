@@ -14,12 +14,18 @@
 
         <transition name="fade">
             <div class="module-list" v-show="sid_show">
-                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width+'%'}">{{item.name}}</div>
+                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width+'%'}">
+                    {{item.name}}aaa
+                    <component :is="item.component"></component>
+                </div>
             </div>
         </transition>
         <transition name="fade">
             <div class="module-list mian-module-list" v-show="!sid_show">
-                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width+'%'}">{{item.name}}</div>
+                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width+'%'}">
+                    {{item.name}}bbb
+                    <component :is="item.component"></component>
+                </div>
             </div>
         </transition>
     </div>

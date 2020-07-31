@@ -42,6 +42,7 @@ layui.define(['layer','jquery'], (exports) => {
                             if(item.isadd){
                                 layui.use('@'+item.name, function(widget) {
                                     $vm.module_list.push(widget.cfg);
+                                    console.log($vm.module_list)
                                 }) 
                             }
                         })
