@@ -29,22 +29,6 @@ class IndexController extends PjaxController {
     public function index() {
     }
 
-    /**
-     * @title Test1-${site}-${ver}
-     * @return \wulaphp\mvc\view\View
-     */
-    public function test1() {
-        return $this->layuiUse('abc', ['site' => 'wulacms demo', 'ver' => "1.0"]);
-    }
-
-    /**
-     * @title Test2-${site}-${ok}
-     * @return \wulaphp\mvc\view\View
-     */
-    public function test2() {
-        return $this->layuiUse('def', ['site' => 'wulacms Demo', 'ver' => '1.0']);
-    }
-
     public function likeMenuPost() {
         $menuId = rqst('menuId');
         //1喜欢0不喜欢

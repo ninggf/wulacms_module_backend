@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{'backend/css/layui.css'|res}">
     <link rel="stylesheet" href="{'backend/css/index.css'|res}">
     <script type="text/javascript" src="{'backend/layui.js'|res}"></script>
-    <script type="text/javascript" src="{'backend/vue.min.js'|res}"></script>
+    <script type="text/javascript" src="{'backend/vue.js'|res}"></script>
 </head>
 <body style="padding:0;margin:0;{$pageMeta.pageStyle}" class="{$pageMeta.bodyCls}">
 {literal}
