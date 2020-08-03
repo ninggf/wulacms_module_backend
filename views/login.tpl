@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{'backend/css/layui.css'|res}">
     <link rel="stylesheet" href="{'backend/css/login.css'|res}">
     <script type="text/javascript" src="{'backend/layui.js'|res}"></script>
-    <script type="text/javascript" src="{'backend/vue.min.js'|res}"></script>
+    <script type="text/javascript" src="{'backend/vue.js'|res}"></script>
 </head>
 
 <body>
@@ -53,10 +53,9 @@
 <script type="text/javascript">
     var winData ={$winData|json_encode:320};
     layui.config({
-        base  : "{'layui'|assets}",
+        base  : "{'layui'|assets:'':0}",
         module: "{'/'|res}",
-    });
-    layui.use(['layer', 'element', 'form', '@backend.login'], function (l, w, f) {
+    }).use(['layer', 'element', 'form', '@backend.login'], function (l, w, f) {
         f.render();
     })
 </script>
