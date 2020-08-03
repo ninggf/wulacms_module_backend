@@ -141,12 +141,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                                     layui.element.progress('install-progress', '100%');   
                             },
                             complete:function(XMLHttpRequest){    
-                                let subtitle=XMLHttpRequest.getResponseHeader('PageTitle');
-                                if(subtitle){
-                                    document.title=`WulaCms - ${subtitle}`;
-                                }else{
-                                    document.title=`WulaCms - 欢迎您使用wulacms！`
-                                }
+                                coolay.setPageTitle(XMLHttpRequest.getResponseHeader('PageTitle'))
                                     //删除进度条
                                 setTimeout(() => {
                                     layui.element.progress('install-progress', '0');
@@ -178,7 +173,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                 },
                 mounted() {
                     console.log('index执行')
-                    console.log(this.menu.menu_list)
+                    console.log(coolay)
                     let $vm=this;
                     history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
                     window.onpopstate = function(e) {
