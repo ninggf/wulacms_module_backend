@@ -126,7 +126,7 @@
     </header>
 {/literal}
 <script type="text/javascript">
-    layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index'], function (cool, home) {
+    layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index','@backend.module'], function (cool, home) {
         cool.init({$pageMeta|json_encode:64},{$userMeta|json_encode:64})
         home.init(cool.naviCfg)
     })

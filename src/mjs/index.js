@@ -136,7 +136,7 @@ layui.define(['&coolay','jquery'], (exports) => {
 
                             },
                             success:function(res){
-                                var workspace=$('#workspace .view')
+                                var workspace=$('#workspace')
                                     workspace.html(res);
                                     layui.element.progress('install-progress', '100%');   
                             },
@@ -148,11 +148,16 @@ layui.define(['&coolay','jquery'], (exports) => {
                                     $('.layui-progress').hide();
                                     $vm.ajax.error = 0;
                                 },2000);
+                                
+                                if(item.url=='/backend'){
+                                    $('#module').show();
+                                }
+                            
                             },
                             error:function(res){
                                 //接口请求失败
                                 //console.log(res.responseText);
-                                var workspace=$('#workspace .view')
+                                var workspace=$('#workspace')
                                 workspace.html(res.responseText);
                                 layui.element.progress('install-progress', '100%');   
                                 setTimeout(function(){
