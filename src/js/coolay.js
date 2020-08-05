@@ -5,14 +5,14 @@ layui.define(['jquery', 'element'], function (exports) {
 
     class Coolay {
         init(pmeta, umeta) {
-            this.pMeta   = pmeta
-            this.uMeta   = umeta
+            this.pMeta   = pmeta // page Meta
+            this.uMeta   = umeta // user Meta
             this.config  = {
                 ids   : pmeta.id2dir,
                 groups: pmeta.prefix,
                 base  : pmeta.basedir
             }
-            this.naviCfg = pmeta.naviCfg
+            this.naviCfg = pmeta.naviCfg // menus
         }
 
         url(url) {

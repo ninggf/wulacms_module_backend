@@ -22,11 +22,15 @@ class PjaxController extends BackendController {
      *
      * @return \wulaphp\mvc\view\View
      */
-    protected final function layuiUse(string $comp, array $data = []): View {
-        $fullComp                = '@' . $this->module->getNamespace() . '.' . $comp;
-        $uses                    = "['" . $fullComp . "']";
-        $code                    = 'layui.use(' . $uses . ', function(' . $comp . ') {' . $comp . '.init()})';
-        $data['use_script_code'] = $code;
+    protected final function vueComp(string $comp, array $data = []): View {
+        $fullComp = '@' . $this->module->getNamespace() . '.' . $comp;
+
+        $data['compCls'] = $fullComp;
+        $data['comp']    = $this->module->getNamespace() . '-' . $comp;
+
+        if (!isset($data['compData']) || !is_array($data['compData'])) {
+            $data['compData'] = [];
+        }
 
         return $this->render('~backend/views/layuse', $data);
     }

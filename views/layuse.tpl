@@ -1,18 +1,15 @@
-<div class="workspace">
-    <component is="demo-index"></component>
+<div class="workspace-comp">
+    <component is="{$comp}"></component>
 </div>
 <script type="text/javascript">
-    layui.use(['@demo.index'],(item)=>{
-        new Vue({
-            el     : '.workspace',
-            data   : {
-            },
-            methods: {
-            },
-            mounted() {
-                console.log('module')
-            },
-        }); 
-    })
-   
+    layui.use(['{$compCls}'], function (item) {
+            item.setData && item.setData({$compData|json_encode:64});
+            if (window.vueVm) {
+
+            }
+            window.vueVm = new Vue({
+                el: '.workspace-comp'
+            });
+        }
+    )
 </script>
