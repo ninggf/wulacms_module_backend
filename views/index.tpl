@@ -31,7 +31,7 @@
     </div>
     <script>
         layui.use(['@backend.module'], function (mod) {
-            mod.init([
+            window.vueVm=mod.init([
                 {id: 'demo.widget', name: 'demo.widget', isadd: 1},
                 {id: 'demo.widget2', name: 'demo.widget2', isadd: 0},
             ])

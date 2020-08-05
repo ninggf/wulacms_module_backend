@@ -137,8 +137,13 @@ layui.define(['&coolay','jquery'], (exports) => {
                             },
                             success:function(res){
                                 var workspace=$('#workspace')
+                                    if (window.vueVm) {
+                                        console.log('销毁')
+                                        window.vueVm.$destroy();
+                                    }
                                     workspace.html(res);
                                     layui.element.progress('install-progress', '100%');   
+                                    
                             },
                             complete:function(XMLHttpRequest){    
                                 coolay.setPageTitle(XMLHttpRequest.getResponseHeader('PageTitle'))
