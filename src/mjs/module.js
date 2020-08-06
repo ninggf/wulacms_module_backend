@@ -6,9 +6,9 @@ layui.define(['layer','jquery'], (exports) => {
             return new Vue({
                 el     : '#module',
                 data   : {
-                    list:[
-                    ],
+                    list:[],
                     module_list:[],
+                    module_r_list:[],
                     //控制侧边栏开启关闭
                     hide_sid:0,
                     sid_show:0,
@@ -38,14 +38,17 @@ layui.define(['layer','jquery'], (exports) => {
                         let $vm=this;
                         this.list=wlist;
                         this.mod_show=location.href.split('/')[location.href.split('/').length-1]!='backend'?0:1;
+
                         this.list.forEach(item=>{
                             if(item.isadd){
                                 layui.use('@'+item.name, function(widget) {
+                                    widget.cfg.width=item.width;
+                                    widget.cfg.pos=item.pos;
                                     $vm.module_list.push(widget.cfg);
-                                    console.log($vm.module_list)
                                 }) 
                             }
                         })
+                       
                     }   
                 },
                 mounted() {

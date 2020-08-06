@@ -42,11 +42,13 @@
                     <li v-show="faq.show"><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
                 </ul>
                 <div class="nav-user">
-                    <img src="/modules/backend/images/avatar.jpg">
+                    <img :src="uMeta.avatar">
                     <ul>
                         <li>
-                            <img src="/modules/backend/images/avatar.jpg">
-                            <p>账号信息</p>
+                            <img :src="uMeta.avatar">
+                            <p>
+                                账号信息
+                                <br>用户名 : {{uMeta.username}}[{{uMeta.nickname}}]</p>
                         </li>
                         <li>
                             <i class="layui-icon layui-icon-vercode"></i>
@@ -128,7 +130,8 @@
 <script type="text/javascript">
     layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index','@backend.module'], function (cool, home) {
         cool.init({$pageMeta|json_encode:64},{$userMeta|json_encode:64})
-        home.init(cool.naviCfg)
+        console.log(cool)
+        home.init(cool)
     })
 </script>
 <div id="workspace">

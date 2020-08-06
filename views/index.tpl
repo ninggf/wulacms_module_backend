@@ -12,29 +12,71 @@
             <li><span @click="hide_sid=1">取消</span><span @click="saveModule">保存</span></li>
         </ul>
 
-        <transition name="fade">
-            <div class="module-list" v-show="sid_show">
-                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width+'%'}">
-                    {{item.name}}aaa
-                    <component :is="item.component"></component>
+
+        <div style="width:100%;display:flex">
+            <!--<transition name="fade">
+                <div class="module-list" style="flex-basis: 66%;" >
+                    <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width+'%'}">
+                        <component :is="item.component"></component>
+                    </div>
+                </div>
+                <div class="module-list" style="flex-basis: 33%;" >
+                    <div v-for="(item,index) in module_r_list" :style="{'flex-basis':item.width+'%'}">
+                        <component :is="item.component"></component>
+                    </div>
+                </div>
+            </transition>-->
+            <div class="module-list" style="flex-basis: 100%;">
+                <div class='left' style="flex-basis: 66%;">
+                    <component :is="item.component"  
+                        v-if="item.pos=='left'" 
+                        v-for="(item,index) in module_list"
+                        :style="{'flex-basis':item.width==2?'100%':'50%'}"
+                        >
+                    </component>
+                </div>
+                <div class='right' style="flex-basis: 33%;">
+                    <component :is="item.component"  
+                        v-if="item.pos=='right'" 
+                        v-for="(item,index) in module_list"
+                        style="flex-basis:100%"
+                        >
+                    </component>
                 </div>
             </div>
-        </transition>
-        <transition name="fade">
-            <div class="module-list mian-module-list" v-show="!sid_show">
-                <div v-for="(item,index) in module_list" :style="{'flex-basis':item.width+'%'}">
-                    {{item.name}}bbb
-                    <component :is="item.component"></component>
+        </div>    
+        <!--
+        <div style="width:100%;display:flex" v-show="!sid_show">
+            <div class="module-list" style="flex-basis: 100%;">
+                <div class='left' style="flex-basis: 66%;">
+                    <component :is="item.component"  
+                        v-if="item.pos=='left'" 
+                        v-for="(item,index) in module_list"
+                        :style="{'flex-basis':item.width==2?'100%':'50%'}"
+                        >
+                    </component>
+                </div>
+                <div class='right' style="flex-basis: 33%;">
+                    <component :is="item.component"  
+                        v-if="item.pos=='right'" 
+                        v-for="(item,index) in module_list"
+                        style="flex-basis:100%"
+                        >
+                    </component>
                 </div>
             </div>
-        </transition>
+        </div>
+        -->
     </div>
     <script>
         layui.use(['@backend.module'], function (mod) {
-            window.vueVm=mod.init([
-                {id: 'demo.widget', name: 'demo.widget', isadd: 1},
-                {id: 'demo.widget2', name: 'demo.widget2', isadd: 0},
-            ])
+            window.vueVm=mod.init(
+                [
+                    {id: 'demo.widget', name: 'demo.widget', isadd: 1,width:2,pos:'left'},
+                    {id: 'demo.widget2', name: 'demo.widget2', isadd: 1,width:1,pos:'left'},
+                    {id: 'demo.widget3', name: 'demo.widget3', isadd: 1,pos:'right'},
+                ]
+            )
         })
     </script>
 {/literal}

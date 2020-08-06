@@ -690,15 +690,34 @@ body{
         position: relative;
         z-index: 10;
         &>div{
-            background: #fff;
-            height: 20%;
+            // background: #fff;
+            // height: 20%;
             flex:0 0 25%;
             font-size: 14px;
+            padding-bottom: 10px;
+            box-sizing: border-box;
+            background-clip: content-box;
+            display: flex;
+            flex-wrap: wrap;
+            &>div{
+            background: #fff;
             padding-right: 10px;
             padding-bottom: 10px;
             box-sizing: border-box;
             background-clip: content-box;
+            min-height: 200px;
+            
+            }
            
+        }
+        .right{
+            &>*{
+                background: #fff;
+                padding-bottom: 10px;
+                box-sizing: border-box;
+                background-clip: content-box;
+                height: 200px;
+            }
         }
         .module-hide{
             position: absolute;
