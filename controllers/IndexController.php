@@ -49,7 +49,6 @@ class IndexController extends PjaxController {
      * 登录
      *
      * @nologin
-     * @sessWrite
      * @return \wulaphp\mvc\view\View
      */
     public function login() {
@@ -112,7 +111,6 @@ class IndexController extends PjaxController {
      * @param string $passwd
      * @param string $captcha 验证码
      *
-     * @sessWrite
      * @return \wulaphp\mvc\view\JsonView
      */
     public function loginPost($username, $passwd, $captcha = '') {
@@ -139,10 +137,13 @@ class IndexController extends PjaxController {
                 Syslog::info('Login', $this->passport->uid, 'accesslog');
                 sess_del('errCnt');
                 $userMeta->setIntMeta($this->passport->uid, 'errCnt', 0);
-                if (rqst('autologin') != 'false') {
-                    Response::cookie('astoken', $this->passport['astoken'], 315360000, '/');
+                $path      = WWWROOT_DIR . App::id2dir('backend') . '/login';
+                $autologin = rqst('autologin');
+                if ($autologin == '1') {
+                    $cookie = Response::cookie('astoken', $this->passport['astoken'], 315360000, $path);
+                    $cookie->httponly(true);
                 } else {
-                    Response::cookie('astoken', null);
+                    Response::cookie('astoken', null, - 1, $path);
                 }
                 $resetPasswd  = $userMeta->getIntMeta($this->passport->uid, 'resetPasswd');
                 $passwdExpire = $userMeta->getIntMeta($this->passport->uid, 'passwdExpire');
@@ -182,8 +183,6 @@ class IndexController extends PjaxController {
      * @param string $type
      * @param string $size
      * @param int    $font
-     *
-     * @sessWrite
      */
     public function captcha($type = 'png', $size = '120x36', $font = 13) {
         Response::nocache();
@@ -230,7 +229,6 @@ class IndexController extends PjaxController {
      * 退出
      * @nologin
      * @resetpasswd
-     * @sessWrite
      */
     public function logout() {
         if ($this->passport->isLogin) {
@@ -239,7 +237,7 @@ class IndexController extends PjaxController {
         }
         $this->destorySession();
         //清空自动登录
-        Response::cookie('astoken', null);
+        Response::cookie('astoken', null, - 1, WWWROOT_DIR . App::id2dir('backend') . '/login');
         if (Request::isAjaxRequest() || rqset('ajax')) {
             return Ajax::redirect(App::url('backend/login'));
         } else {
