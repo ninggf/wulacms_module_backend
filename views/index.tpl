@@ -31,10 +31,12 @@
     </div>
     <script>
         layui.use(['@backend.module'], function (mod) {
-            window.vueVm=mod.init([
-                {id: 'demo.widget', name: 'demo.widget', isadd: 1},
-                {id: 'demo.widget2', name: 'demo.widget2', isadd: 0},
-            ])
+            window.vueVm = mod.init({
+                'left'    : [
+                    {id: 'demo.widget', name: 'demo.widget', isadd: 1, width: 2},
+                    {id: 'demo.widget2', name: 'demo.widget2', isadd: 1, width: 1}
+                ], 'right': []
+            })
         })
     </script>
 {/literal}
