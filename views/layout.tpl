@@ -25,7 +25,13 @@
                 <p class="logo-name">Cms</p>
             </div>
             <div class="nav-right">
-                <input type="text" class="search" placeholder="搜索文档、控制台、API"><i class="layui-icon layui-icon-search"></i>
+                <!--搜索框-->
+                <input type="text" class="search" @input="doSearch" v-model="nav.search_val" placeholder="搜索文档、控制台、API"><i class="layui-icon layui-icon-search"></i>
+                <!--搜索结果-->
+                <ul class="search-result" v-show="nav.show">
+                    <li v-for="(item,i) in 5">{{nav.search_val+i}}</li>
+                </ul>
+                <!--自定义菜单-->
                 <ul class="links">
                     <li v-for="item in links" class="links_menu">
                         <a href="javascript:;">{{item.title}}</a>
@@ -41,14 +47,13 @@
                     <li v-show="cart.show"><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
                     <li v-show="faq.show"><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
                 </ul>
+                <!--用户信息-->
                 <div class="nav-user">
                     <img :src="uMeta.avatar">
                     <ul>
                         <li>
                             <img :src="uMeta.avatar">
-                            <p>
-                                账号信息
-                                <br>用户名 : {{uMeta.username}}[{{uMeta.nickname}}]</p>
+                            <p>{{uMeta.username}}<br>[{{uMeta.nickname}}]</p>
                         </li>
                         <li>
                             <i class="layui-icon layui-icon-vercode"></i>
@@ -128,10 +133,16 @@
     </header>
 {/literal}
 <script type="text/javascript">
-    layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index','@backend.module'], function (cool, home) {
+    layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index','jquery'], function (cool, home,$) {
         cool.init({$pageMeta|json_encode:64},{$userMeta|json_encode:64})
-        console.log(cool)
         home.init(cool)
+
+        {literal}
+        $('body').on("dosearch",".nav-right .search",function(res,param){
+            console.log(param)
+        });
+        {/literal}
+
     })
 </script>
 <div id="workspace">

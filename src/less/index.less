@@ -122,6 +122,7 @@ body{
         .nav-right{
             display: flex;
             transition: all 0.25s ease-in-out 0s;
+            position: relative;
             .search{
                 line-height: 28px;
                 height: 28px;
@@ -138,6 +139,28 @@ body{
                 transition: all 1s;
             
             }
+            .search-result{
+                position: absolute;
+                top: 40px;
+                left: 0;
+                width: 310px;
+                border: 1px solid #aaa;
+                background: #fff;
+                
+                li{
+                   line-height: 30px; 
+                   font-size:14px;
+                    color: #2F4056;
+                    padding-left: 10px;
+                    border-bottom: 1px solid #ccc;
+                    cursor: pointer;
+                    &:hover{
+                        background: rgba(0, 0, 0, 0.05);
+                    }
+                }
+
+            }
+
             .layui-icon-search{
                 align-self: center;
                 font-size: 16px;
@@ -706,7 +729,7 @@ body{
             box-sizing: border-box;
             background-clip: content-box;
             min-height: 200px;
-            
+            cursor: pointer;
             }
            
         }

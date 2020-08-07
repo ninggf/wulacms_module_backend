@@ -40,6 +40,10 @@ layui.define(['&coolay','jquery'], (exports) => {
                         search_val:'',
                         t:"",
                         res:[],
+                    },
+                    nav:{
+                        search_val:"",
+                        show:0,
                     }
                 },
                 methods: {
@@ -92,6 +96,13 @@ layui.define(['&coolay','jquery'], (exports) => {
                         $('#module').hide();
                         history.pushState({comp: item}, item.url, item.url);
 
+                    },
+                    doSearch(val){
+                        let $vm=this;
+                        $vm.nav.show=1;
+                        $(".nav-right .search").trigger("dosearch",{
+                            val:$vm.nav.search_val
+                        });
                     },
                     searchMenu(e){
                         let [$vm,arr]=[this,[]]
@@ -185,7 +196,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                 },
                 mounted() {
                     console.log('index执行')
-                    console.log(coolay)
+        
                     let $vm=this;
                     history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
                     window.onpopstate = function(e) {
