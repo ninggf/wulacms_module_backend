@@ -139,6 +139,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                             url:item.url,
                             method:'GET',
                             timeout:5000,
+                            dataType:'html',
                             beforeSend: function(req){
                                 req.setRequestHeader('PJAX','1')
                                 //初始化进度条
@@ -174,17 +175,33 @@ layui.define(['&coolay','jquery'], (exports) => {
                             },
                             error:function(res){
                                 //接口请求失败
-                                //console.log(res.responseText);
-                                var workspace=$('#workspace')
-                                workspace.html(res.responseText);
-                                layui.element.progress('install-progress', '100%');   
-                                setTimeout(function(){
-                                    $vm.ajax.error = 1;
-                                },500)
-                                
+                                new Promise((resovle,reject)=>{
+                                    setTimeout(() => {
+                                        $('#workspace').html(res.responseText);
+                                        layui.element.progress('install-progress', '100%');   
+                                        $vm.ajax.error = 1;
+                                        reject(res)
+                                    }, 500);
+                                }).catch(res=>{
+                                    $vm.doStatus(res.status);
+                                })
                             },
-                            dataType:'html'
                         });
+                    },
+                    doStatus(status){
+                        if(status==401){
+                            layer.msg('登录失败请重新登录', {
+                                time: 2000
+                            }, function(){
+                                window.open('/backend/logout','self');
+                                return
+                            });
+                        }
+                        if(status==403){
+                            layer.msg('账号权限不够');
+                            return
+                        }
+
                     },
                     goHome(){
                         if(location.pathname=='/backend')return;
