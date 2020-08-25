@@ -39,10 +39,18 @@
                             <li v-for="sub_item in item.navs"><a @click.stop.prevent="clickMenu(sub_item)" :href="sub_item.url">{{sub_item.name}}</a></li>
                         </ul>
                     </li>
-                    <li v-show="notice.show">
-                        <a href="javascript:;" title="消息">
-                            <i :class="[notice.new?'has-notice':'','layui-icon layui-icon-notice']"><span v-show="notice.new" class="layui-badge-dot"></span></i>
+                    <li v-show="notice.data.show" class="links_notice">
+                        <a href="javascript:;" title="消息" @click="showNotice">
+                            <i :class="[notice.data.new?'has-notice':'','layui-icon layui-icon-notice']"><span v-show="notice.data.new" class="layui-badge-dot"></span></i>
                         </a>
+                        <ul v-show="1">
+                            <li v-for="item in notice.data.list">
+                                <fieldset>
+                                    <legend>{{item.title+" "+item.time}}</legend>
+                                    <p>{{item.msg}}</p>
+                                </fieldset>
+                            </li>
+                        </ul>
                     </li>
                     <li v-show="cart.show"><a href="javascript:;" title="购物车"><i class="layui-icon layui-icon-cart"></i></a></li>
                     <li v-show="faq.show"><a href="javascript:;" title="帮助文档"><i class="layui-icon layui-icon-help"></i></a></li>
@@ -53,7 +61,7 @@
                     <ul>
                         <li>
                             <img :src="uMeta.avatar">
-                            <p>{{uMeta.username}}<br>[{{uMeta.nickname}}]</p>
+                            <p>{{uMeta.username}} [{{uMeta.nickname}}]</p>
                         </li>
                         <li>
                             <i class="layui-icon layui-icon-vercode"></i>
@@ -68,7 +76,7 @@
                             <a href="javascript:;">菜单1</a>
                         </li>
                         <li class="logout">
-                            <a href="./backend/logout">退出登录</a>
+                            <a :href="path.login.url">退出登录</a>
                         </li>
                     </ul>
                 </div>
@@ -135,9 +143,27 @@
 <script type="text/javascript">
     layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index','jquery'], function (cool, home,$) {
         cool.init({$pageMeta|json_encode:64},{$userMeta|json_encode:64})
-        home.init(cool)
 
         {literal}
+        cool.path={
+            login:{
+                url:'/backend/logout',
+                cb:'',
+            },
+            backend:{
+                url:'/backend',
+                cb:'',
+            }
+        }
+        cool.naviCfg.notice.list=[
+            {title:"消息一",msg:"消息1消息1消息1消息1消息1消息1",time:"17:52"},
+            {title:"消息二",msg:"消息2消息2消息2消息2消息2消息2消息2消息2",time:"17:52"},
+            {title:"消息三",msg:"消息2消息2消息2消消息2消息2消息2消息2消息2消息2消息2消息2息2消息2消息2消息2消息2",time:"17:52"},
+        ]
+
+
+        console.log(cool)
+        home.init(cool)
         $('body').on("dosearch",".nav-right .search",function(res,param){
             console.log(param)
         });

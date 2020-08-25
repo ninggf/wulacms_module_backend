@@ -20,11 +20,17 @@ layui.define(['&coolay','jquery'], (exports) => {
                         current_menu   : -1,
                     },
                     links:data.naviCfg.tmenu,
-                    notice:data.naviCfg.notice,
+
+                    notice:{
+                        data:data.naviCfg.notice,
+                        list_show:0,
+                        list:[],
+                    },
                     cart:data.naviCfg.cart,
                     faq:data.naviCfg.faq,
                     uMeta:data.uMeta,
                     pMeta:data.pMeta,
+                    path:data.path,
                     //mod:mod,
                     // 拖动
                     drop: {
@@ -168,7 +174,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                                     $vm.ajax.error = 0;
                                 },2000);
                                 
-                                if(item.url=='/backend'){
+                                if(item.url==$vm.path.backend.url){
                                     $('#module').show();
                                 }
                             
@@ -189,11 +195,16 @@ layui.define(['&coolay','jquery'], (exports) => {
                         });
                     },
                     doStatus(status){
+                        var $vm=this;
                         if(status==401){
                             layer.msg('登录失败请重新登录', {
                                 time: 2000
                             }, function(){
-                                window.open('/backend/logout','self');
+                                if($vm.path.login.cb){
+                                    $vm.path.login.cb();
+                                }else{
+                                    location.href=$vm.path.login.url;
+                                }
                                 return
                             });
                         }
@@ -204,16 +215,24 @@ layui.define(['&coolay','jquery'], (exports) => {
 
                     },
                     goHome(){
-                        if(location.pathname=='/backend')return;
-                        this.getHtml({url:'/backend'})
-                        history.pushState({comp: {url:'/backend'}},'/backend','/backend');
+                        var $vm=this;
+                        if(location.pathname==$vm.path.backend.url)return;
+                        this.getHtml({url:$vm.path.backend.url})
+                        history.pushState({comp: {url:$vm.path.backend.url}},$vm.path.backend.url,$vm.path.backend.url);
                         
                        
+                    },
+                    showNotice(){
+                        var $vm=this;
+                        if(!$vm.notice.data.new){
+                            return
+                        }
+                        $vm.notice.list_show=1;
+
                     },
                 },
                 mounted() {
                     console.log('index执行')
-        
                     let $vm=this;
                     history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
                     window.onpopstate = function(e) {
