@@ -40,7 +40,51 @@ html,body{
 body{
     background: #f5f5f5;
     min-width: 980px;
-    
+    .notice-list{
+        position: fixed;
+        right: 10px;
+        bottom: 0;
+        &>div{
+            width: 330px;
+            padding: 14px 26px 14px 13px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ebeef5;
+            background-color: #fff;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.4);
+            transition: all 1s;
+            overflow: hidden;
+            margin-bottom: 10px;
+            position: relative;
+            right: -350px;
+            opacity:0;
+            .notice__title{
+                font-weight: 700;
+                font-size: 16px;
+                color: #303133;
+            }
+            .notice__content{
+                font-size: 14px;
+                line-height: 21px;
+                margin: 6px 20px 0 0;
+                color: #606266;
+                text-align: justify;
+            }
+            .layui-icon{
+                cursor: pointer;
+                font-size: 20px;
+                position: absolute;
+                right: 10px;
+                top: 14px;
+                color: @main-color;
+            }
+        }
+        &>div[class^='notice']{
+            opacity:1;
+            right: 0;
+        }
+        
+    }
 }
 
 #index{
@@ -56,6 +100,7 @@ body{
     display: flex;
     justify-content: space-between;
     min-width: 980px;
+    
     *{
         font-size: 0;
         line-height: 1;

@@ -1,0 +1,2 @@
+/** wulacms-v3.0.0 MIT License By https://www.wulacms.com */
+ ;layui.define(["jquery"],function(e){var r=layui.$,u=(decodeURIComponent,unescape),a=(escape,document);e("&common",function(e){if(window.nativeJs&&("user_info"==e||"web_token"==e))return nativeJs.getUserToken();for(var n=a.cookie.split(";"),o="",i=0;i<n.length;i++){var t=n[i].split("=");r.trim(t[0])==e&&""!=t[1]&&(o=t[1])}return u(o)})});

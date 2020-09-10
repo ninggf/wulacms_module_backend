@@ -224,6 +224,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                     },
                     showNotice(){
                         var $vm=this;
+                        
                         if(!$vm.notice.data.new){
                             return
                         }
