@@ -121,10 +121,18 @@ layui.define(['jquery','&main'], function (exports) {
         }  
 
         get(url,data,cb){
-            this.ajaxApi('GET',url,data,cb);
+            if(arguments.length==3){
+                this.ajax('GET',url,data,cb);
+            }else{
+                this.ajaxApi('GET',data,cb);
+            }
         }
         post(url,data,cb){
-            this.ajaxApi('POST',url,data,cb);
+            if(arguments.length==3){
+                this.ajax('POST',url,data,cb);
+            }else{
+                this.ajaxApi('POST',data,cb);
+            }
         }
 
         ajaxApi(method,url,data,cb){
@@ -152,7 +160,22 @@ layui.define(['jquery','&main'], function (exports) {
             
         }
         ajax(method,url,data,cb){
-            
+            let self=this;
+            $.ajax({ 
+                type: method,
+                url: url,
+                data: data,
+                dataType: "json",
+                success: function(res){
+                    cb(res);
+                    if(res.error){
+                        self.ajaxError(res.error);
+                    }
+                },
+                error: function(res){
+                    self.ajaxError({code:res.status})
+                }
+            });
         }
        
         ajaxError(error){

@@ -1,6 +1,7 @@
-layui.define(['&coolay','jquery'], (exports) => {
+layui.define(['&coolay','jquery','element'], (exports) => {
     'use strict';
-    let $ = layui.$,coolay = layui['&coolay'];
+    let $ = layui.$,coolay = layui['&coolay'],element = layui['element'];
+    console.log(element)
     let menu = null,app= null,home = {
         init (data){
             app = new Vue({
@@ -152,7 +153,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                                 $vm.ajax.error   = 0;
                                 $vm.ajax.success = 0;
                                 $('.layui-progress').show();
-                                layui.element.progress('install-progress', '0');
+                                element.progress('install-progress', '0');
 
                             },
                             success:function(res){
@@ -162,14 +163,14 @@ layui.define(['&coolay','jquery'], (exports) => {
                                         window.vueVm.$destroy();
                                     }
                                     workspace.html(res);
-                                    layui.element.progress('install-progress', '100%');   
+                                    element.progress('install-progress', '100%');   
                                     
                             },
                             complete:function(XMLHttpRequest){    
                                 coolay.setPageTitle(XMLHttpRequest.getResponseHeader('PageTitle'))
                                     //删除进度条
                                 setTimeout(() => {
-                                    layui.element.progress('install-progress', '0');
+                                    element.progress('install-progress', '0');
                                     $('.layui-progress').hide();
                                     $vm.ajax.error = 0;
                                 },2000);
@@ -184,7 +185,7 @@ layui.define(['&coolay','jquery'], (exports) => {
                                 new Promise((resovle,reject)=>{
                                     setTimeout(() => {
                                         $('#workspace').html(res.responseText);
-                                        layui.element.progress('install-progress', '100%');   
+                                        element.progress('install-progress', '100%');   
                                         $vm.ajax.error = 1;
                                         reject(res)
                                     }, 500);
