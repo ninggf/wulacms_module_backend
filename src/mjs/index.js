@@ -42,6 +42,7 @@ layui.define(['&coolay','jquery','element'], (exports) => {
                     ajax:{
                         error:0,
                         success:0,
+                        request:null,
                     },
                     search:{
                         search_val:'',
@@ -51,7 +52,8 @@ layui.define(['&coolay','jquery','element'], (exports) => {
                     nav:{
                         search_val:"",
                         show:0,
-                    }
+                    },
+                    vm:null,
                 },
                 methods: {
                     // 标签添加到左侧sider
@@ -95,14 +97,19 @@ layui.define(['&coolay','jquery','element'], (exports) => {
                         this.drop.target  = item;
                     },
                     clickMenu(item){
+                        //清空workspace
+                       
+                        // $('#workspace').html('')
+
+                        if(item.url.indexOf('#')!=-1){
+                            this.getComp(item.url);
+                        }else{
+                            if(location.pathname==item.url && !location.hash)return;
+                            this.getHtml(item);
+                        }
                         this.menu.show=this.menu.listshow=0;
-                        if(location.pathname==item.url)return;
-
-                        //初始化界面 根据 参数选择打开方式，默认使用改变hash
-                         this.getHtml(item);
-                        $('#module').hide();
                         history.pushState({comp: item}, item.url, item.url);
-
+                        $('#module').hide();
                     },
                     doSearch(val){
                         let $vm=this;
@@ -140,9 +147,18 @@ layui.define(['&coolay','jquery','element'], (exports) => {
                         },800);
 
                     },
+                    getComp(hash){
+                        var name=hash.replace('#','@').replace('/','.');
+                        var $vm=this;
+                        layui.use(name,conf=>{
+                            $('#workspace').html(conf.tpl);
+                            conf.vue.el='#workspace';
+                            $vm.vm=new Vue(conf.vue)
+                        })
+                    },
                     getHtml(item){
                         var $vm=this;
-                        $.ajax({
+                        this.ajax.request=$.ajax({
                             url:item.url,
                             method:'GET',
                             timeout:5000,
@@ -178,7 +194,7 @@ layui.define(['&coolay','jquery','element'], (exports) => {
                                 if(item.url==$vm.path.backend.url){
                                     $('#module').show();
                                 }
-                            
+                                $vm.ajax.request=null;
                             },
                             error:function(res){
                                 //接口请求失败
@@ -217,7 +233,7 @@ layui.define(['&coolay','jquery','element'], (exports) => {
                     },
                     goHome(){
                         var $vm=this;
-                        if(location.pathname==$vm.path.backend.url)return;
+                        if(location.pathname+location.hash==$vm.path.backend.url)return;
                         this.getHtml({url:$vm.path.backend.url})
                         history.pushState({comp: {url:$vm.path.backend.url}},$vm.path.backend.url,$vm.path.backend.url);
                         
@@ -234,13 +250,29 @@ layui.define(['&coolay','jquery','element'], (exports) => {
                     },
                 },
                 mounted() {
-                    console.log('index执行')
                     let $vm=this;
-                    history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
+                    
+                    if(window.location.hash){
+                        history.pushState({comp: {url:window.location.hash,}}, window.location.hash, window.location.hash);
+                        $vm.getComp(window.location.hash)  
+                    }else{
+                        history.pushState({comp: {url:location.pathname,}}, location.pathname, location.pathname);
+                    }
+
                     window.onpopstate = function(e) {
+                        console.log($vm.ajax.request)
+                        if($vm.ajax.request) $vm.ajax.request.abort();
+
                         if(e.state){
-                            $vm.getHtml(e.state.comp)  
+                            if(e.state.comp.url.indexOf('#')!=-1){
+                                $vm.getComp(window.location.hash)  
+                            }else{
+                                $vm.getHtml(e.state.comp)  
+                            }
+                        }else if(window.location.hash){
+                            $vm.getComp(window.location.hash)  
                         }
+                        
                     }
                 },
             });

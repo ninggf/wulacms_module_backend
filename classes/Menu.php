@@ -59,7 +59,11 @@ class Menu {
                 foreach ($mu['items'] as $ck => $child) {
                     $child['like'] = 0;
                     $child['id']   = $k . '/' . $ck;
-                    $child['url']  = App::url($child['url']);
+                    if($child['url']{0} == '#'){
+                        $child['url']  =  $child['url'];
+                    }else{
+                        $child['url']  =  App::url($child['url']);
+                    }
                     $child['py']   = Pinyin::convert($child['name']);
                     if (in_array($child['id'], $myMenusId)) {
                         $child['like'] = 1;

@@ -143,7 +143,6 @@
 <script type="text/javascript">
     layui.config({$layuiCfg|json_encode:64}).use(['&coolay', '@backend.index','jquery'], function (cool, home,$) {
         cool.init({$pageMeta|json_encode:64},{$userMeta|json_encode:64})
-
         {literal}
         cool.path={
             login:{

@@ -13,7 +13,7 @@ layui.define(['layer','jquery'], (exports) => {
                     hide_sid:0,
                     sid_show:0,
                     //自定义模块主页面显示
-                    mod_show:0,
+                    mod_show:1,
                 },
                 methods: {
                     add(m){
@@ -37,7 +37,7 @@ layui.define(['layer','jquery'], (exports) => {
                     init(){
                         let $vm=this;
                         this.list=wlist;
-                        this.mod_show=location.href.split('/')[location.href.split('/').length-1]!='backend'?0:1;
+                        // this.mod_show=location.href.split('/')[location.href.split('/').length-1]!='backend'?0:1;
 
                         this.list.forEach(item=>{
                             if(item.isadd){

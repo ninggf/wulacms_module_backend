@@ -47,11 +47,13 @@ layui.define(['jquery','&main'], function (exports) {
             }
             return url;
         }
+        // 设置标题
         setPageTitle(title) {
             document.title = (title ? title : this.pMeta.defaultTitle) + this.pMeta.titleSuffix
         }
-
+        //弹窗
         dialog(name){
+            console.log('a')
             layui.use(name,conf=>{
                 let vm=null;
                 let cfg={
@@ -59,7 +61,8 @@ layui.define(['jquery','&main'], function (exports) {
                     title:conf.dialog.title,
                     maxWidth:1920,
                     btn:[],
-                    content:conf.dialog.content(),
+                    // content:conf.dialog.content(),
+                    content:conf.tpl,
                     success (dom){
                         conf.vue.el='#'+dom.attr('id')+' .layui-layer-content';
                         vm=new Vue(conf.vue)
@@ -85,6 +88,7 @@ layui.define(['jquery','&main'], function (exports) {
                 layer.open(cfg)
             })
         }
+        //消息提示
         notice(option){
             let notice=$(`<div ><h2 class='notice__title'>${option.title}</h2>
                             <div class='notice__content'><p>${option.content}</p></div>
@@ -106,6 +110,7 @@ layui.define(['jquery','&main'], function (exports) {
             
             this.delNotice(option.time,notice);
         }
+        //删除消息提示
         delNotice (time,el){
             time=time?time:0;
             new Promise((resolve)=>{
@@ -119,7 +124,7 @@ layui.define(['jquery','&main'], function (exports) {
                 }, 1000);
             })
         }  
-
+        //ajax get post
         get(url,data,cb){
             if(arguments.length==3){
                 this.ajax('GET',url,data,cb);
@@ -134,7 +139,6 @@ layui.define(['jquery','&main'], function (exports) {
                 this.ajaxApi('POST',data,cb);
             }
         }
-
         ajaxApi(method,url,data,cb){
             let self=this,reqFormatDataS = self.KSMain.formatReq(data);
             let api=reqFormatDataS.api;
@@ -177,7 +181,6 @@ layui.define(['jquery','&main'], function (exports) {
                 }
             });
         }
-       
         ajaxError(error){
             let self=this,content="",title="";
             switch (error.code) {
