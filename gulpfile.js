@@ -30,7 +30,26 @@ const validate    = require('gulp-jsvalidate')
 const notify      = require('gulp-notify')
 const header      = require('gulp-header')
 const open        = require('gulp-open')
-
+let cb;
+const CPATH = './modules/' + __dirname.substring(__dirname.lastIndexOf("\\") + 1, __dirname.length);
+const pathName=path=>{
+    let path_arr=[...path],reverse=0;
+    switch(path_arr[0]){
+      case '.':// ./src/mjs
+        path_arr[0]=''
+        break
+      case '/':// /src/mjs
+        break
+      case '!':// !src/mjs
+          path_arr[0]=''
+          reverse=1;
+        break
+      default: // src/mjs
+        path_arr.unshift('/')
+        break;
+    }
+    return reverse?'!'+CPATH+'/'+path_arr.join(''):CPATH+path_arr.join('');
+}
 const knownOptions = {
           string : 'env',
           default: {
@@ -57,15 +76,18 @@ const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> L
                       return '(' + options.mod.replace(/,/g, '|') + ')';
                   }() : '',
                   srcx = [
-                      'layui/src/**/*' + mod + '.js', '!layui/src/**/mobile/*.js', '!layui/src/lay/**/mobile.js', '!layui/src/lay/all.js', '!layui/src/lay/all-mobile.js'
+                    pathName('layui/src/**/*' + mod + '.js'),
+                    pathName('!layui/src/**/mobile/*.js'), 
+                    pathName('!layui/src/lay/**/mobile.js'), 
+                    pathName('!layui/src/lay/all.js'), 
+                    pathName('!layui/src/lay/all-mobile.js')
                   ]
-
               let gp = src(srcx)
 
               if (options.env == 'pro')
                   gp = gp.pipe(uglify())
 
-              gp = gp.pipe(dest('./'))
+              gp = gp.pipe(dest(pathName('./')))
 
               if (options.watch)
                   gp.pipe(connect.reload())
@@ -76,7 +98,7 @@ const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> L
           //压缩css文件
           mincss(cb) {
               const srcx = [
-                  'layui/src/css/**/*.css', '!layui/src/css/**/font.css'
+                pathName('layui/src/css/**/*.css'), pathName('!layui/src/css/**/font.css')
               ]
 
               let gp = src(srcx)
@@ -84,7 +106,7 @@ const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> L
               if (options.env == 'pro')
                   gp = gp.pipe(cleancss())
 
-              gp = gp.pipe(dest('css'))
+              gp = gp.pipe(dest(pathName('css')))
 
               if (options.watch)
                   gp.pipe(connect.reload());
@@ -94,17 +116,17 @@ const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> L
 
           //复制iconfont文件
           font(cb) {
-              src('layui/src/font/*')
-              .pipe(dest('font'))
+              src(pathName('layui/src/font/*'))
+              .pipe(dest(pathName('font')))
 
               cb()
           },
 
           //复制组件可能所需的非css和js资源
           mv(cb) {
-              const srcx = ['layui/src/**/*.{png,jpg,gif,html,mp3,json}']
+              const srcx = [pathName('layui/src/**/*.{png,jpg,gif,html,mp3,json}')]
 
-              src(srcx).pipe(dest('./'))
+              src(srcx).pipe(dest(pathName('./')))
 
               cb()
           }
@@ -155,7 +177,7 @@ const compileVue = function () {
 };
 
 const cleanTask = cb => {
-    src(['lay/*', 'css/*', 'demo/*', 'font/*', 'images/*', 'layui.js'], {
+    src([pathName('lay/*'), pathName('css/*'), pathName('demo/*'), pathName('font/*'), pathName('images/*'), pathName('layui.js')], {
         read      : true,
         allowEmpty: true
     }).pipe(clean())
@@ -164,7 +186,7 @@ const cleanTask = cb => {
 }
 
 const buildCss = cb => {
-    let gp = src(['src/less/[^_]*.less'])
+    let gp = src([pathName('src/less/[^_]*.less')])
 
     if (options.env != 'pro') {
         gp = gp.pipe(sourcemap.init()).pipe(identityMap());
@@ -187,7 +209,7 @@ const buildCss = cb => {
     if (options.env == 'pro')
         gp = gp.pipe(cleancss()).pipe(header.apply(null, noteCss))
 
-    gp = gp.pipe(dest('css'))
+    gp = gp.pipe(dest(pathName('css')))
 
     if (options.watch)
         gp = gp.pipe(connect.reload());
@@ -196,13 +218,24 @@ const buildCss = cb => {
 }
 
 const buildJs = cb => {
-    let gp = src(['src/js/*.js'])
-
+    let gp = src([pathName('src/js/*.js')])
     if (options.env != 'pro') {
         gp = gp.pipe(sourcemap.init()).pipe(identityMap());
     }
 
-    gp = gp.pipe(babel()).on('error', (e) => {
+    gp = gp.pipe(babel({
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "loose": true,
+                    "modules": false,
+                    "forceAllTransforms": true
+                }
+            ]
+        ],
+        "plugins": ["@babel/plugin-proposal-class-properties"]
+    })).on('error', (e) => {
         console.error(e.message)
         notify.onError(e.message)
     }).pipe(validate()).on('error', (e) => {
@@ -221,7 +254,7 @@ const buildJs = cb => {
             console.error(['js',e.message])
         }).pipe(header.apply(null, note))
 
-    gp = gp.pipe(dest('lay/exts'))
+    gp = gp.pipe(dest(pathName('lay/exts')))
 
     if (options.watch)
         gp.pipe(connect.reload());
@@ -230,13 +263,24 @@ const buildJs = cb => {
 }
 
 const buildmJs = cb => {
-    let gp = src(['src/mjs/*.js'])
-
+    let gp = src([pathName('src/mjs/*.js')])
     if (options.env != 'pro') {
         gp = gp.pipe(sourcemap.init()).pipe(identityMap());
     }
 
-    gp = gp.pipe(babel()).on('error', (e) => {
+    gp = gp.pipe(babel({
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "loose": true,
+                    "modules": false,
+                    "forceAllTransforms": true
+                }
+            ]
+        ],
+        "plugins": ["@babel/plugin-proposal-class-properties"]
+    })).on('error', (e) => {
         console.error(e.message)
         notify.onError(e.message)
     }).pipe(validate()).on('error', (e) => {
@@ -254,8 +298,7 @@ const buildmJs = cb => {
             notify.onError(e.message)
             console.error(['mjs',e.message,e])
         }).pipe(header.apply(null, note))
-
-    gp = gp.pipe(dest('js'))
+    gp = gp.pipe(dest(pathName('js')))
 
     if (options.watch) {
         gp.pipe(connect.reload());
@@ -265,9 +308,21 @@ const buildmJs = cb => {
 }
 
 const buildVue = cb => {
-    let gp = src(['src/components/*.vue']);
-
-    gp = gp.pipe(compileVue()).pipe(babel()).on('error', (e) => {
+    let gp = src([pathName('src/components/*.vue')]);
+    
+    gp = gp.pipe(compileVue()).pipe(babel({
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "loose": true,
+                    "modules": false,
+                    "forceAllTransforms": true
+                }
+            ]
+        ],
+        "plugins": ["@babel/plugin-proposal-class-properties"]
+    })).on('error', (e) => {
         console.error(e.message);
         notify.onError(e.message)
     }).pipe(validate()).on('error', (e) => {
@@ -283,7 +338,7 @@ const buildVue = cb => {
             console.error(['vuejs',e.message])
         }).pipe(header.apply(null, note))
 
-    gp = gp.pipe(dest('lay/exts'));
+    gp = gp.pipe(dest(pathName('lay/exts')));
 
     if (options.watch) {
         gp.pipe(connect.reload());
@@ -292,11 +347,11 @@ const buildVue = cb => {
 }
 
 const buildHtml = cb => {
-    let gp = src(['src/html/**/*.{html,js}']).pipe(preprocess({
+    let gp = src([pathName('src/html/**/*.{html,js}')]).pipe(preprocess({
         context: options
     })).on('error', e => {
         console.error(e.message)
-    }).pipe(dest('demo'))
+    }).pipe(dest(pathName('demo')))
 
     if (options.watch) {
         gp.pipe(connect.reload());
@@ -306,9 +361,9 @@ const buildHtml = cb => {
 }
 
 const mvAssets = cb => {
-    const srcx = ['./src/**/*.{png,jpg,gif,mp3,json,eot,svg,ttf,woff,woff2}']
+    const srcx = [pathName('./src/**/*.{png,jpg,gif,mp3,json,eot,svg,ttf,woff,woff2}')]
 
-    let gp = src(srcx).pipe(dest('./'))
+    let gp = src(srcx).pipe(dest(pathName('./')))
 
     if (options.watch)
         gp.pipe(connect.reload());
@@ -324,30 +379,29 @@ const watching = cb => {
         port      : 9090,
     })
 
-    src(['.babelrc'], {
-        allowEmpty: true
-    }).pipe(open({
-        uri: 'http://127.0.0.1:9090/demo/'
-    }))
+    // src(['.babelrc'], {
+    //     allowEmpty: true
+    // }).pipe(open({
+    //     uri: 'http://127.0.0.1:9090/demo/'
+    // }))
 
     options.watch = true
+    watch([pathName('src/html/**/*.{html,js,htm}')], buildHtml)
+    watch([pathName('src/js/**/*.js')],buildJs)
+    watch([pathName('src/mjs/**/*.js')],buildmJs)
+    watch([pathName('src/less/**/*.less')], buildCss)
+    watch([pathName('src/components/*.vue')], buildVue)
+    watch([pathName('src/**/*.{png,jpg,gif,mp3,json,eot,svg,ttf,woff,woff2}')], mvAssets)
 
-    watch(['src/html/**/*.{html,js,htm}'], buildHtml)
-    watch(['src/js/**/*.js'], buildJs)
-    watch(['src/mjs/**/*.js'], buildmJs)
-    watch(['src/less/**/*.less'], buildCss)
-    watch(['src/components/*.vue'], buildVue)
-    watch(['src/**/*.{png,jpg,gif,mp3,json,eot,svg,ttf,woff,woff2}'], mvAssets)
-
-    if (fs.existsSync('layui/')) {
-        watch(['layui/src/**/*.js'], layuiTasks.minjs)
-        watch(['layui/src/**/*.css'], layuiTasks.mincss)
+    if (fs.existsSync(pathName('layui/'))) {
+        watch([pathName('layui/src/**/*.js')], layuiTasks.minjs)
+        watch([pathName('layui/src/**/*.css')], layuiTasks.mincss)
     }
 
     cb()
 }
 
-const buildLayui = fs.existsSync('layui/') ? parallel(layuiTasks.minjs, layuiTasks.mincss, layuiTasks.mv, layuiTasks.font) : cb => {
+const buildLayui = fs.existsSync(pathName('layui/')) ? parallel(layuiTasks.minjs, layuiTasks.mincss, layuiTasks.mv, layuiTasks.font) : cb => {
     console.log('skip build layui')
     cb()
 }
@@ -363,4 +417,8 @@ exports.default = series(cb => {
     cb()
 }, exports.build);
 
-exports.watch = series(exports.build, watching)
+exports.watch = series(exports.build,watching)
+
+exports.init = function(done) {
+    cb = done;
+}
