@@ -1,48 +1,49 @@
 const {src, dest, series, parallel, watch} = require('gulp');
-const pkg         = require('./package.json')
-const fs          = require('fs')
-const os          = require('os')
-const through     = require('through2');
-const sourcemap   = require('gulp-sourcemaps')
-const identityMap = require('@gulp-sourcemaps/identity-map')
-const babel       = require('gulp-babel')
-const less        = require('gulp-less')
-const lessc       = require('less')
-const postcss     = require('gulp-postcss')
-const autoprefix  = require('autoprefixer')
-const pxtorem     = require('postcss-pxtorem')
-const connect     = require('gulp-connect')
-const minimist    = require('minimist')
-const preprocess  = require("gulp-preprocess")
-const cleancss    = require('gulp-clean-css')
-const minifyCSS   = require('clean-css');
-const clean       = require('gulp-rimraf')
-const uglify      = require('gulp-uglify')
-const relogger    = require('gulp-remove-logging')
-const validate    = require('gulp-jsvalidate')
-const notify      = require('gulp-notify')
-const header      = require('gulp-header')
+const pkg                                  = require('./package.json')
+const fs                                   = require('fs')
+const os                                   = require('os')
+const through                              = require('through2');
+const sourcemap                            = require('gulp-sourcemaps')
+const identityMap                          = require('@gulp-sourcemaps/identity-map')
+const babel                                = require('gulp-babel')
+const less                                 = require('gulp-less')
+const lessc                                = require('less')
+const postcss                              = require('gulp-postcss')
+const autoprefix                           = require('autoprefixer')
+const pxtorem                              = require('postcss-pxtorem')
+const connect                              = require('gulp-connect')
+const minimist                             = require('minimist')
+const preprocess                           = require("gulp-preprocess")
+const cleancss                             = require('gulp-clean-css')
+const minifyCSS                            = require('clean-css');
+const clean                                = require('gulp-rimraf')
+const uglify                               = require('gulp-uglify')
+const relogger                             = require('gulp-remove-logging')
+const validate                             = require('gulp-jsvalidate')
+const notify                               = require('gulp-notify')
+const header                               = require('gulp-header')
+const path                                 = require('path')
 let cb;
 
-const CPATH = './modules/backend';
+const CPATH = process.cwd().indexOf(path.join('modules', 'backend')) <= 0 ? './modules/backend' : '.';
 
-const pathName=path=>{
-    let path_arr=[...path],reverse=0;
-    switch(path_arr[0]){
-      case '.':// ./src/mjs
-        path_arr[0]=''
-        break
-      case '/':// /src/mjs
-        break
-      case '!':// !src/mjs
-          path_arr[0]=''
-          reverse=1;
-        break
-      default: // src/mjs
-        path_arr.unshift('/')
-        break;
+const pathName = path => {
+    let path_arr = [...path], reverse = 0;
+    switch (path_arr[0]) {
+        case '.':// ./src/mjs
+            path_arr[0] = ''
+            break
+        case '/':// /src/mjs
+            break
+        case '!':// !src/mjs
+            path_arr[0] = ''
+            reverse     = 1;
+            break
+        default: // src/mjs
+            path_arr.unshift('/')
+            break;
     }
-    return reverse?'!'+CPATH+'/'+path_arr.join(''):CPATH+path_arr.join('');
+    return reverse ? '!' + CPATH + '/' + path_arr.join('') : CPATH + path_arr.join('');
 }
 
 const knownOptions = {
@@ -71,13 +72,13 @@ const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> L
                       return '(' + options.mod.replace(/,/g, '|') + ')';
                   }() : '',
                   srcx = [
-                    pathName('layui/src/**/*' + mod + '.js'),
-                    pathName('!layui/src/**/mobile/*.js'), 
-                    pathName('!layui/src/lay/**/mobile.js'), 
-                    pathName('!layui/src/lay/all.js'), 
-                    pathName('!layui/src/lay/all-mobile.js')
+                      pathName('layui/src/**/*' + mod + '.js'),
+                      pathName('!layui/src/**/mobile/*.js'),
+                      pathName('!layui/src/lay/**/mobile.js'),
+                      pathName('!layui/src/lay/all.js'),
+                      pathName('!layui/src/lay/all-mobile.js')
                   ]
-              let gp = src(srcx)
+              let gp   = src(srcx)
 
               if (options.env == 'pro')
                   gp = gp.pipe(uglify())
@@ -93,7 +94,7 @@ const cmt        = '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> L
           //压缩css文件
           mincss(cb) {
               const srcx = [
-                pathName('layui/src/css/**/*.css'), pathName('!layui/src/css/**/font.css')
+                  pathName('layui/src/css/**/*.css'), pathName('!layui/src/css/**/font.css')
               ]
 
               let gp = src(srcx)
@@ -223,8 +224,8 @@ const buildJs = cb => {
             [
                 "@babel/preset-env",
                 {
-                    "loose": true,
-                    "modules": false,
+                    "loose"             : true,
+                    "modules"           : false,
                     "forceAllTransforms": true
                 }
             ]
@@ -246,7 +247,7 @@ const buildJs = cb => {
             replaceWith: 'void 0'
         })).pipe(uglify()).on('error', (e) => {
             notify.onError(e.message)
-            console.error(['js',e.message])
+            console.error(['js', e.message])
         }).pipe(header.apply(null, note))
 
     gp = gp.pipe(dest(pathName('lay/exts')))
@@ -268,8 +269,8 @@ const buildmJs = cb => {
             [
                 "@babel/preset-env",
                 {
-                    "loose": true,
-                    "modules": false,
+                    "loose"             : true,
+                    "modules"           : false,
                     "forceAllTransforms": true
                 }
             ]
@@ -291,7 +292,7 @@ const buildmJs = cb => {
             replaceWith: 'void 0'
         })).pipe(uglify()).on('error', (e) => {
             notify.onError(e.message)
-            console.error(['mjs',e.message,e])
+            console.error(['mjs', e.message, e])
         }).pipe(header.apply(null, note))
     gp = gp.pipe(dest(pathName('js')))
 
@@ -304,14 +305,14 @@ const buildmJs = cb => {
 
 const buildVue = cb => {
     let gp = src([pathName('src/components/*.vue')]);
-    
+
     gp = gp.pipe(compileVue()).pipe(babel({
         "presets": [
             [
                 "@babel/preset-env",
                 {
-                    "loose": true,
-                    "modules": false,
+                    "loose"             : true,
+                    "modules"           : false,
                     "forceAllTransforms": true
                 }
             ]
@@ -330,7 +331,7 @@ const buildVue = cb => {
             replaceWith: 'void 0'
         })).pipe(uglify()).on('error', (e) => {
             notify.onError(e.message)
-            console.error(['vuejs',e.message])
+            console.error(['vuejs', e.message])
         }).pipe(header.apply(null, note))
 
     gp = gp.pipe(dest(pathName('lay/exts')));
@@ -375,8 +376,8 @@ const watching = cb => {
     })
     options.watch = true
     watch([pathName('src/html/**/*.{html,js,htm}')], buildHtml)
-    watch([pathName('src/js/**/*.js')],buildJs)
-    watch([pathName('src/mjs/**/*.js')],buildmJs)
+    watch([pathName('src/js/**/*.js')], buildJs)
+    watch([pathName('src/mjs/**/*.js')], buildmJs)
     watch([pathName('src/less/**/*.less')], buildCss)
     watch([pathName('src/components/*.vue')], buildVue)
     watch([pathName('src/**/*.{png,jpg,gif,mp3,json,eot,svg,ttf,woff,woff2}')], mvAssets)
@@ -404,8 +405,8 @@ exports.default = series(cb => {
     cb()
 }, exports.build);
 
-exports.watch = series(exports.build,watching)
+exports.watch = series(exports.build, watching)
 
-exports.init = function(done) {
+exports.init = function (done) {
     cb = done;
 }
