@@ -1,11 +1,4 @@
-const {
-          src,
-          dest,
-          series,
-          parallel,
-          watch
-      } = require('gulp');
-
+const {src, dest, series, parallel, watch} = require('gulp');
 const pkg         = require('./package.json')
 const fs          = require('fs')
 const os          = require('os')
@@ -29,9 +22,10 @@ const relogger    = require('gulp-remove-logging')
 const validate    = require('gulp-jsvalidate')
 const notify      = require('gulp-notify')
 const header      = require('gulp-header')
-const open        = require('gulp-open')
 let cb;
-const CPATH = './modules/' + __dirname.substring(__dirname.lastIndexOf("\\") + 1, __dirname.length);
+
+const CPATH = './modules/backend';
+
 const pathName=path=>{
     let path_arr=[...path],reverse=0;
     switch(path_arr[0]){
@@ -50,6 +44,7 @@ const pathName=path=>{
     }
     return reverse?'!'+CPATH+'/'+path_arr.join(''):CPATH+path_arr.join('');
 }
+
 const knownOptions = {
           string : 'env',
           default: {
@@ -378,13 +373,6 @@ const watching = cb => {
         livereload: true,
         port      : 9090,
     })
-
-    // src(['.babelrc'], {
-    //     allowEmpty: true
-    // }).pipe(open({
-    //     uri: 'http://127.0.0.1:9090/demo/'
-    // }))
-
     options.watch = true
     watch([pathName('src/html/**/*.{html,js,htm}')], buildHtml)
     watch([pathName('src/js/**/*.js')],buildJs)
@@ -393,7 +381,7 @@ const watching = cb => {
     watch([pathName('src/components/*.vue')], buildVue)
     watch([pathName('src/**/*.{png,jpg,gif,mp3,json,eot,svg,ttf,woff,woff2}')], mvAssets)
 
-    if (fs.existsSync(pathName('layui/'))) {
+    if (fs.existsSync(pathName('layui'))) {
         watch([pathName('layui/src/**/*.js')], layuiTasks.minjs)
         watch([pathName('layui/src/**/*.css')], layuiTasks.mincss)
     }
@@ -401,13 +389,12 @@ const watching = cb => {
     cb()
 }
 
-const buildLayui = fs.existsSync(pathName('layui/')) ? parallel(layuiTasks.minjs, layuiTasks.mincss, layuiTasks.mv, layuiTasks.font) : cb => {
-    console.log('skip build layui')
+const buildLayui = fs.existsSync(pathName('layui')) ? parallel(layuiTasks.minjs, layuiTasks.mincss, layuiTasks.mv, layuiTasks.font) : cb => {
+    console.log('skip build layui!')
     cb()
 }
 
-exports.clean = cleanTask
-
+exports.clean      = cleanTask
 exports.build      = parallel(buildCss, buildVue, buildmJs, buildJs, buildHtml, mvAssets, buildLayui);
 exports.buildVue   = buildVue;
 exports.buildLayui = buildLayui;
