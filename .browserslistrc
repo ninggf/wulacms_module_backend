@@ -1,8 +1,0 @@
-# Browsers that we support
-[production]
-> 3%
-not dead
-edge >= 15
-chrome >= 63
-firefox >= 68
-safari >= 13

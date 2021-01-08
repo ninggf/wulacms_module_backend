@@ -41,9 +41,9 @@ class PjaxController extends BackendController {
      * @param string|array $cfg
      * @param string       $value
      *
-     * @return LayoutSupport
+     * @return \backend\classes\PjaxController
      */
-    protected function layoutCfg($cfg, $value = '') {
+    protected function layoutCfg($cfg, string $value = ''): PjaxController {
         if (is_array($cfg)) {
             foreach ($cfg as $c => $v) {
                 if (in_array($c, ['htmlCls', 'bodyCls', 'pageTheme'])) {
@@ -66,7 +66,7 @@ class PjaxController extends BackendController {
      *
      * @return mixed
      */
-    protected function onInitLayoutData($data) {
+    protected function onInitLayoutData(array $data): array {
         $cmsVer = App::getModuleById('backend')->getCurrentVersion();
         // 页面样式
         $meta['htmlCls']   = $this->htmlCls;

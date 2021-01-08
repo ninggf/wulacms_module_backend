@@ -2,34 +2,35 @@
 
 namespace backend;
 
-use wula\cms\CmfModule;
 use wulaphp\app\App;
+use wulaphp\app\Module;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\io\Response;
+use wulaphp\mvc\view\View;
 
 /**
  * 管理后台模块
  * @group kernel
  */
-class BackendModule extends CmfModule {
-    public function getName() {
+class BackendModule extends Module {
+    public function getName(): string {
         return '管理后台';
     }
 
-    public function getDescription() {
+    public function getDescription(): string {
         return '基于layui与vuejs的易扩展管理后台界面';
     }
 
-    public function getHomePageURL() {
+    public function getHomePageURL(): string {
         return 'https://www.wulacms.com/modules/backend';
     }
 
-    public function getAuthor() {
+    public function getAuthor(): string {
         return 'Leo Ning';
     }
 
-    public function getVersionList() {
+    public function getVersionList(): array {
         $v['1.0.0'] = '管理后台的第一个版本';
 
         return $v;
@@ -41,7 +42,7 @@ class BackendModule extends CmfModule {
      * @param $view
      *
      * @filter mvc\admin\needLogin
-     * @return \wulaphp\mvc\view\View
+     * @return mixed
      */
     public static function onNeedLogin($view) {
         if (Request::isAjaxRequest()) {
@@ -60,7 +61,7 @@ class BackendModule extends CmfModule {
      * @filter mvc\admin\onDenied $message
      * @return \wulaphp\mvc\view\View
      */
-    public static function onDenied($view, $message) {
+    public static function onDenied($view, string $message): ?View {
         if (Request::isAjaxRequest()) {
             $view = Ajax::fatal($message ? $message : __('permission denied'), 403);
         } else {
@@ -73,12 +74,12 @@ class BackendModule extends CmfModule {
     /**
      * 用户被禁用了。
      *
-     * @param \wulaphp\mvc\view\View $view
+     * @param \wulaphp\mvc\view\View|null $view
      *
      * @filter mvc\admin\onLocked
      * @return \wulaphp\mvc\view\View
      */
-    public static function onLocked($view) {
+    public static function onLocked(?View $view): ?View {
         if (Request::isAjaxRequest()) {
             $view = Ajax::fatal('You are blocked', 403);
         }

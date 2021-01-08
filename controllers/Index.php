@@ -21,7 +21,7 @@ use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\io\Response;
 
-class IndexController extends PjaxController {
+class Index extends PjaxController {
 
     /**
      * 后台首页

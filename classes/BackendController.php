@@ -17,6 +17,7 @@ use wulaphp\mvc\controller\AdminController;
 use wulaphp\router\Router;
 
 class BackendController extends AdminController {
+
     public function beforeRun($action, $refMethod) {
         $domain = App::cfg('domain');
         if ($domain && VISITING_DOMAIN != $domain) {
