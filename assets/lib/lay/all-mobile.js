@@ -1,0 +1,1 @@
+layui.define(function(i){i("layui.mobile",layui.v)});
