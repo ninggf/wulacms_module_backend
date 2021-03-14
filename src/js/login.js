@@ -1,0 +1,48 @@
+layui.define(['layer', 'form', 'admin'], cb => {
+    'use strict';
+
+    let $ = layui.$, form = layui.form, layer = layui.layer, admin = layui.admin;
+
+    class LoginWidget {
+        init() {
+
+            $('.login-captcha').on('click', function () {
+                $(this).attr('src', $(this).data('src') + '?_=' + (new Date()).getTime())
+            });
+
+            form.render().on('submit(loginSubmit)', obj => {
+                let loadIndex = layer.load(2);
+                admin.ajax({
+                    url   : admin.url('backend/login'),
+                    method: 'POST',
+                    data  : obj.field,
+                    success(data) {
+                        layer.close(loadIndex);
+                        if (data.code && data.code === 200) {
+                            window.location = admin.url('backend');
+                            return;
+                        }
+                        if (data.args && data.args.ent >= 3) {
+                            $('.login-captcha-group').show();
+                            $('input[name=captcha]').attr('lay-verify', 'required').attr('required', '')
+                        }
+                        if (data.message) {
+                            if (data.args && data.args.elem) {
+                                layer.tips(data.message, data.args.elem)
+                            } else {
+                                layer.msg(data.message, {
+                                    icon: 2,
+                                    time: 2000
+                                })
+                            }
+                        }
+                    }
+                })
+                return false;
+            });
+            $('.login-wrapper').removeClass('layui-hide');
+        }
+    }
+
+    cb('@backend.login', new LoginWidget());
+});

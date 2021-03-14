@@ -1,63 +1,56 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{'Sign in to '|t}{$pageMeta.siteName}{$pageMeta.titleSuffix}</title>
-    <link rel="stylesheet" href="{'backend/css/layui.css'|res}">
-    <link rel="stylesheet" href="{'backend/css/login.css'|res}">
-    <script type="text/javascript" src="{'backend/layui.js'|res}"></script>
-    <script type="text/javascript" src="{'backend/vue.js'|res}"></script>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <script>window !== top ? top.location = location : void 0</script>
+    <link href="/favicon.ico" rel="icon"/>
+    <title>{'Sign in to '|t}{$pageMeta.projectName|default:'App'}{$pageMeta.titleSuffix}</title>
+    <link rel="stylesheet" href="{'backend/assets/lib/css/layui.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/admin.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/login.css'|res}"/>
+    {foreach $_css_files as $_css_file}
+        <link rel="stylesheet" href="{$_css_file}"/>
+    {/foreach}
 </head>
-
-<body>
-
-<div id="login">
-    <header>
-        <div>
-            <img src="{'backend/images/logo.png'|res}" alt="wulacms logo"/>
-            <p>WulaCms</p>
-            <i class="layui-icon layui-icon-home"></i>
-        </div>
-    </header>
-    {literal}
-        <form v-cloak>
-            <h1>登录 </h1>
-            <p class="error" v-show="errormsg">
-                <i class="layui-icon layui-icon-tips"></i><span>{{errormsg}}</span>
-            </p>
-            <div class="form-item">
-                <i class="layui-icon layui-icon-username"></i><input type="text" placeholder="登录用户名" v-model="login.username" class="username">
+<body class="{$pageMeta.bodyCls}">
+<div id="loginApp">
+    <div class="login-wrapper layui-anim layui-anim-scale layui-hide">
+        <form class="layui-form">
+            <h2>{'Sign in'|t}</h2>
+            <div class="layui-form-item layui-input-icon-group">
+                <i class="layui-icon layui-icon-username"></i>
+                <input class="layui-input" name="username" placeholder="{'Username'|t}" autocomplete="off" lay-verType="tips" lay-verify="required" required/>
             </div>
-            <div class="form-item">
-                <i class="layui-icon layui-icon-password"></i><input type="password" placeholder="登录密码" v-model="login.passwd" class="passwd">
+            <div class="layui-form-item layui-input-icon-group">
+                <i class="layui-icon layui-icon-password"></i>
+                <input class="layui-input" name="password" placeholder="{'Password'|t}" type="password" lay-verType="tips" lay-verify="required" required/>
             </div>
-            <div class="form-item" v-show="vcode_show">
-                <i class="layui-icon layui-icon-vercode"></i><input type="text" placeholder="验证码" v-model="login.captcha" class="captcha">
-                <img :src="captcha_src1" class="vcode_img" @click="captcha_src1=captcha_src+'&t='+Math.random()">
+            <div class="layui-form-item layui-input-icon-group login-captcha-group" {if $ent<3}style="display: none" {/if}>
+                <i class="layui-icon layui-icon-auz"></i>
+                <input class="layui-input" name="captcha" placeholder="{'Captcha'|t}" autocomplete="off" lay-verType="tips" {if $ent>=3}lay-verify="required" required{/if}/>
+                <img class="login-captcha" alt="" src="{$captcha}" data-src="{$captcha}"/>
             </div>
-            <div class="form-item" style="text-align:right">
-                <input type="checkbox" name="autologin" v-model="login.autologin"/><label for="">自动登陆</label>
+            <div class="layui-form-item">
+                <input type="checkbox" name="remember" title="{'Remember me'|t}" lay-skin="primary"/>
             </div>
-            <div class="form-item">
-                <input type="button" placeholder="登录" value="登 录" @click="submit">
+            <div class="layui-form-item">
+                <button id="signinbtn" class="layui-btn layui-btn-fluid" lay-filter="loginSubmit" lay-submit>{'Sign in'|t}</button>
             </div>
         </form>
-    {/literal}
-    <footer>
-        <p>© 2016 - {'Y'|date} MIT <a href="https://www.wulacms.com/" target="_blank">WULACMS</a></p>
-    </footer>
+    </div>
+    <div class="login-copyright">Copyright © 2013-{'Y'|date} wulacms.com all rights reserved.</div>
 </div>
-
-<script type="text/javascript">
-    var winData ={$winData|json_encode:320};
-    layui.config({
-        base  : "{'layui'|assets:'':0}",
-        module: "{'/'|res}",
-    }).use(['layer', 'element', 'form', '@backend.login'], function (l, w, f) {
-        f.render();
-    })
+{include './common.tpl' isTop=true}
+<script>
+    layui.use(['@backend.login'], function (login) {
+        login.init()
+    });
 </script>
+{foreach $_js_files.foot as $_js_file}
+    <script src="{$_js_file}"></script>
+{/foreach}
+<!--pageEnd-->
 </body>
 </html>

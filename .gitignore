@@ -6,6 +6,7 @@ npm-debug.log*
 .eslintcache
 .node_repl_history
 *.tgz
+*.map
 .env
 /vendor/
 node_modules/
