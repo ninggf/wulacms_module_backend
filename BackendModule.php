@@ -87,8 +87,6 @@ namespace backend {
             return $view;
         }
     }
-
-    App::register(new BackendModule());
 }
 
 namespace {
