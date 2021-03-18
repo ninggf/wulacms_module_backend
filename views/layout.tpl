@@ -7,8 +7,8 @@
     <script>if (window === top) window.location = "{'backend'|url}"</script>
     <link href="/favicon.ico" rel="icon"/>
     <title>{$pageTitle}{$pageMeta.titleSuffix}</title>
-    <link rel="stylesheet" href="{'backend/assets/lib/css/layui.css'|res}"/>
-    <link rel="stylesheet" href="{'backend/assets/admin.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/layui.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/admin.css'|res}"/>
     {foreach $_css_files as $_css_file}
         <link rel="stylesheet" href="{$_css_file}"/>
     {/foreach}

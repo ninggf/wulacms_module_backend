@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link href="/favicon.ico" rel="icon"/>
     <title>{$pageMeta.projectName|escape}{if $pageMeta.brandName} - {$pageMeta.brandName}{/if}{$pageMeta.titleSuffix}</title>
-    <link rel="stylesheet" href="{'backend/assets/lib/css/layui.css'|res}"/>
-    <link rel="stylesheet" href="{'backend/assets/admin.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/layui.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/admin.css'|res}"/>
     <script>window !== top ? top.location = window.location : void 0</script>
     {foreach $_css_files as $_css_file}
         <link rel="stylesheet" href="{$_css_file}"/>
@@ -136,8 +136,7 @@
                             </dl>
                         {else}
                             <a lay-href="{$menu.url}" {$menu.target}>
-                                <i class="layui-icon {$menu.iconCls|default:'layui-icon-app'}"></i>&emsp;
-                                <cite>{$menu.name}</cite>
+                                <i class="layui-icon {$menu.iconCls|default:'layui-icon-app'}"></i>&emsp; <cite>{$menu.name}</cite>
                             </a>
                         {/if}
                     </li>

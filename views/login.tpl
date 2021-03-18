@@ -7,8 +7,8 @@
     <script>window !== top ? top.location = location : void 0</script>
     <link href="/favicon.ico" rel="icon"/>
     <title>{'Sign in to '|t}{$pageMeta.projectName|default:'App'}{$pageMeta.titleSuffix}</title>
-    <link rel="stylesheet" href="{'backend/assets/lib/css/layui.css'|res}"/>
-    <link rel="stylesheet" href="{'backend/assets/admin.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/layui.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/admin.css'|res}"/>
     <link rel="stylesheet" href="{'backend/assets/css/login.css'|res}"/>
     {foreach $_css_files as $_css_file}
         <link rel="stylesheet" href="{$_css_file}"/>

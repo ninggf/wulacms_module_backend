@@ -1,7 +1,6 @@
 <script>
 layui.define(['layer', 'form', 'formX', 'element', 'admin'], function (exports) {
   let $     = layui.jquery;
-  let layer = layui.layer;
   let form  = layui.form;
   let admin = layui.admin;
   let toast = admin.toast;
@@ -24,7 +23,7 @@ layui.define(['layer', 'form', 'formX', 'element', 'admin'], function (exports) 
         admin.post('backend/profile/save', data.field).then(function (data) {
           if (data.code === 200) {
             top.layui.layer.msg('用户信息更新成功', {icon: 6, timeout: 1000}, function () {
-              //top.location.reload(true);
+              top.location.reload(true);
             })
           } else {
             toast.tc().error(data.message);

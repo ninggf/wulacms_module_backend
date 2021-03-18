@@ -1067,7 +1067,7 @@ body > .page-loading {
 .rubik-loader {
     width: 64px;
     height: 64px;
-    background-image: url(img/ic_loading.gif);
+    background-image: url(../img/ic_loading.gif);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -1438,14 +1438,14 @@ body .layui-transfer-active .layui-btn {
 
 /* 组件加图标 */
 .icon-date, .date-icon {
-    background-image: url(img/icon_date.png);
+    background-image: url(../img/icon_date.png);
     background-repeat: no-repeat;
     background-position: right center;
     padding-right: 28px;
 }
 
 .icon-search {
-    background-image: url(img/icon_search.png);
+    background-image: url(../img/icon_search.png);
     background-repeat: no-repeat;
     background-position: right center;
     padding-right: 26px;

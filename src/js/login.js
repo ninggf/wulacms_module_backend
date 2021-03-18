@@ -1,15 +1,12 @@
 layui.define(['layer', 'form', 'admin'], cb => {
-    'use strict';
-
     let $ = layui.$, form = layui.form, layer = layui.layer, admin = layui.admin;
 
-    class LoginWidget {
+    class Login {
         init() {
 
             $('.login-captcha').on('click', function () {
                 $(this).attr('src', $(this).data('src') + '?_=' + (new Date()).getTime())
             });
-
             form.render().on('submit(loginSubmit)', obj => {
                 let loadIndex = layer.load(2);
                 admin.ajax({
@@ -44,5 +41,5 @@ layui.define(['layer', 'form', 'admin'], cb => {
         }
     }
 
-    cb('@backend.login', new LoginWidget());
+    cb('@backend.login', new Login());
 });

@@ -19,7 +19,6 @@ use system\classes\model\UserTable;
 use system\classes\Syslog;
 use wulaphp\app\App;
 use wulaphp\io\Ajax;
-use wulaphp\io\Request;
 use wulaphp\io\Response;
 use wulaphp\mvc\view\JsonView;
 use wulaphp\mvc\view\View;
@@ -283,27 +282,6 @@ class IndexController extends AuthedController {
         $auth_code_obj->setBgColor($arr ['bg']);
         $auth_code_obj->paint();
         Response::getInstance()->close(true);
-    }
-
-    /**
-     * 退出
-     * @nologin
-     * @resetpasswd
-     */
-    public function signout(): ?View {
-        if ($this->passport->isLogin) {
-            Syslog::info('authlog', 'sign out ' . $this->passport->username, 'sign out', $this->passport->uid);
-        }
-        $this->destorySession();
-        //清空自动登录
-        Response::cookie('astoken', null, - 1, WWWROOT_DIR . App::id2dir('backend') . '/login');
-        if (Request::isAjaxRequest() || rqset('ajax')) {
-            return Ajax::redirect(App::url('backend/login'));
-        } else {
-            App::redirect('backend/login');
-
-            return null;
-        }
     }
 
     /**
