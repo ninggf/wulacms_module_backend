@@ -1,178 +1,195 @@
-<style>
-    .lock-screen-wrapper {
-        color: #ffffff;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        padding: 50px 60px 0 60px;
-        background-color: #000000;
-        background-image: url("{'backend/assets/img/bg-screen.jpg'|res}");
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: relative;
-    }
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <script>if (window !== top) top.location = "{'backend/lock'|url}"</script>
+    <link href="/favicon.ico" rel="icon"/>
+    <title>{$pageMeta.projectName|escape}{if $pageMeta.brandName} - {$pageMeta.brandName}{/if}{$pageMeta.titleSuffix}</title>
+    <link rel="stylesheet" href="{'backend/assets/css/layui.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/admin.css'|res}"/>
+    <style>
+        html, body {
+            height: 100%;
+        }
 
-    .lock-screen-time {
-        font-size: 88px;
-    }
+        .lock-screen-wrapper {
+            color: #ffffff;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 50px 60px 0 60px;
+            background-color: #000000;
+            background-image: url("{'backend/assets/img/bg-screen.jpg'|res}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
 
-    .lock-screen-date {
-        font-size: 24px;
-        padding: 0 0 0 13px;
-    }
+        .lock-screen-time {
+            font-size: 88px;
+        }
 
-    .lock-screen-form {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 65%;
-        width: 100%;
-        text-align: center;
-    }
+        .lock-screen-date {
+            font-size: 24px;
+            padding: 0 0 0 13px;
+        }
 
-    .lock-screen-psw {
-        color: #ffffff;
-        font-size: 22px;
-        width: 0;
-        height: 0;
-        line-height: 40px;
-        border-radius: 40px;
-        border: 2px solid transparent;
-        background-color: transparent;
-        box-sizing: border-box;
-        vertical-align: middle;
-        -webkit-transition: all .3s;
-        transition: all .3s;
-        text-align: center;
-    }
+        .lock-screen-form {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 65%;
+            width: 100%;
+            text-align: center;
+        }
 
-    .lock-screen-psw::-webkit-input-placeholder {
-        color: #F6F6F6;
-        font-size: 16px;
-    }
+        .lock-screen-psw {
+            color: #ffffff;
+            font-size: 22px;
+            width: 0;
+            height: 0;
+            line-height: 40px;
+            border-radius: 40px;
+            border: 2px solid transparent;
+            background-color: transparent;
+            box-sizing: border-box;
+            vertical-align: middle;
+            -webkit-transition: all .3s;
+            transition: all .3s;
+            text-align: center;
+        }
 
-    .lock-screen-psw::-moz-placeholder {
-        color: #F6F6F6;
-        font-size: 16px;
-    }
+        .lock-screen-psw::-webkit-input-placeholder {
+            color: #F6F6F6;
+            font-size: 16px;
+        }
 
-    .lock-screen-psw::-ms-input-placeholder {
-        color: #F6F6F6;
-        font-size: 16px;
-    }
+        .lock-screen-psw::-moz-placeholder {
+            color: #F6F6F6;
+            font-size: 16px;
+        }
 
-    .lock-screen-enter {
-        width: 65px;
-        height: 65px;
-        line-height: 1;
-        font-size: 28px;
-        padding-top: 18px;
-        border: 2px solid #ffffff;
-        border-radius: 50%;
-        text-align: center;
-        display: inline-block;
-        box-sizing: border-box;
-        vertical-align: middle;
-        transition: all .3s;
-        cursor: pointer;
-    }
+        .lock-screen-psw::-ms-input-placeholder {
+            color: #F6F6F6;
+            font-size: 16px;
+        }
 
-    .lock-screen-enter:hover {
-        background-color: rgba(255, 255, 255, .3);
-    }
+        .lock-screen-enter {
+            width: 65px;
+            height: 65px;
+            line-height: 1;
+            font-size: 28px;
+            padding-top: 18px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            text-align: center;
+            display: inline-block;
+            box-sizing: border-box;
+            vertical-align: middle;
+            transition: all .3s;
+            cursor: pointer;
+        }
 
-    .lock-screen-form.show-psw .lock-screen-psw {
-        height: 40px;
-        width: 180px;
-        padding: 0 5px;
-        margin-right: 10px;
-        border-color: #ffffff;
-        background-color: rgba(255, 255, 255, .3);
-    }
+        .lock-screen-enter:hover {
+            background-color: rgba(255, 255, 255, .3);
+        }
 
-    .lock-screen-form.show-psw .lock-screen-enter {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-        padding-top: 8px;
-    }
+        .lock-screen-form.show-psw .lock-screen-psw {
+            height: 40px;
+            width: 180px;
+            padding: 0 5px;
+            margin-right: 10px;
+            border-color: #ffffff;
+            background-color: rgba(255, 255, 255, .3);
+        }
 
-    .lock-screen-form.show-back .lock-screen-enter:before {
-        content: "\e603";
-    }
+        .lock-screen-form.show-psw .lock-screen-enter {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            padding-top: 8px;
+        }
 
-    .lock-screen-tip {
-        color: red;
-        width: 230px;
-        padding: 0 3px;
-        font-size: 14px;
-        text-align: left;
-        box-sizing: border-box;
-        display: none;
-    }
+        .lock-screen-form.show-back .lock-screen-enter:before {
+            content: "\e603";
+        }
 
-    .lock-screen-form.show-psw .lock-screen-tip {
-        display: inline-block;
-    }
+        .lock-screen-tip {
+            color: red;
+            width: 230px;
+            padding: 0 3px;
+            font-size: 14px;
+            text-align: left;
+            box-sizing: border-box;
+            display: none;
+        }
 
-    .lock-screen-tool {
-        width: 20px;
-        position: absolute;
-        right: 20px;
-        bottom: 20px;
-    }
+        .lock-screen-form.show-psw .lock-screen-tip {
+            display: inline-block;
+        }
 
-    .lock-screen-tool .lock-screen-tool-item {
-        position: relative;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        margin-top: 15px;
-        cursor: pointer;
-    }
+        .lock-screen-tool {
+            width: 20px;
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+        }
 
-    .lock-screen-tool .lock-screen-tool-item:hover .layui-icon {
-        color: #ffffff;
-    }
+        .lock-screen-tool .lock-screen-tool-item {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
 
-    .lock-screen-tool .layui-icon {
-        font-size: 20px;
-    }
+        .lock-screen-tool .lock-screen-tool-item:hover .layui-icon {
+            color: #ffffff;
+        }
 
-    .lock-screen-tool .lock-screen-tool-item .lock-screen-tool-tip {
-        position: absolute;
-        top: 50%;
-        right: 100%;
-        height: 24px;
-        line-height: 24px;
-        width: 60px;
-        width: max-content;
-        text-align: center;
-        margin-right: 10px;
-        margin-top: -12px;
-        font-size: 12px;
-        padding: 0 8px;
-        color: #eee;
-        border-radius: 3px;
-        background-color: rgba(255, 255, 255, .3);
-        word-break: break-all;
-        display: none;
-    }
+        .lock-screen-tool .layui-icon {
+            font-size: 20px;
+        }
 
-    .lock-screen-tool .lock-screen-tool-item:hover .lock-screen-tool-tip {
-        display: inline-block;
-    }
+        .lock-screen-tool .lock-screen-tool-item .lock-screen-tool-tip {
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            height: 24px;
+            line-height: 24px;
+            width: 60px;
+            width: max-content;
+            text-align: center;
+            margin-right: 10px;
+            margin-top: -12px;
+            font-size: 12px;
+            padding: 0 8px;
+            color: #eee;
+            border-radius: 3px;
+            background-color: rgba(255, 255, 255, .3);
+            word-break: break-all;
+            display: none;
+        }
 
-    .lock-screen-tool .lock-screen-tool-item .lock-screen-tool-tip:before {
-        content: "";
-        border: 4px solid transparent;
-        border-left-color: rgba(255, 255, 255, .3);
-        position: absolute;
-        right: -8px;
-        top: 50%;
-        margin-top: -4px;
-    }
-</style>
+        .lock-screen-tool .lock-screen-tool-item:hover .lock-screen-tool-tip {
+            display: inline-block;
+        }
+
+        .lock-screen-tool .lock-screen-tool-item .lock-screen-tool-tip:before {
+            content: "";
+            border: 4px solid transparent;
+            border-left-color: rgba(255, 255, 255, .3);
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            margin-top: -4px;
+        }
+    </style>
+</head>
+<body>
 <div class="lock-screen-wrapper">
     <div class="lock-screen-time"></div>
     <div class="lock-screen-date"></div>
@@ -189,7 +206,7 @@
         </div>
     </div>
 </div>
-
+{include './common.tpl' isTop=true}
 <script>
     layui.use(['util', 'admin'], function () {
         var $     = layui.jquery;
@@ -242,7 +259,7 @@
                     admin.unlockScreen(admin.url('backend/unlock'), {
                         passwd: psw
                     }).then(function () {
-                        window.wulacfg.slocked = 0;
+                        window.location = admin.url('backend')
                     }).fail(function () {
                         $psw.val('');
                         $tip.text('密码不正确');
@@ -278,4 +295,5 @@
         }, 1000);
     });
 </script>
-
+</body>
+</html>

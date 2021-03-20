@@ -32,6 +32,7 @@ class SignoutController extends AuthedController {
 
     /**
      * @nologin
+     * @unlock
      * @resetpasswd
      */
     public function index(): ?JsonView {

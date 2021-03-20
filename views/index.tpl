@@ -41,7 +41,7 @@
                 </li>
             {/foreach}
             <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                <a ew-event="fullScreen" title="全屏"><i class="layui-icon layui-icon-screen-full"></i></a>
+                <a ew-event="fullScreen" title="{'Fullscreen'|t}"><i class="layui-icon layui-icon-screen-full"></i></a>
             </li>
             <li class="layui-nav-item layui-hide-xs" lay-unselect>
                 <a ew-event="lockScreen" data-url="{'backend/lock'|url}" title="{'Lock Screen'|t}"><i class="layui-icon layui-icon-password"></i></a>

@@ -21,16 +21,16 @@
             <h2>{'Sign in'|t}</h2>
             <div class="layui-form-item layui-input-icon-group">
                 <i class="layui-icon layui-icon-username"></i>
-                <input class="layui-input" name="username" placeholder="{'Username'|t}" autocomplete="off" lay-verType="tips" lay-verify="required" required/>
+                <input class="layui-input" name="username" placeholder="{'Username'|t}" autocomplete="off" lay-verify="required|ajax"/>
             </div>
             <div class="layui-form-item layui-input-icon-group">
                 <i class="layui-icon layui-icon-password"></i>
-                <input class="layui-input" name="password" placeholder="{'Password'|t}" type="password" lay-verType="tips" lay-verify="required" required/>
+                <input class="layui-input" name="password" placeholder="{'Password'|t}" type="password" lay-verify="required"/>
             </div>
             <div class="layui-form-item layui-input-icon-group login-captcha-group" {if $ent<3}style="display: none" {/if}>
                 <i class="layui-icon layui-icon-auz"></i>
-                <input class="layui-input" name="captcha" placeholder="{'Captcha'|t}" autocomplete="off" lay-verType="tips" {if $ent>=3}lay-verify="required" required{/if}/>
-                <img class="login-captcha" alt="" src="{$captcha}" data-src="{$captcha}"/>
+                <input class="layui-input" name="captcha" placeholder="{'Captcha'|t}" autocomplete="off" {if $ent>=3}lay-verify="required" lay-reqText="请填写验证码"{/if}/>
+                <img class="login-captcha" alt="" {if $ent>=3}src="{$captcha}"{/if} data-src="{$captcha}"/>
             </div>
             <div class="layui-form-item">
                 <input type="checkbox" name="remember" title="{'Remember me'|t}" lay-skin="primary"/>

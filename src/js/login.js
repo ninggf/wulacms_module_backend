@@ -3,11 +3,10 @@ layui.define(['layer', 'form', 'admin'], cb => {
 
     class Login {
         init() {
-
             $('.login-captcha').on('click', function () {
                 $(this).attr('src', $(this).data('src') + '?_=' + (new Date()).getTime())
             });
-            form.render().on('submit(loginSubmit)', obj => {
+            form.on('submit(loginSubmit)', obj => {
                 let loadIndex = layer.load(2);
                 admin.ajax({
                     url   : admin.url('backend/login'),
@@ -21,7 +20,7 @@ layui.define(['layer', 'form', 'admin'], cb => {
                         }
                         if (data.args && data.args.ent >= 3) {
                             $('.login-captcha-group').show();
-                            $('input[name=captcha]').attr('lay-verify', 'required').attr('required', '')
+                            $('input[name=captcha]').attr('lay-verify', 'required').attr('lay-reqText', '请填写验证码')
                         }
                         if (data.message) {
                             if (data.args && data.args.elem) {

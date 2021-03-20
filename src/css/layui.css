@@ -1391,5 +1391,10 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 }
 .layui-anim-fadeout{-webkit-animation-name: layui-fadeout; animation-name: layui-fadeout}
 
-
+.layui-error-msg{
+  color: #FF5722;
+  font-size: 14px;
+  position: absolute;
+  left: 0;
+}
 

@@ -101,7 +101,6 @@ namespace {
             $config['login']   = App::url('backend/login');
             $config['lockurl'] = App::url('backend/lock');
             $me                = whoami('admin');
-            $config['slocked'] = $me->screenLocked;
             $config['ids']     = App::id2dir();
             $config['base']    = WWWROOT_DIR;
             $config['assets']  = WWWROOT_DIR . ASSETS_DIR . '/';

@@ -46,7 +46,7 @@ class PageMetaData {
         $meta['cmsVer']   = $cmsVer;
         $data['pageMeta'] = $meta;
         // 用户元数据
-        $umeta = ['id' => 0, 'nickname' => _('Anonymouse'), 'username' => 'anonymouse'];
+        $umeta = ['id' => 0, 'nickname' => __('Anonymous'), 'username' => 'anonymous'];
         if ($passport) {
             $info              = $passport->info();
             $info              = apply_filter('init_layout_user_meta', $info);

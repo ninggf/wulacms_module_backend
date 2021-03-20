@@ -1076,7 +1076,7 @@ layui.define(['layer'], function (exports) {
                         case 'getCroppedCanvas':
                             if (uploadedImageType === 'image/jpeg') {
                                 if (!data.option) data.option = {};
-                                data.option.fillColor = '#fff';
+                                data.option.fillColor = '#FFF';
                             }
                             break;
                     }
@@ -1370,30 +1370,10 @@ layui.define(['layer'], function (exports) {
 
     /** 锁屏功能 */
     admin.lockScreen = function (url) {
-        if (window !== top && !admin.isTop() && top.layui && top.layui.admin) return top.layui.admin.lockScreen(url);
-        if (!url) url = 'page/tpl/tpl-lock-screen.html';
-        var $lock = $('#ew-lock-screen-group');
-        if ($lock.length > 0) {
-            $lock.fadeIn('fast');
-            admin.isLockScreen = true;
-            admin.putTempData('isLockScreen', admin.isLockScreen, true);
+        if (window !== top) {
+            top.location = url;
         } else {
-            var loadIndex = layer.load(2);
-            admin.ajax({
-                url    : url, dataType: 'html',
-                success: function (res) {
-                    layer.close(loadIndex);
-                    if (typeof res === 'string') {
-                        $('body').append('<div id="ew-lock-screen-group">' + res + '</div>');
-                        admin.isLockScreen = true;
-                        admin.putTempData('isLockScreen', admin.isLockScreen, true);
-                        admin.putTempData('lockScreenUrl', url, true);
-                    } else {
-                        console.error(res);
-                        layer.msg(JSON.stringify(res), {icon: 2, anim: 6});
-                    }
-                }
-            });
+            window.location = url;
         }
     };
 
@@ -1411,9 +1391,6 @@ layui.define(['layer'], function (exports) {
             data   : data,
             success: function (data) {
                 if (data && data.code === 200) {
-                    isRemove ? $lock.remove() : $lock.fadeOut('fast');
-                    admin.isLockScreen = false;
-                    admin.putTempData('isLockScreen', null, true);
                     promise.resolve();
                 } else {
                     promise.reject(data);
@@ -1426,7 +1403,7 @@ layui.define(['layer'], function (exports) {
     /** tips方法封装 */
     admin.tips = function (option) {
         return layer.tips(option.text, option.elem, {
-            tips    : [option.direction || 1, option.bg || '#191a23'],
+            tips    : [option.direction || 1, option.bg || '#191A23'],
             tipsMore: option.tipsMore, time: option.time || -1,
             success : function (layero) {
                 var $content = $(layero).children('.layui-layer-content');
@@ -1486,8 +1463,6 @@ layui.define(['layer'], function (exports) {
     /** 恢复配置信息 */
     admin.recoverState = function () {
         setter.recoverState(admin);
-        // 恢复锁屏状态
-        if (admin.getTempData('isLockScreen', true)) admin.lockScreen(admin.getTempData('lockScreenUrl', true));
         // 恢复配置的主题
         if (setter.defaultTheme) admin.changeTheme(setter.defaultTheme, window, true, true);
         // 恢复页脚状态、导航箭头
@@ -1657,7 +1632,7 @@ layui.define(['layer'], function (exports) {
             }
         }
         if (!$fFip) return layer.oldTips(content, follow, options);
-        options.tips = [$fFip.attr('lay-direction') || 3, $fFip.attr('lay-bg') || '#ff4c4c'];
+        options.tips = [$fFip.attr('lay-direction') || 3, $fFip.attr('lay-bg') || '#FF4C4C'];
         setTimeout(function () {
             options.success = function (layero) {
                 $(layero).children('.layui-layer-content').css('padding', '6px 12px');

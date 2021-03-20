@@ -47,4 +47,16 @@ class AuthedController extends AdminController {
 
         return apply_filter('mvc\admin\needLogin', $view);
     }
+
+    protected function onScreenLocked($view) {
+        return view('~backend/views/lock');
+    }
+
+    protected function onDenied($message, $view) {
+        return $view;
+    }
+
+    protected function onLocked($view) {
+        return $view;
+    }
 }

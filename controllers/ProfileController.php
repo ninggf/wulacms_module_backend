@@ -93,7 +93,7 @@ class ProfileController extends PageController {
             return Ajax::error('新密码不能与原密码相同');
         }
         $table = new UserTable();
-        $hash  = $table->chagnePassword($this->passport->uid, $newPsw);
+        $hash  = $table->changePassword($this->passport->uid, $newPsw);
         if (!$hash) {
             return Ajax::error('修改密码失败，请联系管理员');
         }

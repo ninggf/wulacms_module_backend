@@ -44,48 +44,8 @@ class IndexController extends AuthedController {
 
         $dashboard = new Dashboard();
 
-        if ($this->passport->cando('v:system')) {
-            $naviMenu        = $dashboard->naviMenu();
-            $system          = $naviMenu->get('system', __('System'), 999999);
-            $system->iconCls = 'layui-icon-set';
-            if ($this->passport->cando('v:system/account')) {
-                $account          = $system->get('account', __('Account'), 1);
-                $account->iconCls = 'layui-icon-user';
-                if ($this->passport->cando('v:system/account/user')) {
-                    $user          = $account->get('user', __('User'), 1);
-                    $user->iconCls = 'layui-icon-user';
-                    $user->url     = App::url('backend/user');
-                }
-                if ($this->passport->cando('v:system/account/role')) {
-                    $role          = $account->get('role', __('Role'), 2);
-                    $role->iconCls = 'layui-icon-group';
-                    $role->url     = App::url('backend/role');
-                }
-            }
-
-            if ($this->passport->cando('v:system/setting')) {
-                $log          = $system->get('setting', __('Setting'), 999998);
-                $log->iconCls = 'layui-icon-util';
-                $log->url     = App::url('backend/setting');
-            }
-
-            if ($this->passport->cando('v:system/logs')) {
-                $log          = $system->get('log', __('Logs'), 999999);
-                $log->iconCls = 'layui-icon-log';
-                $log->url     = App::url('backend/logs');
-            }
-        }
-
-        //顶部菜单
-        //        $topMenu                = $dashboard->topMenu();
-        //        $msg                    = $topMenu->get('msg', __('Message'), 1);
-        //        $msg->iconCls           = 'layui-icon-notice';
-        //        $msg->badge             = 10;
-        //        $msg->attrs['ew-event'] = 'message';
-        //        $msg->data['url']       = App::url('backend/notice');
-
-        //通知模型初始化后台界面
-        fire('backend\initDashboard', $dashboard);
+        //通知模块初始化后台界面
+        fire('backend\initDashboard', $dashboard, $this->passport);
 
         $data['dashboard'] = $dashboard;
 
@@ -114,6 +74,7 @@ class IndexController extends AuthedController {
      *
      * @get
      * @nologin
+     * @unlock
      *
      * @return \wulaphp\mvc\view\View
      */
@@ -134,7 +95,7 @@ class IndexController extends AuthedController {
                 try {
                     if ($this->passport->login($uid)) {
                         if ($this->passport['astoken'] == $_COOKIE['astoken']) {
-                            Syslog::info('authlog', 'auto sign in', 'sign in', $this->passport->uid);
+                            Syslog::info('authlog', '%s auto sign in successfully', 'sign in', $this->passport->uid, $this->passport->username);
                             sess_del('loginBack');
                             Response::redirect($landingPage);
                         }
@@ -160,6 +121,7 @@ class IndexController extends AuthedController {
      *
      * @post
      * @nologin
+     * @unlock
      *
      * @param string $username
      * @param string $password
@@ -169,6 +131,16 @@ class IndexController extends AuthedController {
      */
     public function loginPost(string $username, string $password, string $captcha = ''): View {
         $eCnt = sess_get('errCnt', 0);
+        if (!trim($username)) {
+            $eCnt               += 1;
+            $_SESSION['errCnt'] = $eCnt;
+
+            return Ajax::error([
+                'message' => __('Username can not be blank'),
+                'ent'     => $eCnt,
+                'elem'    => 'input[name=username]'
+            ], 'alert');
+        }
         if ($eCnt < 3) {
             $table = new UserTable();
             $user  = $table->findOne(['name' => $username], 'id');
@@ -188,15 +160,29 @@ class IndexController extends AuthedController {
         if ($eCnt >= 3) {
             $auth_code_obj = new Captcha();
             if (!$auth_code_obj->validate($captcha, false, false)) {
-                return Ajax::error(['message' => '验证码不正确', 'ent' => $eCnt, 'elem' => 'input[name=captcha]'], 'alert');
+                return Ajax::error([
+                    'message' => __('Please try again.'),
+                    'ent'     => $eCnt,
+                    'elem'    => 'input[name=captcha]'
+                ], 'alert');
             }
         }
 
         try {
+            if (!apply_filter('passport\TenantInfo', ['tenant_id' => 0, 'username' => $username])) {
+                $eCnt               += 1;
+                $_SESSION['errCnt'] = $eCnt;
+
+                return Ajax::error([
+                    'message' => __('You entered an incorrect username or password.'),
+                    'ent'     => $eCnt,
+                    'elem'    => 'input[name=username]'
+                ], 'alert');
+            }
             $userMeta = new UserMetaTable();
             if ($this->passport->login([$username, $password, $captcha])) {
                 sess_del('errCnt');
-                Syslog::info('authlog', 'successfully', 'sign in', $this->passport->uid);
+                Syslog::info('authlog', '%s sign in successfully', 'sign in', $this->passport->uid, $this->passport->username);
                 $userMeta->setMeta($this->passport->uid, 'errCnt', 0);
                 $path      = WWWROOT_DIR . App::id2dir('backend') . '/login';
                 $autologin = rqst('remember');
@@ -221,7 +207,7 @@ class IndexController extends AuthedController {
                     }
                 }
 
-                Syslog::warn('authlog', 'login Fail: ' . $username, 'sign in');
+                Syslog::warn('authlog', '%s login fail', 'sign in', 0, $username);
 
                 return Ajax::error([
                     'message' => $this->passport->error,
@@ -286,9 +272,12 @@ class IndexController extends AuthedController {
 
     /**
      * 锁屏
+     * @nologin
      */
     public function lock(): View {
-        $this->passport->lockScreen();
+        if ($this->passport->isLogin) {
+            $this->passport->lockScreen();
+        }
 
         return view('lock');
     }
