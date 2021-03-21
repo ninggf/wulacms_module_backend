@@ -11,4 +11,4 @@ npm-debug.log*
 /vendor/
 node_modules/
 /demo/
-modules/**/assets
+/assets/
