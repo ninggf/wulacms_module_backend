@@ -37,7 +37,7 @@ class SignoutController extends AuthedController {
      */
     public function index(): ?JsonView {
         if ($this->passport->isLogin) {
-            Syslog::info('authlog', 'sign out ' . $this->passport->username, 'sign out', $this->passport->uid);
+            Syslog::info('authlog', 'sign out %s', 'Sign out', $this->passport->uid, $this->passport->username);
         }
         $this->destorySession();
         //清空自动登录

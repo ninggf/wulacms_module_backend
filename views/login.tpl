@@ -21,7 +21,7 @@
             <h2>{'Sign in'|t}</h2>
             <div class="layui-form-item layui-input-icon-group">
                 <i class="layui-icon layui-icon-username"></i>
-                <input class="layui-input" name="username" placeholder="{'Username'|t}" autocomplete="off" lay-verify="required|ajax"/>
+                <input class="layui-input" name="username" placeholder="{'Username'|t}" autocomplete="off" lay-verify="required"/>
             </div>
             <div class="layui-form-item layui-input-icon-group">
                 <i class="layui-icon layui-icon-password"></i>

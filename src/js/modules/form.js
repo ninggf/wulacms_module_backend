@@ -677,7 +677,7 @@ layui.define('layer', function(exports){
 
       //匹配验证规则
       if(!stop && verify[thisVer]){
-        var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+        isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
         errorText = errorText || verify[thisVer][1];
 
         if(thisVer === 'required'){
@@ -732,6 +732,7 @@ layui.define('layer', function(exports){
     });
     //则阻止提交
     if(stop) return false;
+
     if($(formElem).find('*[lay-verify-ajax]').length > 0){
         //还有在进行ajax校验请等待
         return false;
@@ -758,9 +759,12 @@ layui.define('layer', function(exports){
 
   //表单reset重置渲染
   $dom.on('reset', ELEM, function(){
-    var filter = $(this).attr('lay-filter');
+    var that = $(this),filter = that.attr('lay-filter');
     setTimeout(function(){
       form.render(null, filter);
+      layui.event.call(this, MOD_NAME, 'reset('+ filter +')', {
+        elem: this,form: that,field: form.getValue(null,that)
+      });
     }, 50);
   });
   //表单提交事件

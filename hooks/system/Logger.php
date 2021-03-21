@@ -2,32 +2,16 @@
 
 namespace backend\hooks\system;
 
-use system\classes\ILogger;
-use system\classes\SimpleLogger;
+use backend\classes\LoginLogger;
+use backend\classes\SimpleLogger;
 use wulaphp\hook\Alter;
 
-class Logger extends Alter implements ILogger {
-    use SimpleLogger;
+class Logger extends Alter {
 
     public function alter($value, ...$args) {
-        $value['authlog'] = $this;
+        $value['common']  = new SimpleLogger();
+        $value['authlog'] = new LoginLogger();
 
         return $value;
-    }
-
-    function getId(): string {
-        return 'authlog';
-    }
-
-    function getName(): string {
-        return __('Login log');
-    }
-
-    function getIconCls(): ?string {
-        return 'layui-icon-key';
-    }
-
-    function getView(): ?string {
-        return '~backend/views/logs/authlog';
     }
 }

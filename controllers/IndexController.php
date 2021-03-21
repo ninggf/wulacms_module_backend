@@ -17,6 +17,7 @@ use Exception;
 use system\classes\model\UserMetaTable;
 use system\classes\model\UserTable;
 use system\classes\Syslog;
+use system\classes\Tenant;
 use wulaphp\app\App;
 use wulaphp\io\Ajax;
 use wulaphp\io\Response;
@@ -95,7 +96,7 @@ class IndexController extends AuthedController {
                 try {
                     if ($this->passport->login($uid)) {
                         if ($this->passport['astoken'] == $_COOKIE['astoken']) {
-                            Syslog::info('authlog', '%s auto sign in successfully', 'sign in', $this->passport->uid, $this->passport->username);
+                            Syslog::info('authlog', '%s auto sign in successfully', 'Sign in', $this->passport->uid, $this->passport->username);
                             sess_del('loginBack');
                             Response::redirect($landingPage);
                         }
@@ -148,7 +149,11 @@ class IndexController extends AuthedController {
                 $eCnt               += 1;
                 $_SESSION['errCnt'] = $eCnt;
 
-                return Ajax::error(['ent' => $eCnt], 'alert');
+                return Ajax::error([
+                    'message' => __('You entered an incorrect username or password.'),
+                    'ent'     => $eCnt,
+                    'elem'    => 'input[name=username]'
+                ], 'alert');
             }
             $eCnt               = intval($user->meta()->where(['name' => 'errCnt'], true)->get('value'));
             $_SESSION['errCnt'] = $eCnt;
@@ -169,12 +174,12 @@ class IndexController extends AuthedController {
         }
 
         try {
-            if (!apply_filter('passport\TenantInfo', ['tenant_id' => 0, 'username' => $username])) {
+            if (!Tenant::getByDomain($username)->isEnabled()) {
                 $eCnt               += 1;
                 $_SESSION['errCnt'] = $eCnt;
 
                 return Ajax::error([
-                    'message' => __('You entered an incorrect username or password.'),
+                    'message' => __('Your tenant account is locked.'),
                     'ent'     => $eCnt,
                     'elem'    => 'input[name=username]'
                 ], 'alert');
@@ -182,7 +187,7 @@ class IndexController extends AuthedController {
             $userMeta = new UserMetaTable();
             if ($this->passport->login([$username, $password, $captcha])) {
                 sess_del('errCnt');
-                Syslog::info('authlog', '%s sign in successfully', 'sign in', $this->passport->uid, $this->passport->username);
+                Syslog::info('authlog', '%s sign in successfully', 'Sign in', $this->passport->uid, $this->passport->username);
                 $userMeta->setMeta($this->passport->uid, 'errCnt', 0);
                 $path      = WWWROOT_DIR . App::id2dir('backend') . '/login';
                 $autologin = rqst('remember');
@@ -207,7 +212,7 @@ class IndexController extends AuthedController {
                     }
                 }
 
-                Syslog::warn('authlog', '%s login fail', 'sign in', 0, $username);
+                Syslog::warn('authlog', '%s login fail', 'Sign in', 0, $username);
 
                 return Ajax::error([
                     'message' => $this->passport->error,

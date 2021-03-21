@@ -19,7 +19,8 @@ layui.define(['layer', 'form', 'admin'], cb => {
                             return;
                         }
                         if (data.args && data.args.ent >= 3) {
-                            $('.login-captcha-group').show();
+                            $('.login-captcha').click()
+                            $('.login-captcha-group').show()
                             $('input[name=captcha]').attr('lay-verify', 'required').attr('lay-reqText', '请填写验证码')
                         }
                         if (data.message) {

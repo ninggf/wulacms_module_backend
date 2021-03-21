@@ -251,7 +251,7 @@ layui.define(['layer'], function (exports) {
         if (!method) method = 'GET';
         if (typeof data === 'string') {
             option = option || {};
-            if (!option.contentType) option.contentType = 'application/json;charset=UTF-8';
+            if (!option.contentType) option.contentType = 'application/json';
         } else if (setter.reqPutToPost) {
             if ('put' === method.toLowerCase()) {
                 method       = 'POST';
@@ -265,8 +265,13 @@ layui.define(['layer'], function (exports) {
             url: admin.url(url), data: data, type: method, dataType: 'json', success: success
         }, option));
     };
-    admin.req1 = function (type, url, data, option) {
+    admin.req1      = function (type, url, data, option) {
         var promise = $.Deferred();
+        if (typeof option === 'function') {
+            option = {
+                success: option
+            }
+        }
         admin.req(url, data, function (data, status, xhr) {
             if (status === 'success') {
                 promise.resolve(data);
@@ -276,10 +281,19 @@ layui.define(['layer'], function (exports) {
         }, type, option);
         return promise;
     };
-    admin.post = function (url, data, option) {
+    admin.postJson  = function (url, jsonData, option) {
+        return admin.req1('POST', url, JSON.stringify(jsonData), option);
+    }
+    admin.putJson   = function (url, jsonData, option) {
+        return admin.req1('PUT', url, JSON.stringify(jsonData), option);
+    }
+    admin.patchJson = function (url, jsonData, option) {
+        return admin.req1('PATCH', url, JSON.stringify(jsonData), option);
+    }
+    admin.post      = function (url, data, option) {
         return admin.req1('POST', url, data, option);
     };
-    admin.get  = function (url, data, option) {
+    admin.get       = function (url, data, option) {
         return admin.req1('GET', url, data, option);
     };
     /** 封装ajax请求 */
@@ -309,8 +323,18 @@ layui.define(['layer'], function (exports) {
         };
         if (!param.error) {
             param.error = function (xhr, status) {
-                param.success({code: xhr.status, message: xhr.statusText}, status, xhr);
-            };
+                var result = xhr.responseJSON || {
+                    code   : xhr.status,
+                    message: xhr.responseText || xhr.statusText
+                };
+                if (!result.code) {
+                    result.code = xhr.status
+                }
+                if (!result.message) {
+                    result.message = xhr.statusText
+                }
+                param.success(result, status, xhr);
+            }
         }
         // 解决缓存问题
         if (layui.cache.version && (!setter.apiNoCache || param.dataType.toLowerCase() !== 'json')) {

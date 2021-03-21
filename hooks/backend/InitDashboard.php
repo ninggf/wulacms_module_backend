@@ -44,7 +44,7 @@ class InitDashboard extends Handler {
                     foreach ($settings as $s) {
                         $id   = str_replace([' ', '-'], '_', $s->getId());
                         $name = $s->getName();
-                        if ($passport->cando('v:logs/' . $id)) {
+                        if ($passport->cando('v:system/settings' . $id)) {
                             $lm          = $setting->get($id, $name);
                             $lm->iconCls = $s->getIconCls() ?? 'layui-icon-util';
                             $lm->url     = App::url('backend/settings/' . $id);
@@ -53,7 +53,7 @@ class InitDashboard extends Handler {
                 }
             }
             # 日志
-            if ($passport->cando('v:logs')) {
+            if ($passport->cando('v:logger')) {
                 $loggers = Syslog::loggers();
                 if ($loggers) {
                     $log          = $system->get('log', __('Logs'), 999999);
@@ -61,10 +61,10 @@ class InitDashboard extends Handler {
                     foreach ($loggers as $logger) {
                         $id   = str_replace([' ', '-'], '_', $logger->getId());
                         $name = $logger->getName();
-                        if ($passport->cando('v:logs/' . $id)) {
+                        if ($passport->cando('v:logger/' . $id)) {
                             $lm          = $log->get($id, $name);
                             $lm->iconCls = $logger->getIconCls() ?? 'layui-icon-log';
-                            $lm->url     = App::url('backend/logs/' . $id);
+                            $lm->url     = App::url('backend/logger/' . $id);
                         }
                     }
                 }

@@ -5248,8 +5248,46 @@ body .ew-xmselect-tree xm-select .xm-body .xm-option.selected .xm-option-content
 }
 
 /** ---------------------------colorful主题end----------------------------------- */
-
-/** ---------------------------toastr end----------------------------------- */
+.layui-no-m {
+    margin: 0!important;
+}
+.layui-no-mt {
+    margin-top: 0!important;
+}
+.layui-no-ml {
+    margin-left: 0!important;
+}
+.layui-no-mr {
+    margin-right: 0!important;
+}
+.layui-no-mb {
+    margin-bottom: 0!important;
+}
+.layui-no-p {
+    padding: 0!important;
+}
+.layui-no-pt {
+    padding-top: 0!important;
+}
+.layui-no-pl {
+    padding-left: 0!important;
+}
+.layui-no-pr {
+    padding-right: 0!important;
+}
+.layui-no-pb {
+    padding-bottom: 0!important;
+}
+.form-group-bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, .05);
+}
+/** ---------------------------toastr start; delete----------------------------------- */
 .toast-title {
     font-weight: bold;
 }

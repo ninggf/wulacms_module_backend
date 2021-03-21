@@ -1397,4 +1397,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
   position: absolute;
   left: 0;
 }
+.layui-radius-table .layui-table-view{
+  border-radius: 2px;
+}
 

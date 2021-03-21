@@ -19,20 +19,33 @@ class SettingsController extends PageController {
         }
         $setting = $this->getSetting($settingId);
         $view    = $setting->getView();
+        $data    = $setting->getData();
+        $name    = $setting->getName();
 
-        return $this->render($view);
+        return $this->render($view, ['settingId' => $settingId, 'settingName' => $name, 'sets' => $data]);
     }
 
+    /**
+     *
+     * @post
+     *
+     * @param string $settingId
+     *
+     * @return \wulaphp\mvc\view\View|null
+     */
     public function save(string $settingId): ?View {
-        if (!$this->passport->cando('v:settings/' . $settingId)) {
+        if (!$this->passport->cando('save:settings/' . $settingId)) {
             return $this->onDenied(__('you are denied'), null);
         }
-
         $setting = $this->getSetting($settingId);
-        //$setting->save();
-        //TODO: 保存配置.
+        throw new \Exception("aafsdf");
+        $rst = $setting->save(rqst('setting'));
 
-        return Ajax::success();
+        if ($rst) {
+            return Ajax::success();
+        } else {
+            return Ajax::error(__('Save failed!'), 'notice');
+        }
     }
 
     private function getSetting(string $sid): Setting {
