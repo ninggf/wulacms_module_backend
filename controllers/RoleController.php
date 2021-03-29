@@ -20,6 +20,7 @@ use wulaphp\auth\AclResourceManager;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\mvc\view\JsonView;
+use wulaphp\mvc\view\View;
 use wulaphp\validator\ValidateException;
 
 /**
@@ -29,7 +30,7 @@ use wulaphp\validator\ValidateException;
  */
 class RoleController extends PageController {
 
-    public function index() {
+    public function index(): View {
         $tableData = $this->list();
 
         return $this->render(['tableData' => json_encode($tableData)]);
@@ -92,11 +93,12 @@ class RoleController extends PageController {
      * @Author LW 2021/3/16 14:20
      */
     public function list(): array {
-        $page             = irqst('page', 1);
-        $limit            = irqst('limit', 20);
-        $id               = rqst('id', null);
-        $param            = rqsts(['name', 'role']);
-        $where['deleted'] = 0;
+        $page  = irqst('page', 1);
+        $limit = irqst('limit', 20);
+        $id    = rqst('id', null);
+        $param = rqsts(['name', 'role']);
+        #$where['deleted'] = 0;
+        $where = [];
         foreach ($param as $key => $value) {
             if (!is_numeric($value) && empty($value)) {
                 unset($param[ $key ]);

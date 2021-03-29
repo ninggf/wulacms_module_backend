@@ -19,6 +19,7 @@ use system\classes\Syslog;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\mvc\view\JsonView;
+use wulaphp\mvc\view\View;
 use wulaphp\validator\ValidateException;
 
 /**
@@ -28,7 +29,7 @@ use wulaphp\validator\ValidateException;
  */
 class UserController extends PageController {
 
-    public function index() {
+    public function index():View {
         return $this->render(['tableData' => $this->list()->render()]);
     }
 
