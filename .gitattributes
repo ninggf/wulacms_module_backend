@@ -14,4 +14,3 @@ package.json export-ignore
 package-lock.json export-ignore
 gulpfile.js export-ignore
 phpunit.xml
-/src/    export-ignore
