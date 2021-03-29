@@ -9,5 +9,7 @@
  */
 
 return [
-    ''
+    'My Profile'      => '个人资料',
+    'Change Password' => '修改密码',
+    'Sorry, your are blocked!' => '抱歉，你的账户被锁定了！'
 ];

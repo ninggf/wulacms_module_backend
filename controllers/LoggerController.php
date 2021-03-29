@@ -11,7 +11,7 @@ use wulaphp\mvc\view\View;
 
 /**
  * 日志控制器
- * @acl     v:logs
+ * @acl     r:system/logger
  * @package backend\controllers
  */
 class LoggerController extends PageController {
@@ -23,7 +23,7 @@ class LoggerController extends PageController {
      * @return \wulaphp\mvc\view\View
      */
     public function index(string $loggerId): ?View {
-        if (!$this->passport->cando('v:logger/' . $loggerId)) {
+        if (!$this->passport->cando('r:system/logger/' . $loggerId)) {
             return $this->onDenied(__('you are denied'), null);
         }
         $logger = $this->getLogger($loggerId);
@@ -42,7 +42,7 @@ class LoggerController extends PageController {
      * @return array|mixed|\wulaphp\mvc\view\SimpleView
      */
     public function data(string $loggerId) {
-        if (!$this->passport->cando('v:logger/' . $loggerId)) {
+        if (!$this->passport->cando('r:system/logger/' . $loggerId)) {
             return $this->onDenied(__('you are denied'), null);
         }
         $logger = $this->getLogger($loggerId);

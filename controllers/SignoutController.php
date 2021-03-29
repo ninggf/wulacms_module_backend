@@ -33,7 +33,7 @@ class SignoutController extends AuthedController {
     /**
      * @nologin
      * @unlock
-     * @resetpasswd
+     * @ResetPasswd
      */
     public function index(): ?JsonView {
         if ($this->passport->isLogin) {

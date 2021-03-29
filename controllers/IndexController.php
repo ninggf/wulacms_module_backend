@@ -90,19 +90,15 @@ class IndexController extends AuthedController {
             Response::redirect($landingPage);
         } else if (isset($_COOKIE['astoken'])) {
             // 自动登录
-            $astokens = explode('/', $_COOKIE['astoken']);
-            if (count($astokens) == 2) {
-                $uid = intval($astokens[1]);
-                try {
-                    if ($this->passport->login($uid)) {
-                        if ($this->passport['astoken'] == $_COOKIE['astoken']) {
-                            Syslog::info('authlog', '%s auto sign in successfully', 'Sign in', $this->passport->uid, $this->passport->username);
-                            sess_del('loginBack');
-                            Response::redirect($landingPage);
-                        }
+            $asToken = explode('/', $_COOKIE['astoken']);
+            if (count($asToken) == 2) {
+                $uid = intval($asToken[1]);
+                if ($this->passport->login($uid)) {
+                    if ($this->passport['astoken'] == $_COOKIE['astoken']) {
+                        Syslog::info('authlog', '%s auto sign in successfully', 'Sign in', $this->passport->uid, $this->passport->username);
+                        sess_del('loginBack');
+                        Response::redirect($landingPage);
                     }
-                } catch (Exception $e) {
-
                 }
             }
             Response::cookie('astoken');//清空自动登录cookie
@@ -229,6 +225,7 @@ class IndexController extends AuthedController {
      * 验证码.
      *
      * @nologin
+     * @unlock
      *
      * @param string $type
      * @param string $size
@@ -276,15 +273,26 @@ class IndexController extends AuthedController {
     }
 
     /**
+     * 用户被锁了
+     * @nologin
+     *
+     * @return View
+     */
+    public function blocked(): View {
+        return view('blocked', PageMetaData::meta($this->passport));
+    }
+
+    /**
      * 锁屏
+     *
      * @nologin
      */
-    public function lock(): View {
+    public function locked(): View {
         if ($this->passport->isLogin) {
             $this->passport->lockScreen();
         }
 
-        return view('lock');
+        return view('locked', PageMetaData::meta($this->passport));
     }
 
     /**

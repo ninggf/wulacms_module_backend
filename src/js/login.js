@@ -37,7 +37,7 @@ layui.define(['layer', 'form', 'admin'], cb => {
                 })
                 return false;
             });
-            $('.login-wrapper').removeClass('layui-hide');
+            //$('.login-wrapper').removeClass('layui-hide');
         }
     }
 

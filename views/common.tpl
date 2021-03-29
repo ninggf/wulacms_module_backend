@@ -8,8 +8,10 @@
     layui.use(['jquery'], function ($) {
         $(document).on('auth.need.login', function () {
             window !== top ? top.location = wulacfg.login : window.location = wulacfg.login;
-        }).on('auth.perm.denied', function () {
-            alert('权限受限，请联系管理员')
+        }).on('auth.user.locked', function () {
+            window !== top ? top.location = wulacfg.lurl : window.location = wulacfg.lurl;
+        }).on('auth.user.blocked', function () {
+            window !== top ? top.location = wulacfg.blurl : window.location = wulacfg.blurl;
         });
     })
 </script>

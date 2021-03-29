@@ -44,7 +44,7 @@
                 <a ew-event="fullScreen" title="{'Fullscreen'|t}"><i class="layui-icon layui-icon-screen-full"></i></a>
             </li>
             <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                <a ew-event="lockScreen" data-url="{'backend/lock'|url}" title="{'Lock Screen'|t}"><i class="layui-icon layui-icon-password"></i></a>
+                <a ew-event="lockScreen" data-url="{'backend/locked'|url}" title="{'Lock Screen'|t}"><i class="layui-icon layui-icon-password"></i></a>
             </li>
 
             <li class="layui-nav-item" lay-unselect>
@@ -160,6 +160,9 @@
 </div>
 <!-- js -->
 {include './common.tpl' isTop=true}
+{foreach $_js_files.foot as $_js_file}
+    <script src="{$_js_file}"></script>
+{/foreach}
 <script>
     layui.use(['index', 'admin'], function (index) {
         index.loadHome({
@@ -168,9 +171,5 @@
         });
     });
 </script>
-{foreach $_js_files.foot as $_js_file}
-    <script src="{$_js_file}"></script>
-{/foreach}
-<!--pageEnd-->
 </body>
 </html>

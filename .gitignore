@@ -10,5 +10,7 @@ npm-debug.log*
 .env
 /vendor/
 node_modules/
+package-lock.json
 /demo/
 /assets/
+/views/*/*.phtml

@@ -13,10 +13,30 @@ layui.define('layer', function(exports){
   ,layer = layui.layer
   ,hint = layui.hint()
   ,device = layui.device()
-
+  ,afterAjax = (that,message,formx) => {
+    let cnt = that.data('ajaxCnt')
+    if(cnt > 0 ){
+      that.data('ajaxCnt',cnt-1)
+    }
+    that.data('verified',message)
+    if(that.data('ajaxCnt') === 0){
+      that.removeAttr('lay-verifying')
+      form.hideLoading(that)
+      if((formx || that.data('autoSubmit')) && message === 1){
+        console.log('auto submit form after ajax verifying!')
+        formx.submit()//提交表单
+      }
+      if(message !== 1){
+        //显示错误信息
+        form.showErrors(null,[{
+          elem: that,
+          error: message
+        }])
+      }
+    }
+  }
   ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this'
   ,SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
-
   ,Form = function(){
     this.config = {
       verify: {
@@ -52,24 +72,62 @@ layui.define('layer', function(exports){
               return $(item).attr('lay-errText') || '请勾选此项'
           }
         }
-        ,ajax: function (value,item){
+        ,ajax: function (value,item,formX){
           var that      = $(item)
               ,url      = that.data('url')
+              ,rValue    = that.data('rValue') // 初始值（绘制时获取的值）
+              ,ajaxCnt   = that.data('ajaxCnt') || 0 // ajax 请求数
               ,verified = that.data('verified')
-              ,pending  = that.attr('lay-verify-ajax');
-          //网络卡时，校验问题如何解决
-          if(pending === 'pending'){
-            return;//正在校验
+          if(!url || rValue === value){
+            return;//无需校验
           }
-
+          if(formX && that.attr('lay-verifying') === 'pending'){//正在校验时提交表单
+             console.log('it is ajax verifying....')
+             that.data('autoSubmit',true)
+             return;
+          }
           if(verified === '0'){
-            //添加正在进行ajax校验属性
-            that.attr('lay-verify-ajax','pending')
-            return;//此时才调用ajax进行校验
-          } else if(verified === '1'){
+            that.data('autoSubmit',false)
+            //添加正在进行ajax校验属性, ajax 请求数加1
+            if(ajaxCnt === 0){
+                form.showLoading(that)
+            }
+            that.data('ajaxCnt',ajaxCnt + 1).attr('lay-verifying','pending')
+            let event = $.Event('ajax_verify'),data = {
+              value: value
+            }
+            that.trigger(event)
+            if(event.result){
+              data = $.extend({},event.result,data)
+            }
+            $.get(url,data,'json').then((data) => {
+              if (typeof data === 'string') {
+                try {
+                  data =  JSON.parse(data);
+                } catch (e) {
+                  data = {code:500,message:'error response'}
+                }
+              }
+              if(data && data.code === 200){
+                afterAjax(that,1,formX)
+              }else if(data && data.message){
+                afterAjax(that,data.message,formX)
+              }else{
+                afterAjax(that,'error response',formX)
+              }
+            }).fail((xhr) => {
+              let result = xhr.responseJSON || {
+                message: xhr.responseText || xhr.statusText
+              }
+              if (!result.message) {
+                result.message = xhr.statusText
+              }
+              afterAjax(that,result.message,formX)
+            })
+          } else if(verified === 1){
             //已经验证过了，且验证通过
             return;
-          } else if(verified){
+          } else {// 直接返回出错的信息.
             return verified;
           }
         }
@@ -91,19 +149,33 @@ layui.define('layer', function(exports){
     return that;
   };
   //设置表单错误
-  Form.prototype.showErrors = function (elem, errors){
-      layui.each(errors,function (_,err){
-          var input = err.elem
-              ,pt = input.closest('div.layui-form-item')
-              ,ee = pt.find('p.layui-error-msg');
-          input.addClass('layui-form-danger')
-          if(ee.length>0){
-            ee.show()
-          }else{
-            ee = $('<p class="layui-error-msg">'+err.error+'</p>');
-            ee.appendTo(pt)
+  Form.prototype.showErrors = function (elem, errors) {
+    layui.each(errors, function (_, err) {
+      var input     = err.elem
+          , item    = input.get(0)
+          , pt      = input.closest('div.layui-form-item')
+          , ee      = pt.find('p.layui-error-msg')
+          , verType = input.attr('lay-verType')
+          ,errorText = err.error
+      input.addClass('layui-form-danger')
+      if (verType === 'tips') {
+        layer.tips(errorText, function () {
+          if (typeof input.attr('lay-ignore') !== 'string') {
+            if (item.tagName.toLowerCase() === 'select' || /^checkbox|radio$/.test(item.type)) {
+              return input.next();
+            }
           }
-      })
+          return input;
+        }(), {tips: 1});
+      } else if (verType === 'alert') {
+        layer.alert(errorText, {title: '提示', shadeClose: true});
+      } else if (ee.length > 0) {
+        ee.show()
+      } else {
+        ee = $('<p class="layui-error-msg">' + errorText + '</p>');
+        ee.appendTo(pt)
+      }
+    })
   }
 
   Form.prototype.hideErrors = function (elem,input) {
@@ -112,6 +184,23 @@ layui.define('layer', function(exports){
     } else {
       elem.find('p.layui-error-msg').hide();
     }
+  }
+  Form.prototype.showLoading = function (input) {
+    let pt   = input.closest('div.layui-form-item')
+        , ee = pt.find('div.layui-verifying')
+    if (ee.length > 0) {
+      ee.show()
+    } else {
+      ee = $('<div class="layui-verifying text-center"><i class="layui-icon layui-icon-loading layui-anim' +
+          ' layui-anim-rotate layui-anim-loop"></i></div>');
+      ee.appendTo(pt)
+    }
+  }
+
+  Form.prototype.hideLoading = function(input){
+    let pt   = input.closest('div.layui-form-item')
+        , ee = pt.find('div.layui-verifying')
+    ee.hide()
   }
   //表单事件监听
   Form.prototype.on = function(events, callback){
@@ -176,14 +265,12 @@ layui.define('layer', function(exports){
         nameIndex[key] = nameIndex[key] | 0;
         item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
       }
-
       if(/^checkbox|radio$/.test(item.type) && !item.checked) return;
       field[item.name] = item.value;
     });
 
     return field;
   };
-
   //表单控件渲染
   Form.prototype.render = function(type, filter){
     var that = this
@@ -656,6 +743,16 @@ layui.define('layer', function(exports){
     ) : layui.each(items, function(index, item){
       item();
     });
+    //设置表单初始值
+    if(!type){
+      let val='',fieldElem = elemForm.find('input,select,textarea') //获取所有表单域
+      layui.each(fieldElem, function(_, item){
+        item.name = (item.name || '').replace(/^\s*|\s*&/, '')
+        if(!item.name) return
+        val = (/^checkbox|radio$/.test(item.type) && !item.checked) ? '' : item.value
+        $(item).data('rValue',val);
+      });
+    }
     return that;
   };
   // 单个输入组件校验
@@ -667,6 +764,7 @@ layui.define('layer', function(exports){
         ,verType = othis.attr('lay-verType') //提示方式
         ,value = othis.val()
         ,item  = othis.get(0)
+        ,submitting = elem ? true : false //正在提交
         ,elem  = elem?elem:$(othis.parents('form')[0]);
 
     //遍历元素绑定的验证规则
@@ -677,7 +775,7 @@ layui.define('layer', function(exports){
 
       //匹配验证规则
       if(!stop && verify[thisVer]){
-        isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+        isTrue = isFn ? errorText = verify[thisVer](value, item,submitting?elem:false) : !verify[thisVer][0].test(value);
         errorText = errorText || verify[thisVer][1];
 
         if(thisVer === 'required'){
@@ -733,7 +831,7 @@ layui.define('layer', function(exports){
     //则阻止提交
     if(stop) return false;
 
-    if($(formElem).find('*[lay-verify-ajax]').length > 0){
+    if($(formElem).find('*[lay-verifying]').length > 0){
         //还有在进行ajax校验请等待
         return false;
     }
@@ -749,7 +847,7 @@ layui.define('layer', function(exports){
   };
   // 值改变校验
   var cverify = function (){
-      if($(this).data('canDoVerify')) verifyIt($(this).data('verified','0'))
+    verifyIt($(this).data('verified','0'))
   }
   //自动完成渲染
   var form = new Form()
@@ -771,9 +869,7 @@ layui.define('layer', function(exports){
   $dom.on('submit', ELEM, submit)
   .on('click', '*[lay-submit]', submit);
   //值改变事件
-  $dom.on('click','*[lay-verify]',function (){
-      $(this).data('canDoVerify',true)
-  }).on('change','*[lay-verify]',cverify)
+  $dom.on('change','*[lay-verify]',cverify)
 
   exports(MOD_NAME, form);
 });

@@ -2,14 +2,14 @@
     <div class="layui-fluid">
         <div class="layui-card">
             <div class="layui-card-body">
-                <div class="layui-form-item layui-row">
-                    <div class="layui-inline layui-col-sm5 layui-col-md3">
+                <div class="layui-form-item layui-row layui-no-mb">
+                    <div class="layui-col-sm6 layui-col-md4">
                         <label class="layui-form-label text-left">{'Date'|t}:</label>
                         <div class="layui-input-block">
                             <input name="date" class="layui-input icon-date" placeholder="{'Date'|t}" autocomplete="off"/>
                         </div>
                     </div>
-                    <div class="layui-inline layui-col-sm5 layui-col-md3">
+                    <div class="layui-col-sm6 layui-col-md4">
                         <label class="layui-form-label text-left">{'Level'|t}:</label>
                         <div class="layui-input-block">
                             <select name="level">
@@ -20,23 +20,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="layui-inline layui-col-sm5 layui-col-md3">
+                    <div class="layui-col-sm6 layui-col-md4">
                         <label class="layui-form-label text-left">{'Username'|t}:</label>
                         <div class="layui-input-block">
                             <input name="name" class="layui-input" placeholder="{'Username'|t}"/>
                         </div>
                     </div>
-                    <div class="layui-inline layui-col-sm5 layui-col-md3">
+                    <div class="layui-col-sm6 layui-col-md4">
                         <label class="layui-form-label text-left">{'Action'|t}:</label>
                         <div class="layui-input-block">
-                            <select name="action">
-                                <option value="">{'All'|t}</option>
-                                <option value="Sign in">{'Sign in'|t}</option>
-                                <option value="Sign out">{'Sign out'|t}</option>
-                            </select>
+                            <input name="action" class="layui-input" placeholder="{'Action'|t}"/>
                         </div>
                     </div>
-                    <div class="layui-inline layui-col-sm5 layui-col-md3">
+                    <div class="layui-col-sm6 layui-col-md4">
                         <label class="layui-form-label text-left">IP:</label>
                         <div class="layui-input-block">
                             <input name="ip" class="layui-input" placeholder="IP"/>
@@ -44,7 +40,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item layui-row layui-no-mb">
-                    <div class="layui-inline layui-col-xs12 text-center">
+                    <div class="layui-col-xs12 text-center layui-no-mb">
                         <div class="layui-btn-group">
                             <button type="button" class="layui-btn layui-btn-sm" lay-filter="searchBtn" lay-submit>
                                 <i class="layui-icon">&#xe615;</i>

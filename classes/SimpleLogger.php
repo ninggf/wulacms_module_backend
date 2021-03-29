@@ -22,13 +22,13 @@ class SimpleLogger extends CommonLogger {
     }
 
     public function getCols(): array {
-        $cols[] = ['field' => 'date', 'title' => __('Datetime'), 'width' => 180, 'fixed' => true];
-        $cols[] = ['field' => 'username', 'title' => __('Username'), 'width' => 150, 'sort' => true, 'fixed' => true];
-        $cols[] = ['field' => 'action', 'title' => __('Action'), 'width' => 90, 'fixed' => true];
-        $cols[] = ['field' => 'ip', 'title' => 'IP', 'width' => 150];
+        $cols[] = ['field' => 'date', 'title' => __('Datetime'), 'width' => 160, 'minWidth'=>160, 'fixed' => true, 'with'=>'level'];
+        $cols[] = ['field' => 'username', 'title' => __('Username'), 'width' => 100, 'sort' => true, 'fixed' => true];
+        $cols[] = ['field' => 'action', 'title' => __('Action'), 'width' => 120, 'fixed' => true,'align'=>'center'];
+        $cols[] = ['field' => 'ip', 'title' => 'IP', 'width' => 100,'align'=>'center'];
         $cols[] = ['field' => 'message', 'title' => __('Log'), 'minWidth' => 300];
-        $cols[] = ['field' => 'valu1', 'title' => __('New Value')];
-        $cols[] = ['field' => 'valu2', 'title' => __('Old Value')];
+        $cols[] = ['field' => 'value1', 'title' => __('Old Value')];
+        $cols[] = ['field' => 'value2', 'title' => __('New Value')];
 
         return [$cols];
     }

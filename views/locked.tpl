@@ -189,12 +189,12 @@
         }
     </style>
 </head>
-<body>
+<body class="{$pageMeta.bodyCls}">
 <div class="lock-screen-wrapper">
     <div class="lock-screen-time"></div>
     <div class="lock-screen-date"></div>
     <div class="lock-screen-form">
-        <input placeholder="{'Password'|t}" class="lock-screen-psw" maxlength="20" type="password"/>
+        <input placeholder="{'Password'|t}" class="lock-screen-psw" autocomplete="off" maxlength="20" type="password"/>
         <i class="layui-icon layui-icon-right lock-screen-enter"></i>
         <br/>
         <div class="lock-screen-tip"></div>

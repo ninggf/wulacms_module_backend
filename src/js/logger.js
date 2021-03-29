@@ -9,7 +9,7 @@ layui.define(['jquery', 'form', 'table', 'admin', 'laydate'], (cb) => {
 
         init(id, cols, data) {
             // 绘制表格
-            let topH = $('#searchForm').outerHeight() + 35, logTable = table.render({
+            let topH = $('#searchForm').outerHeight() + 36, logTable = table.render({
                 elem    : '#loggers',
                 cols    : cols,
                 autoSort: false,

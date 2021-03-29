@@ -1,9 +1,9 @@
 <script>
-layui.define(['layer', 'form', 'formX', 'element', 'admin'], function (exports) {
-  let $     = layui.jquery;
-  let form  = layui.form;
-  let admin = layui.admin;
-  let toast = admin.toast;
+layui.define(['layer', 'form', 'formX', 'element', 'admin', 'notice'], function (exports) {
+  let $      = layui.jquery;
+  let form   = layui.form;
+  let admin  = layui.admin;
+  let notice = layui.notice;
 
   class Profile {
     init() {
@@ -20,16 +20,17 @@ layui.define(['layer', 'form', 'formX', 'element', 'admin'], function (exports) 
 
       // 修改用户信息
       form.on('submit(userInfoSubmit)', function (data) {
-        admin.post('backend/profile/save', data.field).then(function (data) {
+        admin.post(admin.url('backend/profile/save'), data.field).then(function (data) {
           if (data.code === 200) {
-            top.layui.layer.msg('用户信息更新成功', {icon: 6, timeout: 1000}, function () {
-              top.location.reload(true);
-            })
+            notice.success({'message':'用户信息更新成功','title':'SUCCESS','timeout':2000})
+            setTimeout(function (){
+              admin.refresh()
+            },2000)
           } else {
-            toast.tc().error(data.message);
+            notice.error(data.message);
           }
         }).fail(function (data) {
-          toast.tc().error(data.message);
+          notice.error(data.message);
         })
         return false;
       });
@@ -38,12 +39,12 @@ layui.define(['layer', 'form', 'formX', 'element', 'admin'], function (exports) 
       form.on('submit(submit-psw)', function (data) {
         admin.post(admin.url('backend/profile/passwd'), data.field).then(function (data) {
           if (data.code === 200) {
-            toast.success('密码修改成功');
+            notice.success('密码修改成功');
           } else {
-            toast.tc().error(data.message);
+            notice.error(data.message);
           }
         }).fail(function (data) {
-          toast.tc().error(data.message);
+          notice.error(data.message);
         });
         return false;
       });

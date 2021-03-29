@@ -835,6 +835,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             if(item3.event) attr.push('lay-event="'+ item3.event +'"'); //自定义事件
             if(item3.style) attr.push('style="'+ item3.style +'"'); //自定义样式
             if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); //单元格最小宽度
+            if(item3.with) attr.push('data-with="' + item1[item3.with] + '"');
             return attr.join(' ');
           }() +' class="'+ function(){ //追加样式
             var classNames = [];

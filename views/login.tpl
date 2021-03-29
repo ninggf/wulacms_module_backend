@@ -16,16 +16,16 @@
 </head>
 <body class="{$pageMeta.bodyCls}">
 <div id="loginApp">
-    <div class="login-wrapper layui-anim layui-anim-scale layui-hide">
+    <div class="login-wrapper layui-anim layui-anim-scale layui-hidex">
         <form class="layui-form">
             <h2>{'Sign in'|t}</h2>
             <div class="layui-form-item layui-input-icon-group">
                 <i class="layui-icon layui-icon-username"></i>
-                <input class="layui-input" name="username" placeholder="{'Username'|t}" autocomplete="off" lay-verify="required"/>
+                <input class="layui-input" name="username" lay-verType="tips" placeholder="{'Username'|t}" autocomplete="off" lay-verify="required"/>
             </div>
             <div class="layui-form-item layui-input-icon-group">
                 <i class="layui-icon layui-icon-password"></i>
-                <input class="layui-input" name="password" placeholder="{'Password'|t}" type="password" lay-verify="required"/>
+                <input class="layui-input" name="password" lay-verType="tips" placeholder="{'Password'|t}" type="password" lay-verify="required"/>
             </div>
             <div class="layui-form-item layui-input-icon-group login-captcha-group" {if $ent<3}style="display: none" {/if}>
                 <i class="layui-icon layui-icon-auz"></i>

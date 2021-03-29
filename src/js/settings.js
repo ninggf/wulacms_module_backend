@@ -5,7 +5,8 @@ layui.define(['jquery', 'form', 'admin', 'notice', 'layer'], cb => {
         notice = layui.notice;
 
     class Settings {
-        init(id) {
+        init(id, data) {
+            form.val('settingForm',data)
             form.on('submit(saveBtn)', (formObj) => {
                 let loadIndex = layer.load(2);
                 admin.postJson('backend/settings/save/' + id

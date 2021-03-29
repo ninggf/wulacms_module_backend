@@ -11,6 +11,7 @@
 namespace backend\controllers;
 
 use backend\classes\PageController;
+use backend\classes\PageMetaData;
 use system\classes\model\UserMetaTable;
 use system\classes\model\UserTable;
 use wulaphp\io\Ajax;
@@ -31,7 +32,7 @@ class ProfileController extends PageController {
         $meta = rqsts(['nickname', 'phone', 'email', 'desc']);
         $name = rqst('name');
 
-        $userTable = new UserTable(true);
+        $userTable = new UserTable();
         $db        = $userTable->db();
 
         $db->start();//启动事务
@@ -75,7 +76,7 @@ class ProfileController extends PageController {
      * @param string $oldPsw
      * @param string $newPsw
      * @param string $rePsw
-     *
+     * @ResetPasswd
      * @post
      * @return JsonView
      */
@@ -98,7 +99,9 @@ class ProfileController extends PageController {
             return Ajax::error('修改密码失败，请联系管理员');
         }
 
-        $this->passport->data['passwd'] = $hash;
+        $this->passport->data['passwd'] = $hash['passwd'];
+        $this->passport->data['passwd_expire_at'] = $hash['passwd_expire_at'];
+
         $this->passport->store();
 
         return Ajax::success();
@@ -106,19 +109,11 @@ class ProfileController extends PageController {
 
     /**
      * 重置密码页面
-     * @resetpasswd
+     * @ResetPasswd
      */
-    public function reset() {
-        // TODO： 制作重设密码页面
-        return 'reset password';
-    }
+    public function reset(): \wulaphp\mvc\view\SmartyView {
+        $data = PageMetaData::meta();
 
-    /**
-     * 重置密码
-     * @resetpasswd
-     */
-    public function resetPost() {
-        // TODO: 实现重设密码功能，要求和密码不能和上次密码相同的
-        return 'ok';
+        return view($data);
     }
 }

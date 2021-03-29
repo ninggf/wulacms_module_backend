@@ -1,34 +1,25 @@
 <script>
-layui.define(['layer', 'form', 'table', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'], function (exports) {
-  let $        = layui.jquery;
-  let layer    = layui.layer;
-  let form     = layui.form;
-  let table    = layui.treeTable;
-  let admin    = layui.admin;
-  let toast    = admin.toast;
-  let xmSelect = layui.xmSelect;
+layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable', 'index', 'notice'], function (exports) {
+  let $         = layui.jquery;
+  let layer     = layui.layer;
+  let form      = layui.form;
+  let treeTable = layui.treeTable;
+  let admin     = layui.admin;
+  let notice    = layui.notice;
+  let xmSelect  = layui.xmSelect;
+  let index     = layui.index;
 
   class Role {
     insTb
 
     init() {
-      /* 渲染表格 */
-      this.insTb = table.render({
+      this.insTb = treeTable.render({
         elem          : '#roleTable',
-        url           : '/backend/role/list',
+        url           : admin.url('backend/role/list'),
         id            : 'roleList',
         page          : true,
-        toolbar       : ['<p>',
-          '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
-          '<button lay-event="del" class="layui-btn layui-btn-sm layui-btn-danger icon-btn"><i class="layui-icon">&#xe640;</i>删除</button>',
-          '</p>'].join(''),
+        toolbar       : $('#operationToolbar').html(),
         defaultToolbar: ["filter"],
-        tree          : {
-          iconIndex: 2,
-          idName   : 'id',
-          pidName  : 'pid',
-          isPidData: true
-        },
         cellMinWidth  : 100,
         cols          : [[
           {type: 'checkbox'},
@@ -36,8 +27,22 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'zTree', 'xmSelect', 't
           {field: 'role', title: '角色名称', sort: false},
           {field: 'name', title: '角色代码', sort: false},
           {field: 'remark', title: '备注', sort: false},
-          {title: '操作', toolbar: '#roleTbBar', align: 'center', width: 210, minWidth: 200}
-        ]]
+          {field: '_ops', title: '操作', toolbar: '#roleTbBar', align: 'center', width: 140, minWidth: 110}
+        ]],
+        text          : {
+          none: '<div style="padding: 18px 0;">哎呀，当前无角色数据,快去添加吧~</div>'
+        },
+        tree          : {
+          openName : 'role',
+          iconIndex: 2,
+          idName   : 'id',
+          pidName  : 'pid',
+          isPidData: true,
+          arrowType: 'arrow2',
+          getIcon  : (d) => {
+            return '<i class="ew-tree-icon"></i>';
+          }
+        },
       });
       let _this  = this;
       /* 表格搜索 */
@@ -46,20 +51,19 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'zTree', 'xmSelect', 't
         return false;
       });
 
-      /* 表格工具条点击事件 */
-      table.on('tool(roleTable)', function (obj) {
+      treeTable.on('tool(roleTable)', function (obj) {
+        let id = obj.data.id
         if (obj.event === 'edit') { // 修改
           _this.showEditModel(obj.data);
         } else if (obj.event === 'del') { // 删除
-          let id = obj.data.id
           _this.doDel({'ids': [id]});
         } else if (obj.event === 'auth') {  // 权限管理
-          _this.showPermModel(obj.data.roleId);
+          let href = '/backend/role/grant?rid=' + id
+          index.openTab({url: href, title: obj.data.role + '权限', end: ''});
         }
       });
 
-      /* 表格头工具栏点击事件 */
-      table.on('toolbar(roleTable)', function (obj) {
+      treeTable.on('toolbar(roleTable)', function (obj) {
         if (obj.event === 'add') { // 添加
           _this.showEditModel();
         } else if (obj.event === 'del') { // 删除
@@ -78,8 +82,11 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'zTree', 'xmSelect', 't
 
     showEditModel(mData) {
       let insTb = this.insTb
+      let url   = mData ? '/backend/role/save' : '/backend/role/add';
       admin.open({
         type   : 1,
+        area   : '600px',
+        offset : 10,
         title  : (mData ? '修改' : '添加') + '角色',
         content: $('#roleEditDialog').html(),
         success: function (layero, dIndex) {
@@ -88,18 +95,19 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'zTree', 'xmSelect', 't
           // 表单提交事件
           form.on('submit(roleEditSubmit)', function (data) {
             let loadIndex = layer.load(2);
-            admin.post('/backend/role/save', data.field).then(function (data) {
+            admin.post(admin.url(url), data.field).then(function (data) {
               layer.close(loadIndex);
               if (data.code === 200) {
                 layer.close(dIndex);
-                let notice = mData ? '修改' : '添加'
-                toast.tc().success('角色' + notice + '成功', '', {preventDuplicates: !1})
+                let msg = mData ? '修改' : '添加'
+                notice.success('角色' + msg + '成功')
                 insTb.refresh()
               } else {
-                toast.tc().error(data.message);
+                notice.error(data.message)
               }
             }).fail(function (data) {
-              toast.tc().error(data.message);
+              layer.close(loadIndex);
+              notice.error(data.message)
             })
             return false;
 
@@ -128,12 +136,12 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'zTree', 'xmSelect', 't
             insXmSel.update({
               data   : topRoleList,
               tree   : {
-                show        : true,
+                show          : true,
                 showFolderIcon: true,
-                indent      : 15,
-                strict      : false,
-                expandedKeys: [1],
-                simple:true,
+                indent        : 15,
+                strict        : false,
+                expandedKeys  : [1],
+                simple        : true,
               },
               autoRow: true,
             })
@@ -152,66 +160,27 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'zTree', 'xmSelect', 't
         layer.close(i);
         let loadIndex = layer.load(2);
         admin.post('/backend/role/del', obj).then(function (data) {
+          layer.close(loadIndex);
           if (data.code === 200) {
-            toast.tc().success('角色删除成功', '', {preventDuplicates: !1});
+            notice.success('角色删除成功');
             insTb.refresh();
           } else {
-            toast.tc().error(data.message);
+            notice.error(data.message);
           }
-          layer.close(loadIndex);
         }).fail(function (data) {
-          toast.tc().error(data.message);
+          layer.close(loadIndex);
+          notice.error(data.message);
         })
       });
     };
-
-    showPermModel(roleId) {
-      admin.open({
-        title  : '角色权限分配',
-        btn    : ['保存', '取消'],
-        content: '<ul id="roleAuthTree" class="ztree"></ul>',
-        success: function (layero, dIndex) {
-          let loadIndex = layer.load(2);
-          $.get('../../json/role-auth-tree.json', {roleId: roleId}, function (res) {
-            layer.close(loadIndex);
-            if (200 === res.code) {
-              $.fn.zTree.init($('#roleAuthTree'), {
-                check: {enable: true},
-                data : {simpleData: {enable: true}}
-              }, res.data);
-            } else {
-              layer.msg(res.msg, {icon: 2});
-            }
-          }, 'json');
-          // 超出一定高度滚动
-          $(layero).children('.layui-layer-content').css({'max-height': '300px', 'overflow': 'auto'});
-        },
-        yes    : function (dIndex) {
-          let insTree     = $.fn.zTree.getZTreeObj('roleAuthTree');
-          let checkedRows = insTree.getCheckedNodes(true);
-          let ids         = [];
-          for (let i = 0; i < checkedRows.length; i++) {
-            ids.push(checkedRows[i].id);
-          }
-          let loadIndex = layer.load(2);
-          $.get('../../json/ok.json', {roleId: roleId, authIds: ids.join(',')}, function (res) {
-            layer.close(loadIndex);
-            if (200 === res.code) {
-              layer.msg(res.msg, {icon: 1});
-              layer.close(dIndex);
-            } else {
-              layer.msg(res.msg, {icon: 2});
-            }
-          }, 'json');
-        }
-      });
-    }
   }
 
-  exports('@backend.role', new Role());
+  exports('@backend.role', new Role);
 });
 </script>
 
 <style scoped>
-
+.layui-form-checkbox {
+  font-size: 12px !important
+}
 </style>

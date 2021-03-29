@@ -8,14 +8,19 @@
     <title>{$pageTitle}{$pageMeta.titleSuffix}</title>
     <link rel="stylesheet" href="{'backend/assets/css/layui.css'|res}"/>
     <link rel="stylesheet" href="{'backend/assets/css/admin.css'|res}"/>
+    <link rel="stylesheet" href="{'backend/assets/css/iconfont/iconfont.css'|res}"/>
     {foreach $_css_files as $_css_file}
         <link rel="stylesheet" href="{$_css_file}"/>
     {/foreach}
 </head>
-<body>
+<body class="{$pageMeta.bodyCls}">
 <!-- js -->
 {include './common.tpl'}
-{include "$workspaceView"}
+{if $workspaceView}
+    {include "$workspaceView"}
+{elseif $workspaceHtml}
+    {$workspaceHtml}
+{/if}
 {foreach $_js_files.foot as $_js_file}
     <script src="{$_js_file}"></script>
 {/foreach}

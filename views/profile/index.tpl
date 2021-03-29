@@ -61,7 +61,7 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">个人简介:</label>
                                     <div class="layui-input-block">
-                                        <textarea name="desc" placeholder="个人简介" class="layui-textarea"></textarea>
+                                        <textarea name="desc" placeholder="个人简介" class="layui-textarea" >{$userMeta.desc|escape}</textarea>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">

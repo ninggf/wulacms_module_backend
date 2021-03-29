@@ -26,10 +26,10 @@ class AuthedController extends AdminController {
 
         $view = parent::beforeRun($action, $refMethod);
 
-        if ($this->passport->uid && !$this->methodAnn->has('resetpasswd')) {
-            $resetPasswd = $_SESSION['resetPasswd'] ?? 0;
+        if ($this->passport->uid && !$this->methodAnn->has('ResetPasswd')) {
+            $resetPasswd = $this->passport->data['passwd_expired'];
             if ($resetPasswd) {
-                Response::redirect(App::url('backend/reset'));
+                Response::redirect(App::url('backend/profile/reset'));
             }
         }
 
@@ -45,18 +45,6 @@ class AuthedController extends AdminController {
             }
         }
 
-        return apply_filter('mvc\admin\needLogin', $view);
-    }
-
-    protected function onScreenLocked($view) {
-        return view('~backend/views/lock');
-    }
-
-    protected function onDenied($message, $view) {
-        return $view;
-    }
-
-    protected function onLocked($view) {
-        return $view;
+        return parent::needLogin($view);
     }
 }

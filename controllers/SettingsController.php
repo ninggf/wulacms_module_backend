@@ -4,29 +4,35 @@ namespace backend\controllers;
 
 use backend\classes\PageController;
 use system\classes\Setting;
+use system\classes\Syslog;
 use wulaphp\io\Ajax;
+use wulaphp\io\Request;
 use wulaphp\io\Response;
 use wulaphp\mvc\view\View;
 
 /**
- * @acl     v:settings
+ * @acl r:system/settings
  * @package backend\controllers
  */
 class SettingsController extends PageController {
     public function index(string $settingId): ?View {
-        if (!$this->passport->cando('v:settings/' . $settingId)) {
-            return $this->onDenied(__('you are denied'), null);
+        if (!$this->passport->cando('r:system/settings/' . $settingId)) {
+            return $this->onDenied(__('Permission denied'), null);
         }
         $setting = $this->getSetting($settingId);
         $view    = $setting->getView();
         $data    = $setting->getData();
         $name    = $setting->getName();
 
-        return $this->render($view, ['settingId' => $settingId, 'settingName' => $name, 'sets' => $data]);
+        return $this->render($view, [
+            'settingId'   => $settingId,
+            'settingName' => $name,
+            'sets'        => $data,
+            'settingData' => json_encode($data)
+        ]);
     }
 
     /**
-     *
      * @post
      *
      * @param string $settingId
@@ -34,18 +40,17 @@ class SettingsController extends PageController {
      * @return \wulaphp\mvc\view\View|null
      */
     public function save(string $settingId): ?View {
-        if (!$this->passport->cando('save:settings/' . $settingId)) {
-            return $this->onDenied(__('you are denied'), null);
+        if (!$this->passport->cando('save:system/settings/' . $settingId)) {
+            return $this->onDenied(__('Permission denied'), null);
         }
         $setting = $this->getSetting($settingId);
-        throw new \Exception("aafsdf");
-        $rst = $setting->save(rqst('setting'));
+        $rst     = $setting->save(rqst('setting'));
 
-        if ($rst) {
-            return Ajax::success();
-        } else {
+        if (!$rst) {
             return Ajax::error(__('Save failed!'), 'notice');
         }
+        Syslog::info('common', 'Setting successfully', 'Setting', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
+        return Ajax::success();
     }
 
     private function getSetting(string $sid): Setting {

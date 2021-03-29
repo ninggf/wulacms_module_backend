@@ -1,6 +1,6 @@
 /** EasyWeb iframe v3.1.8 date:2020-05-04 License By http://easyweb.vip */
 
-layui.define(['layer', 'element', 'admin', 'toastr'], function (exports) {
+layui.define(['layer', 'element', 'admin'], function (exports) {
     var $          = layui.jquery;
     var layer      = layui.layer;
     var element    = layui.element;
@@ -16,8 +16,6 @@ layui.define(['layer', 'element', 'admin', 'toastr'], function (exports) {
     var tabEndCall = {};  // Tab关闭的事件回调
     var mIsAddTab  = false;  // 是否是添加Tab，添加Tab的时候切换不自动刷新
     var index      = {homeUrl: undefined, mTabPosition: undefined, mTabList: []};
-
-    layui.admin.toast = layui.toastr;
 
     /** 渲染主体部分 */
     index.loadView = function (param) {

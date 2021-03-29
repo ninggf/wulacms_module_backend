@@ -25,7 +25,7 @@ class PageMetaData {
         $cmsVer = App::getModuleById('backend')->getCurrentVersion();
         // 页面样式
         $meta['htmlCls'] = '';
-        $meta['bodyCls'] = App::bcfg('showFooter') ? '' : 'close-footer';
+        $meta['bodyCls'] = (App::bcfg('showFooter') ? '' : 'close-footer') . ' ' . App::cfg('backendTheme', 'theme-cyan');
         // 全局配置(可配置)
         $meta['themedir']     = App::cfg('site.theme_base', WWWROOT_DIR . THEME_DIR . '/');
         $meta['moduledir']    = App::cfg('site.module_base', WWWROOT_DIR . MODULE_DIR . '/');
@@ -56,6 +56,7 @@ class PageMetaData {
             $umeta['avatar']   = $info['avatar'] ? $info['avatar'] : App::res('backend/assets/img/head.jpg');
             $umeta['email']    = $info['email'];
             $umeta['phone']    = $info['phone'];
+            $umeta['desc']    = $info['desc'];
         }
         $data['userMeta'] = $umeta;
 

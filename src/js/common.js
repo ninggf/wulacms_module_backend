@@ -1,31 +1,27 @@
 let __laydef = layui.define;
 layui.config({
     version          : '3.0.1',
-    base             : '$~/addon/',
-    dir              : '$~/',
-    module           : '$@',
-    theme            : '$!',
+    base             : window.wulacfg.mBase + '/backend/assets/addon/',
+    dir              : window.wulacfg.mBase + '/backend/assets/',
+    module           : window.wulacfg.mBase,
     ajaxSuccessBefore: function (data, url, opts) {
         let $d = layui.$(document)
         switch (opts.xhr.status) {
+            case 390:
+                $d.trigger('auth.user.blocked');
+                return false;
+            case 391:
+                $d.trigger('auth.user.locked');
+                return false;
             case 401:
                 $d.trigger('auth.need.login');
                 return false;
             case 403:
-                $d.trigger('auth.perm.denied');
-                return false;
-            case 500:
-                $d.trigger('status.500');
-                return true;
-            case 502:
-                $d.trigger('status.502');
-                return true;
-            case 503:
-                $d.trigger('status.503');
-                return true;
-            case 404:
-                $d.trigger('status.404');
-                return true;
+                $d.trigger('auth.perm.denied', data);
+                return true
+            case 422:
+                $d.trigger('form.data.invalid', data);
+                return true
             default:
                 return true;
         }
@@ -75,20 +71,45 @@ layui.define = (deps, factory) => {
 //=require ./modules/laytpl.js
 //=require ./modules/laypage.js
 //=require ./modules/util.js
-//=require ../addon/toastr.js
+//=require ../addon/notice/notice.js
 //=require ../addon/admin.js
 
 if (__laydef) layui.define = __laydef;
 
+window._t = function () {
+    if (arguments.length === 0) return ''
+    let msgG = arguments[0].split('@'), msg = msgG[0], gp = msgG.length > 1 ? msgG[1] : false, language, msgStr
+    if (gp) {
+        language = window.wulacfg.lang['@' + gp]
+        if (!language) {
+            msgStr = msg
+        }
+    } else {
+        language = window.wulacfg.lang
+    }
+    if (!msgStr && language[msg]) {
+        msgStr = language[msg]
+    }
+
+    if (arguments.length > 1) {
+        msgStr = msgStr.replaceAll(/%[sd]/g, '{@}')
+        for (i = 1; i < arguments.length; i++) {
+            msgStr = msgStr.replace('{@}', arguments[i])
+        }
+    }
+
+    return msgStr
+};
+
 layui.use(['admin'], (admin) => {
-    admin.url    = function (url) {
+    admin.url    = (url) => {
         if (typeof (url) === "string") {
             if (/^(https?:\/\/|ftps?:\/\/|\/)/.test(url)) {
                 return url;
             }
             let config = window.wulacfg,
                 chunks = url.split('/');
-            if (chunks[0].match(/^([~!@#%\^&\*])(.+)$/)) {
+            if (chunks[0].match(/^([~!@#%^&\*])(.+)$/)) {
                 let id     = RegExp.$2,
                     prefix = RegExp.$1;
                 if (config.ids && config.ids[id]) {
@@ -115,19 +136,16 @@ layui.use(['admin'], (admin) => {
         }
         return url;
     };
-    admin.assets = function (url) {
+    admin.assets = (url) => {
         if (/^(\/|https?:\/\/).+/.test(url)) {
             return url;
         }
         return window.wulacfg.assets + url;
     };
-    admin.base   = function (url) {
+    admin.base   = (url) => {
         if (/^(\/|https?:\/\/).+/.test(url)) {
             return url;
         }
         return window.wulacfg.base + url;
     };
-    if (window !== top) {
-        admin.toast = top.layui.toastr;
-    }
 });

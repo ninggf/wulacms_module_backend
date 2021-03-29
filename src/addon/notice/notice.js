@@ -64,7 +64,7 @@ layui.define([], function (exports) {
         position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
         target: '',  // 显示位置
         targetFirst: null,  // 插入顺序
-        timeout: 5000,  // 关闭时间，false不自动关闭
+        timeout: 2200,  // 关闭时间，false不自动关闭
         rtl: false,  // 内容居右
         animateInside: false,  // 进入动画效果
         drag: true,  // 是否可滑动移除
@@ -1229,7 +1229,16 @@ layui.define([], function (exports) {
 
     // 不同主题的通知
     forEach(THEMES, function (theme, name) {
-        $iziToast[name] = function (options) {
+        $iziToast[name] = function (options,title) {
+            if(typeof options === 'string'){
+                options = {
+                    title: name.toUpperCase(),
+                    message: options
+                }
+                if(title){
+                    options.title = title
+                }
+            }
             var settings = extend(CONFIG, options || {});
             settings = extend(theme, settings || {});
             this.show(settings);
