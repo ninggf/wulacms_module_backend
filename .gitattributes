@@ -15,4 +15,3 @@ package-lock.json export-ignore
 gulpfile.js export-ignore
 phpunit.xml
 /src/    export-ignore
-/layui/   export-ignore
