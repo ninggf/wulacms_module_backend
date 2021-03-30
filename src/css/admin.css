@@ -52,6 +52,7 @@ body {
 
 .layui-layout-admin .layui-header .layui-logo img {
     height: 28px;
+    width: 28px;
     vertical-align: middle;
 }
 
