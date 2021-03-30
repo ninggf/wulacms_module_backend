@@ -1418,7 +1418,7 @@ td[data-field=_ops] a {
   padding: 0 2px;
 }
 td[data-field=_ops] a .layui-icon::before{
-    font-size: 20px;
+    font-size: 18px;
 }
 .layui-fg-blue{
   color:#01AAED;

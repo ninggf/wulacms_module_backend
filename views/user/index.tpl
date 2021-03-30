@@ -54,11 +54,12 @@
 
 <!-- 表格操作列 -->
 <script type="text/html" id="userTbBar">
+    <a class="" lay-event="view" title="查看"><i class="layui-icon iconfont layui-extend-view"></i></a>
     {if ican('edit:system/account/user')}
-    <a class="layui-fg-blue" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></a>
+    <a class="layui-fg-blue" lay-event="edit" title="编辑"><i class="layui-icon iconfont layui-extend-edit"></i></a>
     {/if}
     {if ican('del:system/account/user')}
-    <a class="layui-fg-red" lay-event="del" title="删除"><i class="layui-icon layui-icon-delete"></i></a>
+    <a class="layui-fg-red" lay-event="del" title="删除"><i class="layui-icon iconfont layui-extend-delete"></i></a>
     {/if}
 </script>
 

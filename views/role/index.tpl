@@ -35,15 +35,15 @@
 
 <!-- 表格操作列 -->
 <script type="text/html" id="roleTbBar">
-    {*<a class="" lay-event="view" title="查看"><i class="layui-icon iconfont layui-extend-view"></i></a>*}
+    <a class="" lay-event="view" title="查看"><i class="layui-icon iconfont layui-extend-view"></i></a>
     {if ican('edit:system/account/role')}
     <a class="layui-fg-blue" lay-event="edit" title="编辑"><i class="layui-icon iconfont layui-extend-edit"></i></a>
     {/if}
-    {if ican('del:system/account/role')}
-    <a class="layui-fg-red" lay-event="del" title="删除"><i class="layui-icon iconfont layui-extend-del"></i></a>
-    {/if}
     {if ican('grant:system/account/role')}
-    <a class="layui-fg-orange" lay-event="auth" title="授权"><i class="layui-icon iconfont layui-extend-grant"></i></a>
+        <a class="layui-fg-orange" lay-event="auth" title="授权"><i class="layui-icon iconfont layui-extend-grant"></i></a>
+    {/if}
+    {if ican('del:system/account/role')}
+    <a class="layui-fg-red" lay-event="del" title="删除"><i class="layui-icon iconfont layui-extend-delete"></i></a>
     {/if}
 </script><!-- 表单弹窗 -->
 
@@ -77,6 +77,38 @@
         <div class="layui-form-item text-right">
             <button class="layui-btn" lay-filter="roleEditSubmit" lay-submit>保存</button>
             <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="roleDetailDialog">
+    <form id="roleDetailForm" lay-filter="roleDetailForm" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级角色:</label>
+            <div class="layui-input-block">
+                <div id="rolesEditParentSel"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称:</label>
+            <div class="layui-input-block">
+                <input name="role" placeholder="角色名称" class="layui-input"  disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色代码:</label>
+            <div class="layui-input-block">
+                <input name="name" placeholder="角色代码" class="layui-input" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注:</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="备注" class="layui-textarea" disabled></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
         </div>
     </form>
 </script>

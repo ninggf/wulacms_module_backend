@@ -27,7 +27,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
           {field: 'role', title: '角色名称', sort: false},
           {field: 'name', title: '角色代码', sort: false},
           {field: 'remark', title: '备注', sort: false},
-          {field: '_ops', title: '操作', toolbar: '#roleTbBar', align: 'center', width: 140, minWidth: 110}
+          {field: '_ops', title: '操作', toolbar: '#roleTbBar', align: 'center', width: 140, minWidth: 140}
         ]],
         text          : {
           none: '<div style="padding: 18px 0;">哎呀，当前无角色数据,快去添加吧~</div>'
@@ -53,13 +53,19 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
 
       treeTable.on('tool(roleTable)', function (obj) {
         let id = obj.data.id
-        if (obj.event === 'edit') { // 修改
-          _this.showEditModel(obj.data);
-        } else if (obj.event === 'del') { // 删除
-          _this.doDel({'ids': [id]});
-        } else if (obj.event === 'auth') {  // 权限管理
-          let href = '/backend/role/grant?rid=' + id
-          index.openTab({url: href, title: obj.data.role + '权限', end: ''});
+        switch (obj.event) {
+          case 'edit'://编辑
+            _this.showEditModel(obj.data);
+            break;
+          case 'del'://删除
+            _this.doDel({'ids': [id]});
+            break;
+          case 'auth'://授权
+            index.openTab({url: admin.url('/backend/role/grant?rid=' + id), title: obj.data.role + '权限', end: ''});
+            break;
+          case 'view'://查看
+            _this.showDetailModel(obj.data);
+            break;
         }
       });
 
@@ -79,7 +85,55 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
         }
       });
     }
-
+    showDetailModel(mData){
+      admin.open({
+        type   : 1,
+        area   : '600px',
+        offset : 10,
+        title  : '角色详情',
+        content: $('#roleDetailDialog').html(),
+        success: function (layero, dIndex) {
+          // 回显表单数据
+          form.val('roleDetailForm', mData);
+          //显示角色上级
+          let insXmSel = xmSelect.render({
+            el        : '#rolesEditParentSel',
+            height    : '250px',
+            data      : [],
+            tips      : '请选择上级角色',
+            name      : 'pid',
+            initValue : mData ? [mData.pid] : [0],
+            model     : {label: {type: 'text'}},
+            prop      : {
+              name : 'role',
+              value: 'id'
+            },
+            disabled:true,
+            radio     : true,
+            clickClose: true
+          });
+          let id       = mData ? mData.id : 0
+          admin.get('/backend/role/list?id=' + id).then(function (data) {
+            let topRoleList = [];
+            topRoleList.push({'role': '无', 'id': 0})
+            topRoleList = topRoleList.concat(data.tree)
+            insXmSel.update({
+              data   : topRoleList,
+              tree   : {
+                show          : true,
+                showFolderIcon: true,
+                indent        : 15,
+                strict        : false,
+                expandedKeys  : [1],
+                simple        : true,
+              },
+              autoRow: true,
+            })
+          });
+          $(layero).children('.layui-layer-content').css('overflow', 'visible');
+        }
+      });
+    }
     showEditModel(mData) {
       let insTb = this.insTb
       let url   = mData ? '/backend/role/save' : '/backend/role/add';

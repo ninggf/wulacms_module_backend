@@ -57,7 +57,7 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','notice'], f
             }
             , width: 160,
           },
-          { field:'_ops', title: '操作', toolbar: '#userTbBar', align: 'center',width:90, minWidth: 90}
+          { field:'_ops', title: '操作', toolbar: '#userTbBar', align: 'center',width:110, minWidth: 110}
         ]],
         lazy          : true,
         data          : data
