@@ -35,15 +35,15 @@
 
 <!-- 表格操作列 -->
 <script type="text/html" id="roleTbBar">
-    <a class="" lay-event="view" title="查看"><i class="layui-icon iconfont layui-extend-view"></i></a>
+    {*<a class="" lay-event="view" title="查看"><i class="layui-icon iconfont layui-extend-view"></i></a>*}
     {if ican('edit:system/account/role')}
-    <a class="layui-fg-blue" lay-event="edit" title="编辑"><i class="layui-icon iconfont layui-extend-edit"></i></a>
+        <a class="layui-fg-blue" lay-event="edit" title="编辑"><i class="layui-icon iconfont layui-extend-edit"></i></a>
     {/if}
     {if ican('grant:system/account/role')}
         <a class="layui-fg-orange" lay-event="auth" title="授权"><i class="layui-icon iconfont layui-extend-grant"></i></a>
     {/if}
     {if ican('del:system/account/role')}
-    <a class="layui-fg-red" lay-event="del" title="删除"><i class="layui-icon iconfont layui-extend-delete"></i></a>
+        <a class="layui-fg-red" lay-event="del" title="删除"><i class="layui-icon iconfont layui-extend-delete"></i></a>
     {/if}
 </script><!-- 表单弹窗 -->
 
@@ -92,7 +92,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">角色名称:</label>
             <div class="layui-input-block">
-                <input name="role" placeholder="角色名称" class="layui-input"  disabled/>
+                <input name="role" placeholder="角色名称" class="layui-input" disabled/>
             </div>
         </div>
         <div class="layui-form-item">

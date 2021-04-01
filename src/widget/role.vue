@@ -64,7 +64,6 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
             index.openTab({url: admin.url('/backend/role/grant?rid=' + id), title: obj.data.role + '权限', end: ''});
             break;
           case 'view'://查看
-            _this.showDetailModel(obj.data);
             break;
         }
       });
@@ -82,55 +81,6 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
             return d.id;
           });
           _this.doDel({ids: ids});
-        }
-      });
-    }
-    showDetailModel(mData){
-      admin.open({
-        type   : 1,
-        area   : '600px',
-        offset : 10,
-        title  : '角色详情',
-        content: $('#roleDetailDialog').html(),
-        success: function (layero, dIndex) {
-          // 回显表单数据
-          form.val('roleDetailForm', mData);
-          //显示角色上级
-          let insXmSel = xmSelect.render({
-            el        : '#rolesEditParentSel',
-            height    : '250px',
-            data      : [],
-            tips      : '请选择上级角色',
-            name      : 'pid',
-            initValue : mData ? [mData.pid] : [0],
-            model     : {label: {type: 'text'}},
-            prop      : {
-              name : 'role',
-              value: 'id'
-            },
-            disabled:true,
-            radio     : true,
-            clickClose: true
-          });
-          let id       = mData ? mData.id : 0
-          admin.get('/backend/role/list?id=' + id).then(function (data) {
-            let topRoleList = [];
-            topRoleList.push({'role': '无', 'id': 0})
-            topRoleList = topRoleList.concat(data.tree)
-            insXmSel.update({
-              data   : topRoleList,
-              tree   : {
-                show          : true,
-                showFolderIcon: true,
-                indent        : 15,
-                strict        : false,
-                expandedKeys  : [1],
-                simple        : true,
-              },
-              autoRow: true,
-            })
-          });
-          $(layero).children('.layui-layer-content').css('overflow', 'visible');
         }
       });
     }
