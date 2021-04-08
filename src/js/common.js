@@ -102,7 +102,6 @@ layui.define = (deps, factory) => {
 //=require ./modules/jquery.js
 //=require ./modules/layer.js
 //=require ./modules/element.js
-//=require ./modules/form.js
 //=require ./modules/laytpl.js
 //=require ./modules/laypage.js
 //=require ./modules/util.js
