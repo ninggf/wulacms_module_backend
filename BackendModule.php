@@ -47,7 +47,11 @@ namespace backend {
             if (Request::isAjax()) {
                 Response::respond(401, __('Please login'));
             } else {
-                App::redirect('backend/login');
+                if (($from = sess_get('loginBack'))) {
+                    App::redirect('backend/login', ['from' => $from]);
+                } else {
+                    App::redirect('backend/login');
+                }
             }
 
             return $view;
@@ -130,7 +134,7 @@ namespace {
             $config['ids']    = App::id2dir();
             $config['base']   = WWWROOT_DIR;
             $config['assets'] = WWWROOT_DIR . ASSETS_DIR . '/';
-            $config['mBase'] = App::res('/');
+            $config['mBase']  = App::res('/');
             $config['ids']    = wulaphp\app\App::id2dir();
             $config['groups'] = $groups ? $groups : ['char' => []];
             $config['lang']   = I18n::getTranslates();

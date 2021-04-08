@@ -23,6 +23,41 @@ layui.config({
                 $d.trigger('form.data.invalid', data);
                 return true
             default:
+                if (data && typeof data === 'object') {
+                    if (data.message) {
+                        switch (data.code) {
+                            case 500:
+                                window.$notice.error(data.message)
+                                break;
+                            case 400:
+                                window.$notice.warning(data.message)
+                                break;
+                            case 300:
+                                window.$notice.info(data.message)
+                                break;
+                            case 200:
+                                window.$notice.success(data.message)
+                                break;
+                        }
+                    }
+                    switch (data.action) {
+                        case 'redirect':
+                            window.location = data.target;
+                            return false;
+                        case 'reload':
+                            if (data.target) {
+                                layui.$(data.target).data('loaderObj').reloadData();
+                            } else {
+                                window.location.reload(true)
+                            }
+                            return false;
+                        case 'click':
+                            if (data.target) {
+                                layui.$(data.target).click();
+                                return false;
+                            }
+                    }
+                }
                 return true;
         }
     }
@@ -101,7 +136,12 @@ window._t = function () {
     return msgStr
 };
 
-layui.use(['admin'], (admin) => {
+layui.use(['admin', 'notice'], (admin, notice) => {
+    if (window === top) {
+        window.$notice = notice;
+    } else {
+        window.$notice = top.$notice;
+    }
     admin.url    = (url) => {
         if (typeof (url) === "string") {
             if (/^(https?:\/\/|ftps?:\/\/|\/)/.test(url)) {

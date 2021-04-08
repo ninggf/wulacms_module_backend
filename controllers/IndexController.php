@@ -78,6 +78,7 @@ class IndexController extends AuthedController {
      * @unlock
      *
      * @return \wulaphp\mvc\view\View
+     * @throws \Exception
      */
     public function login(): View {
         $from = rqst('from');

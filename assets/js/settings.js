@@ -1,0 +1,2 @@
+/** wulacms-v3.0.0 MIT License By https://github.com/ninggf/wulacms */
+ ;layui.define(["jquery","form","admin","notice","layer"],function(e){var i=layui.layer,n=layui.form,s=layui.admin,o=layui.notice;e("@backend.settings",new(function(){function e(){}return e.prototype.init=function(t,e){n.val("settingForm",e),n.on("submit(saveBtn)",function(e){var n=i.load(2);return s.postJson("backend/settings/save/"+t,{setting:e.field},function(e){i.close(n),200===e.code?o.success({title:"Success",message:"配置保存成功！"}):o.error({title:"Error",message:e.message})}),!1})},e}()))});

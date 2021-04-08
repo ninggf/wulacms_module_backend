@@ -11,10 +11,8 @@
 namespace backend\classes;
 
 use wulaphp\app\App;
-use wulaphp\io\Request;
 use wulaphp\io\Response;
 use wulaphp\mvc\controller\AdminController;
-use wulaphp\router\Router;
 
 class AuthedController extends AdminController {
 
@@ -34,17 +32,5 @@ class AuthedController extends AdminController {
         }
 
         return $view;
-    }
-
-    protected function needLogin($view) {
-        if ($this->loginBack) {
-            if (Request::isAjaxRequest()) {
-                $_SESSION['loginBack'] = $_SERVER['HTTP_REFERER'];
-            } else {
-                $_SESSION['loginBack'] = Router::getFullURI();
-            }
-        }
-
-        return parent::needLogin($view);
     }
 }

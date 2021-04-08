@@ -21,11 +21,22 @@ class SimpleLogger extends CommonLogger {
         return __('Common Log');
     }
 
+    public function getIconCls(): ?string {
+        return 'layui-icon-log';
+    }
+
     public function getCols(): array {
-        $cols[] = ['field' => 'date', 'title' => __('Datetime'), 'width' => 160, 'minWidth'=>160, 'fixed' => true, 'with'=>'level'];
+        $cols[] = [
+            'field'    => 'date',
+            'title'    => __('Datetime'),
+            'width'    => 160,
+            'minWidth' => 160,
+            'fixed'    => true,
+            'with'     => 'level'
+        ];
         $cols[] = ['field' => 'username', 'title' => __('Username'), 'width' => 100, 'sort' => true, 'fixed' => true];
-        $cols[] = ['field' => 'action', 'title' => __('Action'), 'width' => 120, 'fixed' => true,'align'=>'center'];
-        $cols[] = ['field' => 'ip', 'title' => 'IP', 'width' => 100,'align'=>'center'];
+        $cols[] = ['field' => 'action', 'title' => __('Action'), 'width' => 120, 'fixed' => true, 'align' => 'center'];
+        $cols[] = ['field' => 'ip', 'title' => 'IP', 'width' => 100, 'align' => 'center'];
         $cols[] = ['field' => 'message', 'title' => __('Log'), 'minWidth' => 300];
         $cols[] = ['field' => 'value1', 'title' => __('Old Value')];
         $cols[] = ['field' => 'value2', 'title' => __('New Value')];

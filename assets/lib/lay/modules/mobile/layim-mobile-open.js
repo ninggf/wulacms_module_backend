@@ -1,0 +1,1 @@
+layui.define(function(i){i("layim-mobile",layui.v)});

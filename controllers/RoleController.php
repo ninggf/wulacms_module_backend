@@ -78,7 +78,7 @@ class RoleController extends PageController {
         }
         $model = new RolePermission();
         if ($model->updatePermissionByRoleId($rid, $permissions)) {
-            Syslog::info('common', 'Grant For Role successfully', 'Role Grant', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
+            Syslog::info('common', 'Grant For Role successfully', 'Role Grant', $this->passport->uid, '', json_encode(Request::getInstance()->requests(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS));
 
             return Ajax::success();
         }

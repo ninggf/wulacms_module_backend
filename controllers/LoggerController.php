@@ -28,10 +28,10 @@ class LoggerController extends PageController {
         }
         $logger = $this->getLogger($loggerId);
         $view   = $logger->getView();
-        $data   = $logger->getData($loggerId, Request::getInstance()->requests());
+        $data   = json_encode($logger->getData($loggerId, Request::getInstance()->requests()), JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
         $cols   = json_encode($logger->getCols(), JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
 
-        return $this->render($view, ['loggerId' => $loggerId, 'tableCols' => $cols, 'tableData' => $data->render()]);
+        return $this->render($view, ['loggerId' => $loggerId, 'tableCols' => $cols, 'tableData' => $data]);
     }
 
     /**

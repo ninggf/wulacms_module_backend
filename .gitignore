@@ -1,4 +1,4 @@
-logs
+/logs
 *.log
 npm-debug.log*
 *.dev.*
@@ -7,10 +7,3 @@ npm-debug.log*
 .node_repl_history
 *.tgz
 *.map
-.env
-/vendor/
-node_modules/
-package-lock.json
-/demo/
-/assets/
-/views/*/*.phtml

@@ -15,7 +15,11 @@ layui.define(['layer', 'form', 'admin'], cb => {
                     success(data) {
                         layer.close(loadIndex);
                         if (data.code && data.code === 200) {
-                            window.location = admin.url('backend');
+                            if (data.target) {
+                                window.location = data.target;
+                            } else {
+                                window.location = admin.url('backend');
+                            }
                             return;
                         }
                         if (data.args && data.args.ent >= 3) {
@@ -37,7 +41,6 @@ layui.define(['layer', 'form', 'admin'], cb => {
                 })
                 return false;
             });
-            //$('.login-wrapper').removeClass('layui-hide');
         }
     }
 

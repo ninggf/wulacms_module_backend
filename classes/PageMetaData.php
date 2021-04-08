@@ -56,7 +56,8 @@ class PageMetaData {
             $umeta['avatar']   = $info['avatar'] ? $info['avatar'] : App::res('backend/assets/img/head.jpg');
             $umeta['email']    = $info['email'];
             $umeta['phone']    = $info['phone'];
-            $umeta['desc']    = $info['desc'];
+            $umeta['desc']     = $info['desc'];
+
         }
         $data['userMeta'] = $umeta;
 
