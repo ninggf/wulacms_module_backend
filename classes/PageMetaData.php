@@ -25,7 +25,11 @@ class PageMetaData {
         $cmsVer = App::getModuleById('backend')->getCurrentVersion();
         // 页面样式
         $meta['htmlCls'] = '';
-        $meta['bodyCls'] = (App::bcfg('showFooter') ? '' : 'close-footer') . ' ' . App::cfg('backendTheme', 'theme-cyan');
+        $_uit            = $_COOKIE['_uit'] ?? false;
+        if (!$_uit || $_uit == 'undefined') {
+            $_uit = App::cfg('backendTheme', 'theme-cyan');
+        }
+        $meta['bodyCls'] = (App::bcfg('hideFooter') ? 'close-footer' : '') . ' ' . $_uit;
         // 全局配置(可配置)
         $meta['themedir']     = App::cfg('site.theme_base', WWWROOT_DIR . THEME_DIR . '/');
         $meta['moduledir']    = App::cfg('site.module_base', WWWROOT_DIR . MODULE_DIR . '/');
@@ -37,7 +41,14 @@ class PageMetaData {
         $meta['projectName']  = App::cfg('site.projectName', 'WulaCms Pro');
         $meta['brandImg']     = App::cfg('site.brandImg', App::res('backend/assets/img/logo.png'));
         $meta['brandName']    = App::cfg('site.brandName');
-        $meta['site']         = App::cfg('site');
+        $sc                   = App::acfg('site');
+        unset($sc['logo'], $sc['theme_base']);
+        unset($sc['module_base'], $sc['assets_base']);
+        unset($sc['name'], $sc['defaultTitle']);
+        unset($sc['titleSuffix'], $sc['projectName']);
+        unset($sc['brandImg'], $sc['brandImg']);
+        $meta['site'] = $sc;
+
         // 插件可以修改meta数据
         $meta           = apply_filter('init_layout_page_meta', $meta);
         $meta['id2dir'] = App::id2dir();

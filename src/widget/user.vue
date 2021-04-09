@@ -1,5 +1,5 @@
 <script>
-layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','notice'], function (exports) {
+layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'notice'], function (exports) {
   let $        = layui.jquery;
   let layer    = layui.layer;
   let form     = layui.form;
@@ -11,6 +11,7 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','notice'], f
 
   class User {
     insTb
+    where = {}
 
     init(data) {
       let _this = this, topH = $('#searchForm').outerHeight() + 40;
@@ -57,10 +58,11 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','notice'], f
             }
             , width: 160,
           },
-          { field:'_ops', title: '操作', toolbar: '#userTbBar', align: 'center',width:110, minWidth: 110}
+          {field: '_ops', title: '操作', toolbar: '#userTbBar', align: 'center', width: 110, minWidth: 110}
         ]],
         lazy          : true,
-        data          : data
+        data          : data,
+        where         : this.where
       });
 
       let userRoleList = xmSelect.render({
@@ -95,7 +97,8 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect','notice'], f
 
       /* 表格搜索 */
       form.on('submit(userTbSearch)', function (data) {
-        _this.insTb.reload({where: data.field, page: {curr: 1}});
+        _this.where = $.extend(_this.where, data.field)
+        _this.insTb.reloadData()
         return false;
       });
 

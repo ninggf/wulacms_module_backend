@@ -1,13 +1,12 @@
 <script>
-layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable', 'index', 'notice'], function (exports) {
+layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable', 'notice'], function (exports) {
   let $         = layui.jquery;
   let layer     = layui.layer;
   let form      = layui.form;
   let treeTable = layui.treeTable;
   let admin     = layui.admin;
   let notice    = layui.notice;
-  let xmSelect  = layui.xmSelect;
-  let index     = layui.index;
+  let xmSelect  = layui.xmSelect,index = top.layui.index;
 
   class Role {
     insTb
@@ -61,7 +60,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
             _this.doDel({'ids': [id]});
             break;
           case 'auth'://授权
-            index.openTab({url: admin.url('/backend/role/grant?rid=' + id), title: obj.data.role + '权限', end: ''});
+            index.openTab({url: admin.url('backend/role/grant?rid=' + id), title: obj.data.role + '权限', end: ''});
             break;
           case 'view'://查看
             break;
@@ -86,7 +85,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
     }
     showEditModel(mData) {
       let insTb = this.insTb
-      let url   = mData ? '/backend/role/save' : '/backend/role/add';
+      let url   = admin.url(mData ? 'backend/role/save' : 'backend/role/add');
       admin.open({
         type   : 1,
         area   : '600px',
@@ -133,7 +132,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
             clickClose: true
           });
           let id       = mData ? mData.id : 0
-          admin.get('/backend/role/list?id=' + id).then(function (data) {
+          admin.get('backend/role/list?id=' + id).then(function (data) {
             let topRoleList = [];
             topRoleList.push({'role': '无', 'id': 0})
             topRoleList = topRoleList.concat(data.tree)
@@ -163,7 +162,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
       }, function (i) {
         layer.close(i);
         let loadIndex = layer.load(2);
-        admin.post('/backend/role/del', obj).then(function (data) {
+        admin.post('backend/role/del', obj).then(function (data) {
           layer.close(loadIndex);
           if (data.code === 200) {
             notice.success('角色删除成功');

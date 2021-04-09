@@ -40,7 +40,13 @@
             </div>
         </form>
     </div>
-    <div class="login-copyright">Copyright © 2013-{'Y'|date} wulacms.com all rights reserved.</div>
+    <div class="login-copyright">
+        {if $pageMeta.site.copyright}
+            Copyright © {$pageMeta.site.copyright}
+        {else}
+            Powered by <a href="https://wulacms.com" target="_blank">wulacms.com</a> Ver: {$pageMeta.cmsVer}
+        {/if}
+    </div>
 </div>
 {include './common.tpl' isTop=true}
 <script>

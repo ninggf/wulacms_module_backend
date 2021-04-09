@@ -105,6 +105,7 @@ layui.define = (deps, factory) => {
 //=require ./modules/laytpl.js
 //=require ./modules/laypage.js
 //=require ./modules/util.js
+//=require ../addon/contextMenu.js
 //=require ../addon/notice/notice.js
 //=require ../addon/admin.js
 
@@ -135,7 +136,7 @@ window._t = function () {
     return msgStr
 };
 
-layui.use(['admin', 'notice'], (admin, notice) => {
+layui.use(['admin', 'notice','contextMenu'], (admin, notice) => {
     if (window === top) {
         window.$notice = notice;
     } else {

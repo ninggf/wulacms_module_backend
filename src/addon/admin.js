@@ -515,6 +515,7 @@ layui.define(['layer'], function (exports) {
                 var $body = win.layui.jquery('body');
                 $body.addClass(theme);
                 $body.data('theme', theme);
+                admin.addCookie('_uit',theme)
             } catch (e) {
             }
         }
@@ -533,6 +534,7 @@ layui.define(['layer'], function (exports) {
             $body.removeData('theme');
         } catch (e) {
         }
+        admin.addCookie('_uit','')
     };
 
     /** 关闭当前iframe层弹窗 */
@@ -1504,7 +1506,27 @@ layui.define(['layer'], function (exports) {
     admin.on = function (events, callback) {
         return layui.onevent.call(this, 'admin', events, callback);
     };
+    //写Cookie
+    admin.addCookie = function (objName, objValue, objHours) {
+        var str = objName + "=" + escape(objValue); //编码
+        if (objHours > 0) {//为0时不设定过期时间，浏览器关闭时cookie自动消失
+            var date = new Date();
+            var ms = objHours * 3600 * 1000;
+            date.setTime(date.getTime() + ms);
+            str += "; expires=" + date.toGMTString();
+        }
+        document.cookie = str;
+    }
 
+    //读Cookie
+    admin.getCookie = function (objName) {//获取指定名称的cookie的值
+        var arrStr = document.cookie.split("; ");
+        for (var i = 0; i < arrStr.length; i++) {
+            var temp = arrStr[i].split("=");
+            if (temp[0] == objName) return unescape(temp[1]);  //解码
+        }
+        return "";
+    }
     /** 侧导航折叠状态下鼠标经过无限悬浮效果 */
     var navItemDOM = '.layui-layout-admin.admin-nav-mini>.layui-side .layui-nav .layui-nav-item';
     $(document).on('mouseenter', navItemDOM + ',' + navItemDOM + ' .layui-nav-child>dd', function () {

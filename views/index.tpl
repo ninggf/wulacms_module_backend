@@ -92,7 +92,7 @@
     <div class="layui-side">
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-shrink="_all">
-                <li class="layui-nav-item layui-this" id="navi-menu">
+                <li class="layui-nav-item" id="navi-menu">
                     <a lay-href="{'backend/home'|url}"><i class="layui-icon layui-icon-home"></i>&emsp;<cite>{'Dashboard'|t}</cite></a>
                 </li>
                 {foreach $dashboard->naviMenu()->menus() as $menu}
@@ -148,8 +148,16 @@
     <div class="layui-body"></div>
     <!-- 底部 -->
     <div class="layui-footer layui-text">
-        Copyright © 2013 - {'Y'|date} <a href="https://wulacms.com" target="_blank">wulacms.com</a> all rights reserved.
-        <span class="pull-right">Ver: {$pageMeta.cmsVer}</span>
+        {if $pageMeta.site.copyright}
+            Copyright © {$pageMeta.site.copyright}
+        {/if}
+        <span class="pull-right">
+            {if $pageMeta.site.supportBy}
+                {$pageMeta.site.supportBy}
+            {else}
+                Powered by <a href="https://wulacms.com" target="_blank">wulacms.com</a> Ver: {$pageMeta.cmsVer}
+            {/if}
+        </span>
     </div>
 </div>
 <!-- js -->
