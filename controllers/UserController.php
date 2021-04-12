@@ -148,7 +148,9 @@ class UserController extends PageController {
                 $roleRes   = $userTable->setRoles($uid, explode(',', $roleIds));
                 if ($metaRes && $roleRes) {
                     $db->commit();
-                    Syslog::info('common', 'Add User successfully', 'Add User', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
+                    $requests = Request::getInstance()->requests();
+                    unset($requests['passwd']);
+                    Syslog::info('common', 'Add User successfully', 'Add User', $this->passport->uid, '', json_encode($requests));                    Syslog::info('common', 'Add User successfully', 'Add User', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
 
                     return Ajax::success();
                 }
@@ -222,7 +224,9 @@ class UserController extends PageController {
                 $roleRes   = $userTable->setRoles($uid, explode(',', $roleIds));
                 if ($metaRes && $roleRes) {
                     $db->commit();
-                    Syslog::info('common', 'Edit User successfully', 'Edit User', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
+                    $requests = Request::getInstance()->requests();
+                    unset($requests['passwd']);
+                    Syslog::info('common', 'Edit User successfully', 'Edit User', $this->passport->uid, '', json_encode($requests));                    Syslog::info('common', 'Edit User successfully', 'Edit User', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
 
                     return Ajax::success();
                 }

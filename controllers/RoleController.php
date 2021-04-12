@@ -37,7 +37,7 @@ class RoleController extends PageController {
     }
 
     /**
-     * 权限列表
+     * 授权页面
      * @acl    grant:system/account/role
      *
      * @param int $rid
@@ -46,7 +46,19 @@ class RoleController extends PageController {
      * @return array|\wulaphp\mvc\view\View|null
      * @Author LW 2021/3/25 11:07
      */
-    public function grant(int $rid) {
+    public function grant(int $rid): View {
+        return $this->render('role/grant', ['rid' => $rid]);
+    }
+
+    /**
+     * 权限列表
+     * @acl    grant:system/account/role
+     * @param int $rid
+     *
+     * @get
+     * @return \backend\classes\layui\TableData
+     */
+    public function grantList(int $rid) {
         $rolePer = new RolePermission();
         $hasPers = array_column($rolePer->getPermissionByRoleId($rid), 'resId');
 
@@ -54,9 +66,6 @@ class RoleController extends PageController {
         $res  = $aclM->getResource('/');
         $tree = $this->permissionList($res, $hasPers, 0);
         $data = array_values($tree);
-        if (!Request::isAjax()) {
-            return $this->render('role/grant', ['rid' => $rid, 'data' => json_encode($data)]);
-        }
 
         return new TableData($data, count($data));
     }
@@ -65,7 +74,7 @@ class RoleController extends PageController {
      * @post
      * @acl grant:system/account/role
      */
-    public function grantPost(): JsonView {
+    public function grantSave(): JsonView {
         $rid    = irqst('rid', 1);
         $grants = rqst('grants');
         if (empty($grants))

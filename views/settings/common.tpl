@@ -51,13 +51,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="layui-form-item text-right submit-button">
+                    <button type="reset" class="layui-btn layui-btn-primary">{'Reset'|t}</button>
+                    <button class="layui-btn" lay-filter="saveBtn" lay-submit>{'Save'|t}</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="form-group-bottom text-center">
-        <button type="reset" class="layui-btn layui-btn-primary">{'Reset'|t}</button>
-        <button class="layui-btn" lay-filter="saveBtn" lay-submit>{'Save'|t}</button>
-    </div>
+
 </form>
 <script>
     layui.use(['@backend.settings'], function (setting) {

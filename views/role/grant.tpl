@@ -6,7 +6,7 @@
 </div>
 <script>
     layui.use(['jquery', '@backend.grant'], function ($, grant) {
-        grant.init({$data});
+        grant.init();
         $('#saveBtn').click(() => {
             grant.save()
         })

@@ -11,13 +11,11 @@ layui.define(['layer', 'table', 'util', 'admin', 'notice'], function (exports) {
     insXmSel
     selRid
 
-    init(data) {
+    init() {
       this.selRid         = $('#saveBtn').data('rid')
       this.grantListTable = table.render({
         id              : 'grantList',
-        lazy            : true,
-        data            : data,
-        url             : admin.url('backend/role/grant'),
+        url             : admin.url('backend/role/grant-list'),
         where           : {rid: this.selRid},
         treeDefaultClose: false,
         treeLinkage     : false,
@@ -70,13 +68,12 @@ layui.define(['layer', 'table', 'util', 'admin', 'notice'], function (exports) {
       })
       if (grant.length > 0) {
         let loadIndex = layer.load(2);
-        admin.post(admin.url('backend/role/grant'), {'rid': this.selRid, 'grants': grant}).then(function (data) {
+        admin.post(admin.url('backend/role/grant-save'), {'rid': this.selRid, 'grants': grant}).then(function (data) {
           layer.close(loadIndex);
           if (data.code === 200) {
             notice.success('保存成功');
             setTimeout(()=>{
               admin.closeThisTabs()
-              console.log('999')
             },2200)
           } else {
             notice.error(data.message);

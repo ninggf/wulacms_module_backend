@@ -2,7 +2,6 @@
 
 namespace backend\hooks\backend;
 
-use backend\classes\Dashboard;
 use system\classes\Setting;
 use system\classes\Syslog;
 use wulaphp\app\App;
@@ -10,6 +9,7 @@ use wulaphp\hook\Handler;
 
 class InitDashboard extends Handler {
     protected $acceptArgs = 2;
+
     public function handle(...$args) {
         /**@var \backend\classes\Dashboard $dashboard */
         $dashboard = $args[0];
@@ -41,12 +41,14 @@ class InitDashboard extends Handler {
                     $setting          = $system->get('setting', __('Settings'), 999998);
                     $setting->iconCls = 'layui-icon-util';
                     foreach ($settings as $s) {
-                        $id   = str_replace([' ', '-'], '_', $s->getId());
-                        $name = $s->getName();
-                        if ($passport->cando('r:system/settings' . $id)) {
-                            $lm          = $setting->get($id, $name);
-                            $lm->iconCls = $s->getIconCls() ?? 'layui-icon-util';
-                            $lm->url     = App::url('backend/settings/' . $id);
+                        if ($s instanceof Setting) {
+                            $id   = str_replace([' ', '-'], '_', $s->getId());
+                            $name = $s->getName();
+                            if ($passport->cando('r:system/settings/' . $id)) {
+                                $lm          = $setting->get($id, $name);
+                                $lm->iconCls = $s->getIconCls() ?? 'layui-icon-util';
+                                $lm->url     = App::url('backend/settings/' . $id);
+                            }
                         }
                     }
                 }

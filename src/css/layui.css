@@ -1432,3 +1432,6 @@ td[data-field=_ops] a .layui-icon::before{
 .layui-font-18::before{
   font-size: 18px !important
 }
+.layui-margin-left-10{
+  margin-left: -10px
+}

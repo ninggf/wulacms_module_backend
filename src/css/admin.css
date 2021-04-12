@@ -5308,3 +5308,6 @@ td[data-with="WARN"]::before {
 td[data-with="ERROR"]::before {
     background: #ED4014;
 }
+.submit-button{
+    margin: 24px 0px 10px 0px;
+}

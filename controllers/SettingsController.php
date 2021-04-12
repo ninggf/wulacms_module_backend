@@ -28,7 +28,8 @@ class SettingsController extends PageController {
             'settingId'   => $settingId,
             'settingName' => $name,
             'sets'        => $data,
-            'settingData' => json_encode($data)
+            'settingData' => json_encode($data),
+            'settingObject' => $setting
         ]);
     }
 
