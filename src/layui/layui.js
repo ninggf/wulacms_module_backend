@@ -1,7 +1,7 @@
 /*!
 
  @Name: layui
- @Description：经典模块化前端 UI 框架
+ @Description：Classic modular front-end UI framework
  @License：MIT
 
  */
@@ -17,7 +17,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.5.7'; //版本号
+    this.v = '2.6.4'; //版本号
   }
 
   //获取layui所在目录
@@ -38,23 +38,25 @@
   }()
 
   //异常提示
-  ,error = function(msg){
-    win.console && console.error && console.error('Layui hint: ' + msg);
+  ,error = function(msg, type){
+    type = type || 'log';
+    win.console && console[type] && console[type]('layui error hint: ' + msg);
   }
 
   ,isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]'
 
   //内置模块
-  ,modules = {
-    layer: 'modules/layer' //弹层
+  ,modules = config.builtin = {
+    lay: 'modules/lay' //基础 DOM 操作
+    ,layer: 'modules/layer' //弹层
     ,laydate: 'modules/laydate' //日期
     ,laypage: 'modules/laypage' //分页
     ,laytpl: 'modules/laytpl' //模板引擎
-    ,layim: 'modules/layim' //web通讯
     ,layedit: 'modules/layedit' //富文本编辑器
     ,form: 'modules/form' //表单集
     ,upload: 'modules/upload' //上传
-    ,transfer: 'modules/transfer' //上传
+    ,dropdown: 'modules/dropdown' //下拉菜单
+    ,transfer: 'modules/transfer' //穿梭框
     ,tree: 'modules/tree' //树结构
     ,table: 'modules/table' //表格
     ,element: 'modules/element' //常用元素操作
@@ -65,10 +67,10 @@
     ,flow: 'modules/flow' //流加载
     ,util: 'modules/util' //工具块
     ,code: 'modules/code' //代码修饰器
-    ,jquery: 'modules/jquery' //DOM库（第三方）
+    ,jquery: 'modules/jquery' //DOM 库（第三方）
     
-    ,mobile: 'modules/mobile' //移动大模块 | 若当前为开发目录，则为移动模块入口，否则为移动模块集合
-    ,'layui.all': '../layui.all' //PC模块合并版
+    ,all: 'modules/all'
+    ,'layui.all': 'modules/layui.all' //聚合标识（功能性的，非真实模块）
   };
 
   //记录基础数据
@@ -97,21 +99,27 @@
       deps = []
     );
     
-    if((!layui['layui.all'] && layui['layui.mobile'])){
-      return callback.call(that);
-    }
-
-    that.use(deps, callback);
+    that.use(deps, callback, null, 'define');
     return that;
   };
 
   //使用特定模块
-  Layui.prototype.use = function(apps, callback, exports){
+  Layui.prototype.use = function(apps, callback, exports, from){
     var that = this
     ,dir = config.dir = config.dir ? config.dir : getPath
     ,head = doc.getElementsByTagName('head')[0];
 
-    apps = typeof apps === 'string' ? [apps] : apps;
+    apps = function(){
+      if(typeof apps === 'string'){
+        return [apps];
+      }
+      //当第一个参数为 function 时，则自动加载所有内置模块，且执行的回调即为该 function 参数；
+      else if(typeof apps === 'function'){
+        callback = apps;
+        return ['all'];
+      }
+      return apps;
+    }();
     
     //如果页面已经存在 jQuery 1.7+ 库且所定义的模块依赖 jQuery，则不加载内部 jquery 模块
     if(window.jQuery && jQuery.fn.on){
@@ -123,7 +131,7 @@
       layui.jquery = layui.$ = jQuery;
     }
     
-    var item = apps[0] ? apps[0].replace(/[^\/]+?\//,'') : undefined
+    var item = apps[0]
     ,timeout = 0;
     exports = exports || [];
 
@@ -138,26 +146,31 @@
         head.removeChild(node);
         (function poll() {
           if(++timeout > config.timeout * 1000 / 4){
-            return error(item + ' is not a valid module');
+            return error(item + ' is not a valid module', 'error');
           };
           config.status[item] ? onCallback() : setTimeout(poll, 4);
         }());
       }
     }
-    
+
     //回调
     function onCallback(){
       exports.push(layui[item]);
       apps.length > 1 ?
-        that.use(apps.slice(1), callback, exports)
-      : ( typeof callback === 'function' && callback.apply(layui, exports) );
+        that.use(apps.slice(1), callback, exports, from)
+      : ( typeof callback === 'function' && function(){
+        //保证文档加载完毕再执行回调
+        if(layui.jquery && typeof layui.jquery === 'function' && from !== 'define'){
+          return layui.jquery(function(){
+            callback.apply(layui, exports);
+          });
+        }
+        callback.apply(layui, exports);
+      }() );
     }
     
-    //如果引入了完整库（layui.all.js），内置的模块则不必再加载
-    if(apps.length === 0 
-    || (layui['layui.all'] && modules[item]) 
-    || (!layui['layui.all'] && layui['layui.mobile'] && modules[item])
-    ){
+    //如果引入了聚合板，内置的模块则不必重复加载
+    if( apps.length === 0 || (layui['layui.all'] && modules[item]) ){
       return onCallback(), that;
     }
     
@@ -166,10 +179,10 @@
     //如果是扩展模块，则判断模块路径值是否为 {/} 开头，
     //如果路径值是 {/} 开头，则模块路径即为后面紧跟的字符。
     //否则，则按照 base 参数拼接模块路径
-    var url = ( modules[item] ? (dir + 'js/')
+
+    var url = ( modules[item] ? (dir + 'modules/')
       : (/^\{\/\}/.test(that.modules[item]) ? '' : (config.base || ''))
     ) + (that.modules[item] || item) + '.js';
-    
     url = url.replace(/^\{\/\}/, '');
     
     //如果扩展模块（即：非内置模块）对象已经存在，则不必再加载
@@ -220,7 +233,7 @@
     } else { //缓存
       (function poll() {
         if(++timeout > config.timeout * 1000 / 4){
-          return error(item + ' is not a valid module');
+          return error(item + ' is not a valid module', 'error');
         };
         (typeof config.modules[item] === 'string' && config.status[item]) 
         ? onCallback() 
@@ -257,7 +270,7 @@
     if(typeof fn === 'string') cssname = fn;
     
     var app = (cssname || href).replace(/\.|\//g, '')
-    ,id = link.id = 'layuicss-'+app
+    ,id = link.id = 'layuicss-'+ app
     ,timeout = 0;
     
     link.rel = 'stylesheet';
@@ -297,7 +310,8 @@
 
   //css内部加载器
   Layui.prototype.addcss = function(firename, fn, cssname){
-    return layui.link(config.dir + 'css/' + firename, fn, cssname);
+    // layuiDir
+    return layui.link(window.wulacfg.mBase + '/backend/assets/css/' + firename, fn, cssname);
   };
 
   //图片预加载
@@ -343,7 +357,7 @@
     options = options || {};
     for(var o in options){
       if(that[o] || that.modules[o]){
-        error('\u6A21\u5757\u540D '+ o +' \u5DF2\u88AB\u5360\u7528');
+        error(o+ ' Module already exists', 'error');
       } else {
         that.modules[o] = options[o];
       }

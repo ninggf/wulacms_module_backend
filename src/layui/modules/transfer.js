@@ -1,7 +1,6 @@
 /**
  
- @Name：layui.transfer 穿梭框
- @Author：贤心
+ @Name：transfer 穿梭框组件
  @License：MIT
 
  */
@@ -28,7 +27,7 @@ layui.define(['laytpl', 'form'], function(exports){
       return that;
     }
     
-    //事件监听
+    //事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
@@ -130,12 +129,7 @@ layui.define(['laytpl', 'form'], function(exports){
   //重载实例
   Class.prototype.reload = function(options){
     var that = this;
-    
-    layui.each(options, function(key, item){
-      if(item.constructor === Array) delete that.config[key];
-    });
-    
-    that.config = $.extend(true, {}, that.config, options);
+    that.config = $.extend({}, that.config, options);
     that.render();
   };
 

@@ -1,7 +1,6 @@
 /**
 
- @Name：layui.code 代码修饰器
- @Author：贤心
+ @Name：code 代码修饰器
  @License：MIT
     
  */
@@ -10,13 +9,12 @@ layui.define('jquery', function(exports){
   "use strict";
   
   var $ = layui.$;
-  var about = 'http://www.layui.com/doc/modules/code.html'; //关于信息
   
   exports('code', function(options){
     var elems = [];
     options = options || {};
     options.elem = $(options.elem||'.layui-code');
-    options.about = 'about' in options ? options.about : true;
+    options.lang = 'lang' in options ? options.lang : 'code';
     
     options.elem.each(function(){
       elems.push(this);
@@ -34,7 +32,7 @@ layui.define('jquery', function(exports){
       othis.html('<ol class="layui-code-ol"><li>' + html.replace(/[\r\t\n]+/g, '</li><li>') + '</li></ol>')
       
       if(!othis.find('>.layui-code-h3')[0]){
-        othis.prepend('<h3 class="layui-code-h3">'+ (othis.attr('lay-title')||options.title||'code') + (options.about ? '<a href="'+ about +'" target="_blank">layui.code</a>' : '') + '</h3>');
+        othis.prepend('<h3 class="layui-code-h3">'+ (othis.attr('lay-title')||options.title||'&lt;/&gt;') + '<a href="javascript:;">'+ (othis.attr('lay-lang')||options.lang||'') +'</a>' + '</h3>');
       }
       
       var ol = othis.find('>.layui-code-ol');
@@ -58,4 +56,5 @@ layui.define('jquery', function(exports){
     });
     
   });
-}).addcss('modules/code.css', 'skincodecss');
+}).addcss('modules/code.css?v=1', 'skincodecss');
+

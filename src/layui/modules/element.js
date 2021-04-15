@@ -1,7 +1,6 @@
 /**
 
- @Name：layui.element 常用元素操作
- @Author：贤心
+ @Name：element 常用元素操作
  @License：MIT
     
  */
@@ -26,7 +25,7 @@ layui.define('jquery', function(exports){
     return that;
   };
   
-  //表单事件监听
+  //表单事件
   Element.prototype.on = function(events, callback){
     return layui.onevent.call(this, MOD_NAME, events, callback);
   };
@@ -460,7 +459,10 @@ layui.define('jquery', function(exports){
   Element.prototype.render = Element.prototype.init;
 
   var element = new Element(), dom = $(document);
-  element.render();
+  
+  $(function(){
+    element.render();
+  });
   
   var TITLE = '.layui-tab-title li';
   dom.on('click', TITLE, call.tabClick); //Tab切换

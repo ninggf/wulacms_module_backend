@@ -1,7 +1,6 @@
 /**
 
  @Name：layui 移动模块入口 | 构建后则为移动模块集合
- @Author：贤心
  @License：MIT
     
  */

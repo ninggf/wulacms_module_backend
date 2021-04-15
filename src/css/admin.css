@@ -145,6 +145,8 @@ body {
     position: absolute;
     left: 235px;
     top: 50px;
+    bottom: 44px;
+    padding-bottom: 0;
     z-index: auto;
     overflow: auto;
     -webkit-transition: left .3s;
@@ -5249,6 +5251,9 @@ body .ew-xmselect-tree xm-select .xm-body .xm-option.selected .xm-option-content
 }
 
 /** ---------------------------colorful主题end----------------------------------- */
+.layui-elem-field legend {
+    font-size: 16px;
+}
 .layui-no-m {
     margin: 0!important;
 }

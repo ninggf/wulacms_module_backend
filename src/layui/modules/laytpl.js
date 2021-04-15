@@ -1,7 +1,6 @@
-/**
+﻿/**
  
- @Name : layui.laytpl 模板引擎
- @Author：贤心
+ @Name : laytpl 模板引擎
  @License：MIT
  
  */
@@ -32,7 +31,7 @@ layui.define(function(exports){
       .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     },
     error: function(e, tplog){
-      var error = 'Laytpl Error：';
+      var error = 'Laytpl Error: ';
       typeof console === 'object' && console.error(error + e + '\n'+ (tplog || ''));
       return error + e;
     }

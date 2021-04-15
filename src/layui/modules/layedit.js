@@ -1,7 +1,6 @@
 /**
 
- @Name：layui.layedit 富文本编辑器
- @Author：贤心
+ @Name：layedit 富文本编辑器
  @License：MIT
     
  */
@@ -43,7 +42,7 @@ layui.define(['layer', 'form'], function(exports){
     return that;
   };
   
-  //事件监听
+  //事件
   Edit.prototype.on = function(events, callback){
     return layui.onevent(MOD_NAME, events, callback);
   };
@@ -423,7 +422,7 @@ layui.define(['layer', 'form'], function(exports){
           ,shadeClose: true
           ,shade: 0.1
           ,skin: 'layui-layer-msg'
-          ,content: ['http://www.layui.com/about/layedit/help.html', 'no']
+          ,content: ['', 'no']
         });
       }
     }

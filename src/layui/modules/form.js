@@ -1,7 +1,6 @@
 /**
 
- @Name：layui.form 表单组件
- @Author：贤心
+ @Name：form 表单组件
  @License：MIT
 
  */
@@ -37,6 +36,7 @@ layui.define('layer', function(exports){
   }
   ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this'
   ,SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
+
   ,Form = function(){
     this.config = {
       verify: {
@@ -265,12 +265,14 @@ layui.define('layer', function(exports){
         nameIndex[key] = nameIndex[key] | 0;
         item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
       }
+
       if(/^checkbox|radio$/.test(item.type) && !item.checked) return;
       field[item.name] = item.value;
     });
 
     return field;
   };
+
   //表单控件渲染
   Form.prototype.render = function(type, filter){
     var that = this
@@ -743,16 +745,6 @@ layui.define('layer', function(exports){
     ) : layui.each(items, function(index, item){
       item();
     });
-    //设置表单初始值
-    if(!type){
-      let val='',fieldElem = elemForm.find('input,select,textarea') //获取所有表单域
-      layui.each(fieldElem, function(_, item){
-        item.name = (item.name || '').replace(/^\s*|\s*&/, '')
-        if(!item.name) return
-        val = (/^checkbox|radio$/.test(item.type) && !item.checked) ? '' : item.value
-        $(item).data('rValue',val);
-      });
-    }
     return that;
   };
   // 单个输入组件校验
@@ -853,7 +845,9 @@ layui.define('layer', function(exports){
   var form = new Form()
   ,$dom = $(document), $win = $(window);
 
-  form.render();
+  $(function(){
+    form.render();
+  });
 
   //表单reset重置渲染
   $dom.on('reset', ELEM, function(){

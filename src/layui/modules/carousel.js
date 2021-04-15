@@ -1,7 +1,6 @@
 /**
 
- @Name：layui.carousel 轮播模块
- @Author：贤心
+ @Name：carousel 轮播模块
  @License：MIT
     
  */
@@ -24,7 +23,7 @@ layui.define('jquery', function(exports){
       return that;
     }
     
-    //事件监听
+    //事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }

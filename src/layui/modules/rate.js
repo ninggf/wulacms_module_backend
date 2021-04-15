@@ -1,7 +1,6 @@
 /**
 
- @Title: layui.rate 评分评星
- @Author: star1029
+ @Title: rate 评分评星组件
  @License：MIT
 
  */
@@ -22,7 +21,7 @@ layui.define('jquery',function(exports){
       return that;
     }
     
-    //事件监听
+    //事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }

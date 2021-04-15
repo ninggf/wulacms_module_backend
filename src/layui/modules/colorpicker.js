@@ -1,7 +1,6 @@
 /**
 
- @Title: layui.colorpicker 颜色选择器
- @Author: star1029
+ @Title: colorpicker 颜色选择器组件
  @License：MIT
 
  */
@@ -23,7 +22,7 @@ layui.define('jquery', function(exports){
       return that;
     }
     
-    //事件监听
+    //事件
     ,on: function(events, callback){
       return layui.onevent.call(this, 'colorpicker', events, callback);
     }

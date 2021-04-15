@@ -1,7 +1,6 @@
 /**
  
- @Name：layui.tree 树
- @Author：star1029
+ @Name：tree 树组件
  @License：MIT
 
  */
@@ -28,7 +27,7 @@ layui.define('form', function(exports){
       return that;
     }
     
-    //事件监听
+    //事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }

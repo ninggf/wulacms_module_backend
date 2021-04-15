@@ -1,11 +1,10 @@
-let __laydef = layui.define;
 layui.config({
     version          : '3.0.1',
     base             : window.wulacfg.mBase + '/backend/assets/addon/',
     dir              : window.wulacfg.mBase + '/backend/assets/',
     module           : window.wulacfg.mBase,
     ajaxSuccessBefore: function (data, url, opts) {
-        let $d = layui.$(document)
+        var $d = layui.$(document)
         switch (opts.xhr.status) {
             case 390:
                 $d.trigger('auth.user.blocked');
@@ -65,7 +64,7 @@ layui.config({
     steps     : 'steps/steps',
     notice    : 'notice/notice',
     cascader  : 'cascader/cascader',
-    dropdown  : 'dropdown/dropdown',
+    dropdownX : 'dropdown/dropdown',
     fileChoose: 'fileChoose/fileChoose',
     Split     : 'Split/Split',
     Cropper   : 'Cropper/Cropper',
@@ -74,42 +73,10 @@ layui.config({
     introJs   : 'introJs/introJs',
     zTree     : 'zTree/zTree'
 });
-layui.define = (deps, factory) => {
-    let type       = typeof deps === 'function'
-        , callback = function () {
 
-        const setApp = function (app, exports) {
-            layui[app]               = exports;
-            layui.cache.modules[app] = app;
-            layui.cache.status[app]  = true;
-        };
-
-        typeof factory === 'function' && factory(function (app, exports) {
-            setApp(app, exports);
-            layui.cache.callback[app] = function () {
-                factory(setApp);
-            }
-        });
-
-        return this;
-    };
-
-    type && (factory = deps)
-    callback()
-    return layui
-};
-
-//=require ./modules/jquery.js
-//=require ./modules/layer.js
-//=require ./modules/element.js
-//=require ./modules/laytpl.js
-//=require ./modules/laypage.js
-//=require ./modules/util.js
 //=require ../addon/contextMenu.js
 //=require ../addon/notice/notice.js
 //=require ../addon/admin.js
-
-if (__laydef) layui.define = __laydef;
 
 window._t = function () {
     if (arguments.length === 0) return ''
@@ -136,13 +103,13 @@ window._t = function () {
     return msgStr
 };
 
-layui.use(['admin', 'notice','contextMenu'], (admin, notice) => {
+layui.use(['admin', 'notice'], function (admin, notice) {
     if (window === top) {
         window.$notice = notice;
     } else {
         window.$notice = top.$notice;
     }
-    admin.url    = (url) => {
+    admin.url    = function (url) {
         if (typeof (url) === "string") {
             if (/^(https?:\/\/|ftps?:\/\/|\/)/.test(url)) {
                 return url;
@@ -176,16 +143,16 @@ layui.use(['admin', 'notice','contextMenu'], (admin, notice) => {
         }
         return url;
     };
-    admin.assets = (url) => {
+    admin.assets = function (url) {
         if (/^(\/|https?:\/\/).+/.test(url)) {
             return url;
         }
         return window.wulacfg.assets + url;
     };
-    admin.base   = (url) => {
+    admin.base   = function (url) {
         if (/^(\/|https?:\/\/).+/.test(url)) {
             return url;
         }
         return window.wulacfg.base + url;
     };
-});
+}, [], 'define');

@@ -1,7 +1,6 @@
 /**
 
- @Title: layui.slider 滑块
- @Author: star1029
+ @Title: slider 滑块组件
  @License：MIT
 
  */
@@ -22,7 +21,7 @@ layui.define('jquery', function(exports){
       return that;
     }
     
-    //事件监听
+    //事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }

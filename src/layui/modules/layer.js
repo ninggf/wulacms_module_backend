@@ -1,8 +1,6 @@
 /**
 
- @Name：layer v3.1.2 Web弹层组件
- @Author：贤心
- @Site：http://layer.layui.com
+ @Name：layer - Web 弹出层组件
  @License：MIT
     
  */
@@ -39,7 +37,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
     return style[style.getPropertyValue ? 'getPropertyValue' : 'getAttribute'](name);
   },
   
-  //载入CSS配件
+  //载入 CSS 依赖
   link: function(href, fn, cssname){
     
     //未设置路径，则不主动加载css
@@ -72,7 +70,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.1.1',
+  v: '3.3.0',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -175,17 +173,22 @@ var layer = {
       shade: false,
       resize: false,
       fixed: false,
-      maxWidth: 210
+      maxWidth: 260
     }, options));
   }
 };
 
 var Class = function(setings){  
-  var that = this;
+  var that = this, creat = function(){
+    layer.ready(function(){
+      that.creat();
+    });
+  };
   that.index = ++layer.index;
+  that.config.maxWidth = $(win).width() - 15*2; //初始最大宽度：当前屏幕宽，左右留 15px 边距
   that.config = $.extend({}, that.config, ready.config, setings);
-  document.body ? that.creat() : setTimeout(function(){
-    that.creat();
+  document.body ? creat() : setTimeout(function(){
+    creat();
   }, 30);
 };
 
@@ -934,19 +937,19 @@ layer.close = function(index){
     typeof ready.end[index] === 'function' && ready.end[index]();
     delete ready.end[index];
   };
-  
+
   if(layero.data('isOutAnim')){
     layero.addClass('layer-anim '+ closeAnim);
   }
-  
+
   $('#layui-layer-moves, #layui-layer-shade' + index).remove();
   layer.ie == 6 && ready.reselect();
-  ready.rescollbar(index); 
+  ready.rescollbar(index);
   if(layero.attr('minLeft')){
     ready.minIndex--;
     ready.minLeft.push(layero.attr('minLeft'));
   }
-  
+
   if((layer.ie && layer.ie < 10) || !layero.data('isOutAnim')){
     remove()
   } else {
@@ -958,11 +961,13 @@ layer.close = function(index){
 
 //关闭所有层
 layer.closeAll = function(type){
-  $.each($('.'+doms[0]), function(){
-    var othis = $(this);
-    var is = type ? (othis.attr('type') === type) : 1;
-    is && layer.close(othis.attr('times'));
-    is = null;
+  layer.ready(function(){
+    $.each($('.'+doms[0]), function(){
+      var othis = $(this);
+      var is = type ? (othis.attr('type') === type) : 1;
+      is && layer.close(othis.attr('times'));
+      is = null;
+    });
   });
 };
 

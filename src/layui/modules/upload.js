@@ -1,7 +1,6 @@
 /**
 
- @Title: layui.upload 文件上传
- @Author: 贤心
+ @Title: upload 文件上传组件
  @License：MIT
 
  */
@@ -25,7 +24,7 @@ layui.define('layer' , function(exports){
       return that;
     }
     
-    //事件监听
+    //事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
@@ -227,11 +226,11 @@ layui.define('layer' , function(exports){
             allDone();
           }
         };
-        //监听进度条
+        //进度条
         if(typeof options.progress === 'function'){
           opts.xhr = function(){
             var xhr = $.ajaxSettings.xhr();
-            //监听上传进度
+            //上传进度
             xhr.upload.addEventListener("progress", function (e) {
               if(e.lengthComputable) {
                 var percent = Math.floor((e.loaded/e.total)* 100); //百分比
