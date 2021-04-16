@@ -2,7 +2,9 @@
   <div class="layui-fluid page-header">
     <h2>{'Message'|t}</h2>
     <div class="page-toolbar">
-
+      <button type="button" class="layui-btn layui-btn-sm" id="newMsgButton">
+        <i class="layui-icon">&#xe654;</i> {'New'|t} <i class="layui-icon layui-icon-down layui-font-12"></i>
+      </button>
     </div>
   </div>
 
@@ -26,6 +28,9 @@
                 <option value="2">{'Deleted'|t}</option>
               </select>
             </div>
+          </div>
+          <div class="layui-col-sm6 layui-col-md4">
+
           </div>
         </div>
         <div class="layui-form-item layui-row layui-no-mb">
@@ -53,7 +58,12 @@
     </div>
     <table id="pageTable" lay-filter="pageTable"></table>
   </div>
-
+  {literal}
+  <script type="text/html" id="title_desc">
+    <small>{{ d.title }}</small>
+    <div>{{ d.desc }}</div>
+  </script>
+  {/literal}
   {foreach $editors as $etype => $editor}
   <script type="text/html" id="{$etype}_editor">
     {$editor}
@@ -62,8 +72,9 @@
 </template>
 
 <script>
-layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admin, laydate) => {
-  let element = layui.element
+layui.use(['jquery', 'form', 'table', 'admin', 'laydate', 'dropdown'], ($, form, table, admin, laydate) => {
+  let element    = layui.element
+      , dropdown = layui.dropdown
 
   class TablePage {
     where = {
@@ -116,6 +127,14 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admi
         if (typ != that.where.msgType) {
           that.where.msgType = typ
           dataTable.reloadData()
+        }
+      })
+      //下拉菜单
+      dropdown.render({
+        elem: '#newMsgButton',
+        data: pageData.newMsgItems,
+        click(obj) {
+          console.log(obj)
         }
       })
     }

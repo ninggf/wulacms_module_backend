@@ -83,6 +83,6 @@ class InitDashboard extends Handler {
         $msg->iconCls           = 'layui-icon-notice';
         $msg->badge             = 10;
         $msg->attrs['ew-event'] = 'message';
-        $msg->data['url']       = App::url('backend/notices');
+        $msg->data['url']       = App::url('backend/notice');
     }
 }

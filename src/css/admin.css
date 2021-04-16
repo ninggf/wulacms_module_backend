@@ -107,7 +107,7 @@ body {
     text-align: center;
 }
 .layui-nav-child-left {
-    left: -30px;
+    left: 12px;
 }
 .layui-nav-child-left a {
     text-align: left !important;

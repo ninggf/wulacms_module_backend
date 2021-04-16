@@ -5,7 +5,6 @@ namespace backend\controllers;
 use backend\classes\layui\TableData;
 use backend\classes\layui\TablePage;
 use backend\classes\PageController;
-use backend\classes\query\MessageParam;
 use system\classes\Message;
 use wulaphp\io\Request;
 use wulaphp\mvc\view\View;
@@ -19,16 +18,24 @@ class MessageController extends PageController {
     use TablePage;
 
     public function index(): View {
-        $messages  = Message::messages();
-        $editViews = [];
-
+        $messages    = Message::messages();
+        $editViews   = [];
+        $newMsgItems = [];
         foreach ($messages as $type => $msg) {
             $editViews[ $type ] = $msg->getEditView()->render();
+            $newMsgItems[]      = [
+                'title' => $msg->getName(),
+                'id'    => $type
+            ];
         }
         $defaultType = array_keys($editViews)[0];
         Request::getInstance()->addUserData(['msgType' => $defaultType]);
 
-        return $this->renderTable('message', ['editors' => $editViews, 'messages' => $messages]);
+        return $this->renderTable('message', [
+            'editors'  => $editViews,
+            'messages' => $messages,
+            'pageData' => ['newMsgItems' => $newMsgItems]
+        ]);
     }
 
     /**
@@ -87,14 +94,17 @@ class MessageController extends PageController {
         return new TableData($msg, $total);
     }
 
+    public function view() {
+
+    }
+
     protected function cols(): array {
         $cols   = [];
         $cols[] = ['field' => 'id', 'title' => 'ID', 'width' => 80];
-        $cols[] = ['field' => 'create_time', 'title' => __('Create Time'), 'width' => 150];
+        $cols[] = ['field' => 'create_time', 'title' => __('Create & Publish Time'), 'width' => 180];
         $cols[] = ['field' => 'name', 'title' => __('User'), 'width' => 150];
         $cols[] = ['field' => 'status', 'title' => __('Status'), 'width' => 80];
-        $cols[] = ['field' => 'title', 'title' => __('Title'), 'width' => 250];
-        $cols[] = ['field' => 'desc', 'title' => __('Desc')];
+        $cols[] = ['field' => 'title', 'title' => __('Title & Desc'), 'templet' => '#title_desc'];
         $cols[] = ['field' => '_ops', 'width' => 80, 'toolbar' => '#toolbar'];
 
         return [$cols];

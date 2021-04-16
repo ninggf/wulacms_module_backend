@@ -14,6 +14,7 @@ use backend\classes\AuthedController;
 use backend\classes\Dashboard;
 use backend\classes\PageMetaData;
 use Exception;
+use system\classes\Message;
 use system\classes\model\UserMetaTable;
 use system\classes\model\UserTable;
 use system\classes\Syslog;
@@ -64,6 +65,9 @@ class IndexController extends AuthedController {
     }
 
     public function notice(): View {
+        $messages = Message::messages();
+        $msgModel = new \system\classes\model\Message();
+
         $data = apply_filter('backend\initNoticeWidget', []);
         $tpl  = $data['tpl'] ?? 'notice';
 

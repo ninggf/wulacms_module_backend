@@ -1,7 +1,9 @@
 <div class="layui-fluid page-header">
     <h2>{'Message'|t}</h2>
     <div class="page-toolbar">
-
+      <button type="button" class="layui-btn layui-btn-sm" id="newMsgButton">
+        <i class="layui-icon">&#xe654;</i> {'New'|t} <i class="layui-icon layui-icon-down layui-font-12"></i>
+      </button>
     </div>
   </div>
 
@@ -25,6 +27,9 @@
                 <option value="2">{'Deleted'|t}</option>
               </select>
             </div>
+          </div>
+          <div class="layui-col-sm6 layui-col-md4">
+
           </div>
         </div>
         <div class="layui-form-item layui-row layui-no-mb">
@@ -52,16 +57,22 @@
     </div>
     <table id="pageTable" lay-filter="pageTable"></table>
   </div>
-
+  {literal}
+  <script type="text/html" id="title_desc">
+    <small>{{ d.title }}</small>
+    <div>{{ d.desc }}</div>
+  </script>
+  {/literal}
   {foreach $editors as $etype => $editor}
   <script type="text/html" id="{$etype}_editor">
     {$editor}
   </script>
   {/foreach}
-<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(obj,key,value){if(key in obj){Object.defineProperty(obj,key,{value:value,enumerable:true,configurable:true,writable:true});}else{obj[key]=value;}return obj;}layui.use(['jquery','form','table','admin','laydate'],function($,form,table,admin,laydate){var element=layui.element;var TablePage=/*#__PURE__*/function(){function TablePage(){_defineProperty(this,"where",{'sort[name]':'id','sort[dir]':'d','msgType':$('#messageType').find('li.layui-this').data('type')});}var _proto=TablePage.prototype;_proto.init=function init(id,cols,data){var _this=this;// 绘制表格
+<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(obj,key,value){if(key in obj){Object.defineProperty(obj,key,{value:value,enumerable:true,configurable:true,writable:true});}else{obj[key]=value;}return obj;}layui.use(['jquery','form','table','admin','laydate','dropdown'],function($,form,table,admin,laydate){var element=layui.element,dropdown=layui.dropdown;var TablePage=/*#__PURE__*/function(){function TablePage(){_defineProperty(this,"where",{'sort[name]':'id','sort[dir]':'d','msgType':$('#messageType').find('li.layui-this').data('type')});}var _proto=TablePage.prototype;_proto.init=function init(id,cols,data){var _this=this;// 绘制表格
 var dataTable=table.render({elem:id,cols:cols,autoSort:false,data:data,lazy:true,limit:30,where:this.where,url:admin.url('backend/message/data'),page:true}),that=this;//排序
 table.on('sort(pageTable)',function(obj){_this.where['sort[name]']=obj.field;_this.where['sort[dir]']=obj.type==='asc'?'a':'d';dataTable.reloadData();});//绘制日期控件
 laydate.render({elem:'input[name="date"]',type:'date',range:true,trigger:'click'});//搜索表单提交
 form.on('submit(searchBtn)',function(obj){_this.where=$.extend(_this.where,obj.field);dataTable.reloadData();return false;});//重置表单
 form.on('reset(searchForm)',function(obj){_this.where=$.extend(_this.where,obj.field);dataTable.reloadData();});//标签切换
-element.on('tab(messageType)',function(){var typ=$(this).data('type');if(typ!=that.where.msgType){that.where.msgType=typ;dataTable.reloadData();}});};return TablePage;}();var page=new TablePage();page.init('#pageTable',pageData.table.cols,pageData.table.data);});{/literal}</script>
+element.on('tab(messageType)',function(){var typ=$(this).data('type');if(typ!=that.where.msgType){that.where.msgType=typ;dataTable.reloadData();}});//下拉菜单
+dropdown.render({elem:'#newMsgButton',data:pageData.newMsgItems,click:function click(obj){console.log(obj);}});};return TablePage;}();var page=new TablePage();page.init('#pageTable',pageData.table.cols,pageData.table.data);});{/literal}</script>
