@@ -14,7 +14,7 @@
                     <div class="layui-line-dash"></div>
                     <h3>角色</h3>
                     <div class="layui-badge-list" style="padding-top: 6px;">
-                        {foreach $myPassport.data.roles as $role}
+                        {foreach $myPassport.data.rolens as $role}
                             <span class="layui-badge layui-bg-gray">{$role}</span>
                         {/foreach}
                     </div>

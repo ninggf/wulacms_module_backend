@@ -63,7 +63,7 @@ class MenuItem {
         if (!isset ($this->child [ $id ])) {
             $this->child[ $id ]        = new MenuItem($id);
             $this->child[ $id ]->level = $this->level + 1;
-            $this->child[ $id ]->pos   = $pos == null ? $this->cpos ++ : $pos;
+            $this->child[ $id ]->pos   = $pos ?? $this->cpos ++;
         }
         if ($name) {
             $this->child[ $id ]->name = $name;

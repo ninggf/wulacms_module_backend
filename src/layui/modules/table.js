@@ -62,7 +62,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         that.resize.call(that);
       }
       ,reloadData: function (){
-        if(that.layPage.length > 0){
+        that.config.lazy = false
+        if(that.layPage.length > 0 && that.layPage.find('.layui-input').length > 0){
           that.layPage.find('.layui-input').val(1)
           that.layPage.find('.layui-laypage-btn').click()
         }else {

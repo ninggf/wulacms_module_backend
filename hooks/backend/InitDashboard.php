@@ -34,6 +34,11 @@ class InitDashboard extends Handler {
                     $role->url     = App::url('backend/role');
                 }
             }
+            if ($passport->cando('r:system/message')) {
+                $message          = $system->get('message', __('Message'), 2);
+                $message->iconCls = 'layui-icon-email';
+                $message->url     = App::url('backend/message');
+            }
             # 设置
             if ($passport->cando('r:system/settings')) {
                 $settings = Setting::settings();
@@ -73,11 +78,11 @@ class InitDashboard extends Handler {
         }
 
         //顶部菜单
-        //        $topMenu                = $dashboard->topMenu();
-        //        $msg                    = $topMenu->get('msg', __('Message'), 1);
-        //        $msg->iconCls           = 'layui-icon-notice';
-        //        $msg->badge             = 10;
-        //        $msg->attrs['ew-event'] = 'message';
-        //        $msg->data['url']       = App::url('backend/notices');
+        $topMenu                = $dashboard->topMenu();
+        $msg                    = $topMenu->get('msg', __('Message'), 1);
+        $msg->iconCls           = 'layui-icon-notice';
+        $msg->badge             = 10;
+        $msg->attrs['ew-event'] = 'message';
+        $msg->data['url']       = App::url('backend/notices');
     }
 }

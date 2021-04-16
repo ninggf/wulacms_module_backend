@@ -5316,3 +5316,18 @@ td[data-with="ERROR"]::before {
 .submit-button{
     margin: 24px 0px 10px 0px;
 }
+
+.page-header {
+    padding-bottom: 0;
+    margin-bottom: -10px;
+}
+
+.page-header small {
+    font-size: 65%;
+}
+
+.page-header .page-toolbar{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}

@@ -19,6 +19,7 @@ use wulaphp\auth\AclResource;
 use wulaphp\auth\AclResourceManager;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
+use wulaphp\io\Response;
 use wulaphp\mvc\view\JsonView;
 use wulaphp\mvc\view\View;
 use wulaphp\validator\ValidateException;
@@ -47,12 +48,20 @@ class RoleController extends PageController {
      * @Author LW 2021/3/25 11:07
      */
     public function grant(int $rid): View {
-        return $this->render('role/grant', ['rid' => $rid]);
+        $roleM              = new RoleModel();
+        $where['id']        = $rid;
+        $where['tenant_id'] = APP_TENANT_ID;
+        $role               = $roleM->findOne($where);
+        if ($role['id']) {
+            return $this->render('role/grant', ['rid' => $rid, 'role' => $role]);
+        }
+        Response::respond(404);
     }
 
     /**
      * 权限列表
      * @acl    grant:system/account/role
+     *
      * @param int $rid
      *
      * @get
@@ -144,6 +153,7 @@ class RoleController extends PageController {
             if ($result) {
                 return Ajax::error('请检查角色代码,不能重复~');
             }
+            $role['system'] = 0;
             if ($roleModel->addRole($role)) {
                 Syslog::info('common', 'Add Role successfully', 'Add Role', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
 
@@ -168,17 +178,27 @@ class RoleController extends PageController {
         $role['pid'] = irqst('pid', 0);
         $roleModel   = new RoleModel();
         if (empty($id))
-            return Ajax::error('当前用户无效,请刷新重试');
+            return Ajax::error('当前角色无效,请刷新重试');
         try {
-            $role['tenant_id'] = $tenant_id = $this->passport->data['tenant_id'];
-            $result            = $roleModel->findOne(['tenant_id' => $tenant_id, 'name' => $role['name']], 'id');
+            $crole = $roleModel->findOne($id)->ary();
+            if (!$crole) {
+                return Ajax::error('角色不存在~');
+            }
 
+            $tenant_id = $this->passport->data['tenant_id'];
+            $result    = $roleModel->findOne(['tenant_id' => $tenant_id, 'name' => $role['name']])->ary();
             if ($result && $result['id'] != $id) {
                 return Ajax::error('请检查角色代码,不能重复~');
             }
+
             if ($roleModel->checkRoleIsMySubRole($role['pid'], $id, $tenant_id)) {
                 return Ajax::error('修改失败,不能修改上级角色为当前子类角色!');
             }
+
+            if ($crole['system']) {
+                unset($role['name']);//内置角色不能修改name
+            }
+
             if ($roleModel->updateRole($role, $id)) {
                 Syslog::info('common', 'Edit Role successfully', 'Edit Role', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
 

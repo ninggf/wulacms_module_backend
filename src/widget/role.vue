@@ -6,7 +6,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
   let treeTable = layui.treeTable;
   let admin     = layui.admin;
   let notice    = layui.notice;
-  let xmSelect  = layui.xmSelect,index = top.layui.index;
+  let xmSelect  = layui.xmSelect, index = top.layui.index;
 
   class Role {
     insTb
@@ -23,8 +23,12 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
         cols          : [[
           {type: 'checkbox'},
           {type: 'numbers', title: '序号', width: 80,},
-          {field: 'role', title: '角色名称', sort: false},
-          {field: 'name', title: '角色代码', sort: false},
+          {field: 'role', title: '角色', sort: false, width: 200,
+            templet:(d)=>{
+              return d.role +  (d.system ? '&nbsp;<span class="layui-badge layui-bg-green">S</span>':'')
+            }
+          },
+          {field: 'name', title: '标识', sort: false, width: 100},
           {field: 'remark', title: '备注', sort: false},
           {field: '_ops', title: '操作', toolbar: '#roleTbBar', align: 'center', width: 140, minWidth: 140}
         ]],
@@ -60,7 +64,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
             _this.doDel({'ids': [id]});
             break;
           case 'auth'://授权
-            index.openTab({url: admin.url('backend/role/grant?rid=' + id), title: obj.data.role + '权限', end: ''});
+            index.openTab({url: admin.url('backend/role/grant?rid=' + id), title: obj.data.role + ' ' + _t('Permissions'), end: ''});
             break;
           case 'view'://查看
             break;
@@ -83,6 +87,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
         }
       });
     }
+
     showEditModel(mData) {
       let insTb = this.insTb
       let url   = admin.url(mData ? 'backend/role/save' : 'backend/role/add');

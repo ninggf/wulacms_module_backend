@@ -80,7 +80,7 @@ layui.config({
 
 window._t = function () {
     if (arguments.length === 0) return ''
-    let msgG = arguments[0].split('@'), msg = msgG[0], gp = msgG.length > 1 ? msgG[1] : false, language, msgStr
+    let msgG = arguments[0].split('@'), msg = msgG[0], gp = msgG.length > 1 ? msgG[1] : false, language, msgStr=msg
     if (gp) {
         language = window.wulacfg.lang['@' + gp]
         if (!language) {
