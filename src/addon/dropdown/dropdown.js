@@ -246,5 +246,5 @@ layui.define(['jquery'], function (exports) {
     };
 
     dropdown.init();
-    exports('dropdown', dropdown);
+    exports('dropdownX', dropdown);
 });
