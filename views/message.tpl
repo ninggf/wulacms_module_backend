@@ -12,13 +12,13 @@
       <div class="layui-card-body">
         <div class="layui-form-item layui-row layui-no-mb">
           <div class="layui-col-sm6 layui-col-md4">
-            <label class="layui-form-label text-left">{'Date'|t}:</label>
+            <label class="layui-form-label">{'Date'|t}:</label>
             <div class="layui-input-block">
               <input name="date" class="layui-input icon-date" placeholder="{'Date'|t}" autocomplete="off"/>
             </div>
           </div>
           <div class="layui-col-sm6 layui-col-md4">
-            <label class="layui-form-label text-left">{'Status'|t}:</label>
+            <label class="layui-form-label">{'Status'|t}:</label>
             <div class="layui-input-block">
               <select name="status">
                 <option value="" selected>{'All'|t}</option>
@@ -29,7 +29,10 @@
             </div>
           </div>
           <div class="layui-col-sm6 layui-col-md4">
-
+            <label class="layui-form-label">{'User'|t}:</label>
+            <div class="layui-input-block">
+              <div id="userXmlSelect"></div>
+            </div>
           </div>
         </div>
         <div class="layui-form-item layui-row layui-no-mb">
@@ -68,4 +71,12 @@
     {$editor}
   </script>
   {/foreach}
-<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(e,a,t){return a in e?Object.defineProperty(e,a,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[a]=t,e}layui.use(["jquery","form","table","admin","laydate","dropdown"],function(e,a,t,r,n){var i=layui.element,o=layui.dropdown;(new(function(){function d(){_defineProperty(this,"where",{"sort[name]":"id","sort[dir]":"d",msgType:e("#messageType").find("li.layui-this").data("type")})}return d.prototype.init=function(d,l,s){var u=this,c=t.render({elem:d,cols:l,autoSort:!1,data:s,lazy:!0,limit:30,where:this.where,url:r.url("backend/message/data"),page:!0}),p=this;t.on("sort(pageTable)",function(e){u.where["sort[name]"]=e.field,u.where["sort[dir]"]="asc"===e.type?"a":"d",c.reloadData()}),n.render({elem:'input[name="date"]',type:"date",range:!0,trigger:"click"}),a.on("submit(searchBtn)",function(a){return u.where=e.extend(u.where,a.field),c.reloadData(),!1}),a.on("reset(searchForm)",function(a){u.where=e.extend(u.where,a.field),c.reloadData()}),i.on("tab(messageType)",function(){var a=e(this).data("type");a!=p.where.msgType&&(p.where.msgType=a,c.reloadData())}),o.render({elem:"#newMsgButton",data:pageData.newMsgItems,click:function(e){console.log(e)}})},d}())).init("#pageTable",pageData.table.cols,pageData.table.data)});{/literal}</script>
+<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(obj,key,value){if(key in obj){Object.defineProperty(obj,key,{value:value,enumerable:true,configurable:true,writable:true});}else{obj[key]=value;}return obj;}layui.use(['jquery','form','table','admin','laydate','dropdown','xmSelect'],function($,form,table,admin,laydate){var element=layui.element,dropdown=layui.dropdown,xmSelect=layui.xmSelect;var TablePage=/*#__PURE__*/function(){function TablePage(){_defineProperty(this,"where",{'sort[name]':'id','sort[dir]':'d','msgType':$('#messageType').find('li.layui-this').data('type')});}var _proto=TablePage.prototype;_proto.init=function init(id,cols,data){var _this=this;// 绘制表格
+var dataTable=table.render({elem:id,cols:cols,autoSort:false,data:data,lazy:true,limit:30,where:this.where,url:admin.url('backend/message/data'),page:true}),that=this;//排序
+table.on('sort(pageTable)',function(obj){_this.where['sort[name]']=obj.field;_this.where['sort[dir]']=obj.type==='asc'?'a':'d';dataTable.reloadData();});//绘制日期控件
+laydate.render({elem:'input[name="date"]',type:'date',range:true,trigger:'click'});//搜索表单提交
+form.on('submit(searchBtn)',function(obj){_this.where=$.extend(_this.where,obj.field);dataTable.reloadData();return false;});//重置表单
+form.on('reset(searchForm)',function(obj){_this.where=$.extend(_this.where,obj.field);dataTable.reloadData();});//标签切换
+element.on('tab(messageType)',function(){var typ=$(this).data('type');if(typ!=that.where.msgType){that.where.msgType=typ;dataTable.reloadData();}});//下拉菜单
+dropdown.render({elem:'#newMsgButton',data:pageData.newMsgItems,click:function click(obj){console.log(obj);}});//用户选择
+var userSelect=xmSelect.render({name:'uid',el:'#userXmlSelect',height:'250px',radio:true,data:[],initValue:[1],tips:'请选择用户',model:{icon:'hidden',label:{type:'text'}},filterable:true,remoteSearch:true,delay:500,remoteMethod:function remoteMethod(val,cb,show){console.log([val,cb,show]);cb([]);}});};return TablePage;}();var page=new TablePage();page.init('#pageTable',pageData.table.cols,pageData.table.data);});{/literal}</script>

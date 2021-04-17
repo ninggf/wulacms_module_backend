@@ -2042,7 +2042,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   //核心入口
   table.render = function(options){
     var inst = new Class(options);
-    return thisTable.call(inst);
+    //return thisTable.call(inst);
+
+    var cinst = thisTable.call(inst);
+    $(options.elem).data('reloadObj',cinst);
+    return cinst;
   };
 
   //清除临时Key

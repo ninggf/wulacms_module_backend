@@ -106,9 +106,11 @@ body {
     color: #595959;
     text-align: center;
 }
+
 .layui-nav-child-left {
     left: 12px;
 }
+
 .layui-nav-child-left a {
     text-align: left !important;
 }
@@ -2176,7 +2178,9 @@ xm-select > .xm-body .xm-option:hover {
 }
 
 xm-select {
-    border-color: #E6E6E6 !important;
+    border-color: #EEE !important;
+    width: auto !important;
+    box-sizing: border-box !important;
 }
 
 xm-select:hover {
@@ -5254,45 +5258,57 @@ body .ew-xmselect-tree xm-select .xm-body .xm-option.selected .xm-option-content
 .layui-elem-field legend {
     font-size: 16px;
 }
+
 .layui-no-m {
-    margin: 0!important;
+    margin: 0 !important;
 }
+
 .layui-no-mt {
-    margin-top: 0!important;
+    margin-top: 0 !important;
 }
+
 .layui-no-ml {
-    margin-left: 0!important;
+    margin-left: 0 !important;
 }
+
 .layui-no-mr {
-    margin-right: 0!important;
+    margin-right: 0 !important;
 }
+
 .layui-no-mb {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
 }
+
 .layui-no-p {
-    padding: 0!important;
+    padding: 0 !important;
 }
+
 .layui-no-pt {
-    padding-top: 0!important;
+    padding-top: 0 !important;
 }
+
 .layui-no-pl {
-    padding-left: 0!important;
+    padding-left: 0 !important;
 }
+
 .layui-no-pr {
-    padding-right: 0!important;
+    padding-right: 0 !important;
 }
+
 .layui-no-pb {
-    padding-bottom: 0!important;
+    padding-bottom: 0 !important;
 }
+
 .form-group-bottom {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     padding: 10px 20px;
-    background-color: #fff;
+    background-color: #FFF;
     box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, .05);
 }
+
 td[data-with]::before {
     content: '';
     position: absolute;
@@ -5313,7 +5329,8 @@ td[data-with="WARN"]::before {
 td[data-with="ERROR"]::before {
     background: #ED4014;
 }
-.submit-button{
+
+.submit-button {
     margin: 24px 0px 10px 0px;
 }
 
@@ -5326,7 +5343,7 @@ td[data-with="ERROR"]::before {
     font-size: 65%;
 }
 
-.page-header .page-toolbar{
+.page-header .page-toolbar {
     position: absolute;
     top: 10px;
     right: 15px;

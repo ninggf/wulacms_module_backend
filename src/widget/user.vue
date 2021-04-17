@@ -79,6 +79,12 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'notice'], 
         },
         clickClose: true,
         layVerType: 'tips',
+        model     : {
+          icon : 'hidden',
+          label: {
+            type: 'text',
+          }
+        },
       });
       admin.get('backend/role/list?id=0').then(function (data) {
         userRoleList.update({

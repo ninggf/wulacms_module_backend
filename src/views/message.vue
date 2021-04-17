@@ -13,13 +13,13 @@
       <div class="layui-card-body">
         <div class="layui-form-item layui-row layui-no-mb">
           <div class="layui-col-sm6 layui-col-md4">
-            <label class="layui-form-label text-left">{'Date'|t}:</label>
+            <label class="layui-form-label">{'Date'|t}:</label>
             <div class="layui-input-block">
               <input name="date" class="layui-input icon-date" placeholder="{'Date'|t}" autocomplete="off"/>
             </div>
           </div>
           <div class="layui-col-sm6 layui-col-md4">
-            <label class="layui-form-label text-left">{'Status'|t}:</label>
+            <label class="layui-form-label">{'Status'|t}:</label>
             <div class="layui-input-block">
               <select name="status">
                 <option value="" selected>{'All'|t}</option>
@@ -30,7 +30,10 @@
             </div>
           </div>
           <div class="layui-col-sm6 layui-col-md4">
-
+            <label class="layui-form-label">{'User'|t}:</label>
+            <div class="layui-input-block">
+              <div id="userXmlSelect"></div>
+            </div>
           </div>
         </div>
         <div class="layui-form-item layui-row layui-no-mb">
@@ -72,9 +75,10 @@
 </template>
 
 <script>
-layui.use(['jquery', 'form', 'table', 'admin', 'laydate', 'dropdown'], ($, form, table, admin, laydate) => {
+layui.use(['jquery', 'form', 'table', 'admin', 'laydate', 'dropdown', 'xmSelect'], ($, form, table, admin, laydate) => {
   let element    = layui.element
       , dropdown = layui.dropdown
+      , xmSelect = layui.xmSelect
 
   class TablePage {
     where = {
@@ -135,6 +139,29 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate', 'dropdown'], ($, form,
         data: pageData.newMsgItems,
         click(obj) {
           console.log(obj)
+        }
+      })
+      //用户选择
+      let userSelect = xmSelect.render({
+        name        : 'uid',
+        el          : '#userXmlSelect',
+        height      : '250px',
+        radio       : true,
+        data        : [],
+        initValue   : [1],
+        tips        : '请选择用户',
+        model       : {
+          icon : 'hidden',
+          label: {
+            type: 'text',
+          }
+        },
+        filterable  : true,
+        remoteSearch: true,
+        delay       : 500,
+        remoteMethod(val, cb, show) {
+          console.log([val, cb, show])
+          cb([])
         }
       })
     }

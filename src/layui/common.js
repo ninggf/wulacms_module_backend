@@ -74,6 +74,7 @@ layui.config({
     zTree     : 'zTree/zTree'
 });
 
+//=require ../addon/xmSelect.js
 //=require ../addon/contextMenu.js
 //=require ../addon/notice/notice.js
 //=require ../addon/admin.js
