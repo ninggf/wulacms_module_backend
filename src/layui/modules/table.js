@@ -744,8 +744,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           that.setColsWidth();
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
-        ,error: function(e, m){
-          that.errorView('数据接口请求异常：'+ m);
+        ,error: function(e, msg){
+          that.errorView('数据接口请求异常：'+ msg);
 
           that.renderForm();
           that.setColsWidth();
@@ -1004,17 +1004,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       var content = function(){
         var text = item3.totalRowText || ''
         ,thisTotalNum = parseFloat(totalNums[field]).toFixed(2)
-        ,tplData = {};
+        ,tplData = {}
+        ,getContent;
 
         tplData[field] = thisTotalNum;
-        thisTotalNum = parseTempData(item3, thisTotalNum, tplData);
+
+        //获取自动计算的合并内容
+        getContent = item3.totalRow ? (parseTempData(item3, thisTotalNum, tplData) || text) : text;
 
         //如果直接传入了合计行数据，则不输出自动计算的结果
-        if(totalRowData){
-          return totalRowData[item3.field] || text;
-        } else {
-          return item3.totalRow ? (thisTotalNum || text) : text;
-        }
+        return totalRowData ? (totalRowData[item3.field] || getContent) : getContent;
       }()
       ,td = ['<td data-field="'+ field +'" data-key="'+ options.index + '-'+ item3.key +'" '+ function(){
         var attr = [];
@@ -1528,7 +1527,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       }
     });
 
-    //数据行中的事件监听返回的公共对象成员
+    //数据行中的事件返回的公共对象成员
     var commonMember = function(sets){
       var othis = $(this)
       ,index = othis.parents('tr').eq(0).data('index')
@@ -2058,7 +2057,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
 
   //自动完成渲染
-  table.init();
+  $(function(){
+    table.init();
+  });
 
   exports(MOD_NAME, table);
 });

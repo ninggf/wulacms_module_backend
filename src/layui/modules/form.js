@@ -255,19 +255,21 @@ layui.define('layer', function(exports){
     ,fieldElem = itemForm.find('input,select,textarea') //获取所有表单域
 
     layui.each(fieldElem, function(_, item){
-      item.name = (item.name || '').replace(/^\s*|\s*&/, '');
+      var othis = $(this)
+      ,init_name; //初始 name
 
+      item.name = (item.name || '').replace(/^\s*|\s*&/, '');
       if(!item.name) return;
 
       //用于支持数组 name
       if(/^.*\[\]$/.test(item.name)){
         var key = item.name.match(/^(.*)\[\]$/g)[0];
         nameIndex[key] = nameIndex[key] | 0;
-        item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
+        init_name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
       }
 
-      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;
-      field[item.name] = item.value;
+      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;  //复选框和单选框未选中，不记录字段
+      field[init_name || item.name] = item.value;
     });
 
     return field;
@@ -859,6 +861,7 @@ layui.define('layer', function(exports){
       });
     }, 50);
   });
+
   //表单提交事件
   $dom.on('submit', ELEM, submit)
   .on('click', '*[lay-submit]', submit);
