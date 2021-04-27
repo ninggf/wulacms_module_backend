@@ -90,7 +90,7 @@ window._t = function () {
     } else {
         language = window.wulacfg.lang
     }
-    if (!msgStr && language[msg]) {
+    if (language[msg]) {
         msgStr = language[msg]
     }
 

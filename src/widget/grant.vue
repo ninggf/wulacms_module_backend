@@ -25,13 +25,13 @@ layui.define(['layer', 'table', 'util', 'admin', 'notice'], function (exports) {
         page            : false,
         cols            : [[
           {
-            field: 'name', title: '名称', width: 180, sort: false, templet: (d) => {
+            field: 'name', title: '', width: 180, sort: false, templet: (d) => {
               let space = ['', '&emsp;', '&emsp;&emsp;']
               return space[d.level] + d.name
             }
           },
           {
-            field: 'op', title: '权限', sort: false, templet: (d) => {
+            field: 'op', title: _t('Permissions'), sort: false, templet: (d) => {
               let html = '';
               let op;
               let topResId;
@@ -53,6 +53,9 @@ layui.define(['layer', 'table', 'util', 'admin', 'notice'], function (exports) {
           checkbox.children('span').css('font-size', '12px');
           checkbox.children('span').css('padding', '0 6px');
           checkbox.children('i').css('height', '24px');
+          $('.grantBtn').click(() => {
+            grant.save()
+          })
         }
       });
     };
@@ -66,28 +69,21 @@ layui.define(['layer', 'table', 'util', 'admin', 'notice'], function (exports) {
           grant.push($(this).val())
         }
       })
-      if (grant.length > 0) {
-        let loadIndex = layer.load(2);
-        admin.post(admin.url('backend/role/grant-save'), {'rid': this.selRid, 'grants': grant}).then(function (data) {
-          layer.close(loadIndex);
-          if (data.code === 200) {
-            notice.success('保存成功');
-            setTimeout(()=>{
-              admin.closeThisTabs()
-            },2200)
-          } else {
-            notice.error(data.message);
-          }
-        }).fail(function (data) {
+      let loadIndex = layer.load(2);
+      admin.post(admin.url('backend/role/grant-save'), {'rid': this.selRid, 'grants': grant}).then(function (data) {
+        layer.close(loadIndex);
+        if (data.code === 200) {
+          notice.success('授权成功！');
+        } else {
           notice.error(data.message);
-        })
-      } else {
-        notice.warning('请选择角色权限');
-      }
-
+        }
+      }).fail(function (data) {
+        notice.error(data.message);
+      })
     }
   }
 
-  exports('@backend.grant', new Grant);
+  let grant = new Grant
+  exports('@backend.grant', grant);
 })
 </script>

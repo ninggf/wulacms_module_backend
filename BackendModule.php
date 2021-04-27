@@ -136,7 +136,7 @@ namespace {
             $config['assets'] = WWWROOT_DIR . ASSETS_DIR . '/';
             $config['mBase']  = App::res('/');
             $config['ids']    = wulaphp\app\App::id2dir();
-            $config['groups'] = $groups ? $groups : ['char' => []];
+            $config['groups'] = $groups ?: ['char' => []];
             $config['lang']   = I18n::getTranslates();
 
             return json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

@@ -19,9 +19,16 @@ class InitDashboard extends Handler {
             $naviMenu        = $dashboard->naviMenu();
             $system          = $naviMenu->get('system', __('System'), 999999);
             $system->iconCls = 'layui-icon-set';
+
+            # 后台任务
+            if ($passport->cando('r:system/task')) {
+                $task          = $system->get('task', __('Tasks'), 90);
+                $task->iconCls = 'layui-icon-flag';
+                $task->url     = App::url('backend/task');
+            }
             # 账户
             if ($passport->cando('r:system/account')) {
-                $account          = $system->get('account', __('Account'), 1);
+                $account          = $system->get('account', __('Account'), 100);
                 $account->iconCls = 'layui-icon-user';
                 if ($passport->cando('r:system/account/user')) {
                     $user          = $account->get('user', __('User'), 1);
@@ -34,11 +41,13 @@ class InitDashboard extends Handler {
                     $role->url     = App::url('backend/role');
                 }
             }
+            # 消息
             if ($passport->cando('r:system/message')) {
-                $message          = $system->get('message', __('Message'), 2);
+                $message          = $system->get('message', __('Message'), 200);
                 $message->iconCls = 'layui-icon-email';
                 $message->url     = App::url('backend/message');
             }
+
             # 设置
             if ($passport->cando('r:system/settings')) {
                 $settings = Setting::settings();
@@ -78,10 +87,10 @@ class InitDashboard extends Handler {
         }
 
         //顶部菜单
-        $topMenu                = $dashboard->topMenu();
-        $msg                    = $topMenu->get('msg', __('Message'), 1);
-        $msg->iconCls           = 'layui-icon-notice';
-        $msg->badge             = 10;
+        $topMenu      = $dashboard->topMenu();
+        $msg          = $topMenu->get('msg', __('Message'), 1);
+        $msg->iconCls = 'layui-icon-notice';
+        //$msg->badge             = 10;
         $msg->attrs['ew-event'] = 'message';
         $msg->data['url']       = App::url('backend/notice');
     }

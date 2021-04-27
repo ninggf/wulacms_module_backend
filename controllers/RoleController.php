@@ -67,7 +67,7 @@ class RoleController extends PageController {
      * @get
      * @return \backend\classes\layui\TableData
      */
-    public function grantList(int $rid) {
+    public function grantList(int $rid): TableData {
         $rolePer = new RolePermission();
         $hasPers = array_column($rolePer->getPermissionByRoleId($rid), 'resId');
 
@@ -84,15 +84,15 @@ class RoleController extends PageController {
      * @acl grant:system/account/role
      */
     public function grantSave(): JsonView {
-        $rid    = irqst('rid', 1);
-        $grants = rqst('grants');
-        if (empty($grants))
-            return Ajax::error('请选择权限');
+        $rid         = irqst('rid', 1);
+        $grants      = rqst('grants');
         $permissions = [];
-        foreach ($grants as $key => $value) {
-            [$op, $uri] = explode(':', $value);
-            $per                 = ['id' => md5($rid . $uri . $op), 'role_id' => $rid, 'uri' => $uri, 'op' => $op];
-            $permissions[ $key ] = $per;
+        if ($grants) {
+            foreach ($grants as $key => $value) {
+                [$op, $uri] = explode(':', $value);
+                $per                 = ['id' => md5($rid . $uri . $op), 'role_id' => $rid, 'uri' => $uri, 'op' => $op];
+                $permissions[ $key ] = $per;
+            }
         }
         $model = new RolePermission();
         if ($model->updatePermissionByRoleId($rid, $permissions)) {

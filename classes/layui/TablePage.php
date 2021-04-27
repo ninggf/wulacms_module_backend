@@ -13,7 +13,17 @@ namespace backend\classes\layui;
 use wulaphp\mvc\view\View;
 
 trait TablePage {
-    protected function renderTable($tpl = null, array $data = []): View {
+    /**
+     * @param null|array|string $tpl  模板或数据
+     * @param array|null        $data 数据
+     *
+     * @return \wulaphp\mvc\view\View
+     */
+    protected function renderTable($tpl = null, ?array $data = null): View {
+        if (is_array($tpl)) {
+            $data = $tpl;
+            $tpl  = null;
+        }
         $data['pageData']['table']['data'] = $this->data()->getData();
         $data['pageData']['table']['cols'] = $this->cols();
 
