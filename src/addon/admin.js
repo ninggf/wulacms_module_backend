@@ -1527,6 +1527,24 @@ layui.define(['layer'], function (exports) {
         }
         return "";
     }
+
+    // 重新设置表格行高
+    admin.autoRowHeight = function(tableId) {
+        return function(){
+            var ctable = $('[lay-id='+tableId+']') // 找到当前表格
+            // 找出当前表格的每一行
+            ctable.find(".layui-table-main table tr").each((index, ele) => {
+                // 获取当前行的高度
+                let _h = $(ele).height() + 'px';
+                // 重新设置当前行的高度（解决行高自动计算的BUG）
+                $(ele).height(_h)
+                // 找出固定列表
+                ctable.find(".layui-table-fixed div.layui-table-body").each((idx, tbody) => {
+                    $(tbody).find('tr').eq(index).height(_h);
+                });
+            });
+        }
+    }
     /** 侧导航折叠状态下鼠标经过无限悬浮效果 */
     var navItemDOM = '.layui-layout-admin.admin-nav-mini>.layui-side .layui-nav .layui-nav-item';
     $(document).on('mouseenter', navItemDOM + ',' + navItemDOM + ' .layui-nav-child>dd', function () {

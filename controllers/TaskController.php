@@ -27,29 +27,8 @@ class TaskController extends PageController {
         return $this->renderTable(['tasks' => $taskNames]);
     }
 
-    protected function cols(): array {
-        $headCols = [];//表头
+    public function queue() {
 
-        $cols[]     = ['field' => 'id', 'title' => '#', 'width' => 70, 'with' => 'level'];
-        $cols[]     = ['field' => 'name', 'title' => __('Name')];
-        $cols[]     = ['field' => 'retry', 'title' => __('Retry'), 'width' => 80];
-        $cols[]     = ['field' => 'interval', 'title' => __('Interval'), 'width' => 80];
-        $cols[]     = ['field' => 'create_time', 'title' => __('Create Time'), 'width' => 160];
-        $cols[]     = ['field' => 'first_runtime', 'title' => __('First Run Time'), 'width' => 160];
-        $cols[]     = ['field' => 'next_runtime', 'title' => __('Next Run Time'), 'width' => 160];
-        $cols[]     = ['field' => 'last_runtime', 'title' => __('Last Run Time'), 'width' => 160];
-        $cols[]     = ['field' => 'crontab', 'title' => __('Cron Express'), 'width' => 150];
-        $cols[]     = [
-            'field'   => '_ops',
-            'title'   => '',
-            'width'   => 110,
-            'toolbar' => '#tableToolbar',
-            'fixed'   => 'right',
-            'align'   => 'center'
-        ];
-        $headCols[] = $cols;
-
-        return $headCols;
     }
 
     /**
@@ -95,5 +74,33 @@ class TaskController extends PageController {
         });
 
         return new TableData($items, $total);
+    }
+
+    /**
+     *
+     * @return array
+     */
+    protected function cols(): array {
+        $headCols = [];//表头
+
+        $cols[]     = ['field' => 'id', 'title' => '#', 'width' => 70, 'with' => 'level', 'fixed' => 'left'];
+        $cols[]     = ['field' => 'name', 'title' => __('Name'), 'minWidth' => 150];
+        $cols[]     = ['field' => 'retry', 'title' => __('Retry'), 'width' => 120,'templet'=>'#retryCol'];
+        $cols[]     = ['field' => 'create_time', 'title' => __('Create Time'), 'width' => 170];
+        $cols[]     = ['field' => 'first_runtime', 'title' => __('First Run Time'), 'width' => 170];
+        $cols[]     = ['field' => 'next_runtime', 'title' => __('Next Run Time'), 'width' => 170];
+        $cols[]     = ['field' => 'last_runtime', 'title' => __('Last Run Time'), 'width' => 170];
+        $cols[]     = ['field' => 'crontab', 'title' => __('Cron Express'), 'width' => 140];
+        $cols[]     = [
+            'field'   => '_ops',
+            'title'   => '&nbsp;',
+            'width'   => 80,
+            'toolbar' => '#tableToolbar',
+            'fixed'   => 'right',
+            'align'   => 'center'
+        ];
+        $headCols[] = $cols;
+
+        return $headCols;
     }
 }

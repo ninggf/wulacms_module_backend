@@ -49,7 +49,7 @@
     </div>
   </form>
 
-  <div class="layui-fluid layui-radius-table layui-no-pt">
+  <div class="layui-fluid layui-radius-table layui-no-pt layui-table-cell-ah">
     <div class="layui-tab layui-tab-brief" lay-filter="runStatus">
       <ul class="layui-tab-title" id="messageType">
         <li class="layui-this text-info" data-type="R">{'Running'|t}</li>
@@ -58,15 +58,16 @@
     </div>
     <table id="pageTable" lay-filter="pageTable"></table>
   </div>
-
+  <script type="text/html" id="retryCol">
+    {literal}<p>Retry: {{ d.retry }}</p><p>Interval: {{ d.interval }}</p>{/literal}
+  </script>
   <!-- 表格工具栏 -->
   <script type="text/html" id="tableToolbar">
-    <a class="" lay-event="setup" title="{'Setup'|t}"><i class="layui-icon layui-icon-set"></i></a>
-    <a class="layui-fg-blue" lay-event="queue" title="{'Queue'|t}"><i class="layui-icon layui-icon-template-1"></i></a>
+    <a class="" lay-event="setup" title="{'Setup'|t}"><i class="layui-icon layui-icon-set"></i></a><a class="layui-fg-blue" lay-event="queue" title="{'Queue'|t}"><i class="layui-icon layui-icon-template-1"></i></a>
   </script>
   <!-- 任务队列界面 -->
   <script type="text/html" id="taskQueueDialog">
-
+    <table lay-filter="queueTable"></table>
   </script>
 </template>
 <script>
@@ -91,7 +92,8 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admi
         limit   : 30,
         where   : this.where,
         url     : admin.url('backend/task/data'),
-        page    : true
+        page    : true,
+        done    : admin.autoRowHeight('pageTable')
       }), that      = this
       //排序
       table.on('sort(pageTable)', (obj) => {
@@ -99,6 +101,16 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admi
         this.where['sort[dir]']  = obj.type === 'asc' ? 'a' : 'd'
         dataTable.reloadData()
       });
+      table.on('tool(pageTable)', (obj) => {
+        let event = obj.event, data = obj.data
+        switch (event) {
+          case 'setup':
+            break;
+          case 'queue':
+            this.showQueue(data)
+            break;
+        }
+      })
       //绘制日期控件
       laydate.render({
         elem   : 'input[name="date"]',
@@ -127,9 +139,14 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admi
         }
       })
     }
+
+    showQueue(task) {
+      //admin.openDialog('','','')
+      console.log(task)
+    }
   }
 
-  let page = new TablePage();
-  page.init('#pageTable', pageData.table.cols, pageData.table.data)
+  let taskTable = new TablePage();
+  taskTable.init('#pageTable', pageData.table.cols, pageData.table.data)
 });
 </script>
