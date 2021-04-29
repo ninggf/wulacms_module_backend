@@ -273,4 +273,27 @@ class UserController extends PageController {
 
         return Ajax::error('删除用户失败');
     }
+
+    /**
+     * message 用户选择
+     * @return array
+     */
+    public function xmSelectData(): array {
+        $userM              = new UserTable();
+        $where['tenant_id'] = APP_TENANT_ID;
+        $page  = irqst('page', 1);
+        $limit = irqst('limit', 20);
+        $id    = rqst('id', '0');
+
+        $userM = $userM->select()->where($where);
+        $count = $userM->count();
+        $list  = $userM->page($page, $limit)->toArray();
+
+        if (!is_null($id) && is_numeric($id)) {
+            $tree = $list;
+        }
+
+        return ['code' => 0, 'count' => $count, 'data' => $list, 'tree' => $tree ?? []];
+    }
+
 }

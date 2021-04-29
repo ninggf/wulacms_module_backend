@@ -48,6 +48,11 @@ class MessageController extends PageController {
         if ($msgType) {
             $where['M.type'] = $msgType;
         }
+        $uid = rqst('uid');
+        if($uid){
+            $where['M.uid'] = $uid;
+        }
+
         $date = rqst('date');
         if ($date) {
             $date                     = explode(' - ', $date);

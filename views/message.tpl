@@ -79,4 +79,6 @@ form.on('submit(searchBtn)',function(obj){_this.where=$.extend(_this.where,obj.f
 form.on('reset(searchForm)',function(obj){_this.where=$.extend(_this.where,obj.field);dataTable.reloadData();});//标签切换
 element.on('tab(messageType)',function(){var typ=$(this).data('type');if(typ!=that.where.msgType){that.where.msgType=typ;dataTable.reloadData();}});//下拉菜单
 dropdown.render({elem:'#newMsgButton',data:pageData.newMsgItems,click:function click(obj){console.log(obj);}});//用户选择
-var userSelect=xmSelect.render({name:'uid',el:'#userXmlSelect',height:'250px',radio:true,data:[],initValue:[1],tips:'请选择用户',model:{icon:'hidden',label:{type:'text'}},filterable:true,remoteSearch:true,delay:500,remoteMethod:function remoteMethod(val,cb,show){console.log([val,cb,show]);cb([]);}});};return TablePage;}();var page=new TablePage();page.init('#pageTable',pageData.table.cols,pageData.table.data);});{/literal}</script>
+var userXmlSelect=xmSelect.render({name:'uid',el:'#userXmlSelect',height:'240px',radio:true,empty:'暂无数据',paging:true,// 开启分页
+pageSize:10,// 每页条数
+data:[],initValue:[],tips:'请选择用户',prop:{name:'name',value:'id'},model:{icon:'hidden',label:{type:'text'}},clickClose:true,layVerify:'required',layVerType:'tips'});admin.get('backend/user/xm-select-data?id=0').then(function(data){userXmlSelect.update({data:data.tree,tree:{show:true,showFolderIcon:true,indent:15,strict:false,expandedKeys:[1],simple:true},autoRow:true});});};return TablePage;}();var page=new TablePage();page.init('#pageTable',pageData.table.cols,pageData.table.data);});{/literal}</script>

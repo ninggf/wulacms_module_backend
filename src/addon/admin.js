@@ -123,6 +123,16 @@ layui.define(['layer'], function (exports) {
         return layIndex;
     };
 
+    admin.openDialog = function (id, title, param, success) {
+        param         = param || {}
+        param.content = $(id).html()
+        param.title   = title
+        param.type    = 1
+        if (typeof success === 'function') {
+            param.success = success
+        }
+        admin.open(param)
+    };
     /** 获取弹窗数据 */
     admin.getLayerData = function (index, key) {
         if (index === undefined) {

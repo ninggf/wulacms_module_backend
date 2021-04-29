@@ -142,29 +142,50 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate', 'dropdown', 'xmSelect'
         }
       })
       //用户选择
-      let userSelect = xmSelect.render({
-        name        : 'uid',
-        el          : '#userXmlSelect',
-        height      : '250px',
-        radio       : true,
-        data        : [],
-        initValue   : [1],
-        tips        : '请选择用户',
-        model       : {
+      let userXmlSelect = xmSelect.render({
+        name      : 'uid',
+        el        : '#userXmlSelect',
+        height    : '240px',
+        radio     : true,
+        empty     : '暂无数据',
+        paging    : true, // 开启分页
+        pageSize  : 10, // 每页条数
+        data      : [],
+        initValue : [],
+        tips      : '请选择用户',
+        prop      : {
+          name : 'name',
+          value: 'id'
+        },
+        model     : {
           icon : 'hidden',
           label: {
             type: 'text',
-          }
+          },
         },
-        filterable  : true,
-        remoteSearch: true,
-        delay       : 500,
-        remoteMethod(val, cb, show) {
-          console.log([val, cb, show])
-          cb([])
-        }
+        clickClose: true,
+        layVerify : 'required',
+        layVerType: 'tips',
+
       })
+      admin.get('backend/user/xm-select-data?id=0').then(function (data) {
+        userXmlSelect.update({
+          data   : data.tree,
+          tree   : {
+            show          : true,
+            showFolderIcon: true,
+            indent        : 15,
+            strict        : false,
+            expandedKeys  : [1],
+            simple        : true,
+          },
+          autoRow: true,
+        })
+
+      });
+
     }
+
   }
 
   let page = new TablePage();
