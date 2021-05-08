@@ -12,7 +12,8 @@ layui.define(['layer', 'form', 'formX', 'element', 'admin', 'notice'], function 
         admin.cropImg({
           imgSrc: $('#userInfoHead>img').attr('src'),
           onCrop: function (res) {
-            $('#userInfoHead>img').attr('src', res);
+            console.log(res)
+            $('#userInfoHead > img').attr('src', res);
             parent.layui.jquery('.layui-layout-admin>.layui-header .layui-nav img.layui-nav-img').attr('src', res);
           }
         });

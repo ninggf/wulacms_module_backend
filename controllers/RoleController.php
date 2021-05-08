@@ -255,10 +255,10 @@ class RoleController extends PageController {
         foreach ($resource->getNodes() as $key => $value) {
             $id           = $count ++;
             $uri          = $value->getURI();
-            $defaultOp    = ['r' => ['uri' => $uri, 'name' => '查看', 'extra' => '', 'resId' => 'r:' . $uri]];
+            //$defaultOp    = ['r' => ['uri' => $uri, 'name' => '查看', 'extra' => '', 'resId' => 'r:' . $uri]];
             $res['name']  = $value->getName();
             $res['uri']   = $value->getURI();
-            $res['ops']   = isset($value->getOperations()['r']) ? $value->getOperations() : array_merge($defaultOp, $value->getOperations());
+            $res['ops']   = $value->getOperations();
             $res['id']    = $id;
             $res['pid']   = $pid;
             $res['level'] = $level;

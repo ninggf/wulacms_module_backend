@@ -523,14 +523,20 @@
                 </div>
             </div>
         </div>
+        <div class="layui-col-md4 layui-col-sm6">
+            <button type="button" class="layui-btn" id="test1">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
+        </div>
     </div>
 </div>
 <script>
-    layui.use(['layer', 'carousel', 'element'], function () {
+    layui.use(['layer', 'carousel', 'element', 'upload'], function () {
         var $        = layui.jquery;
         var layer    = layui.layer;
         var carousel = layui.carousel;
         var device   = layui.device();
+        var upload   = layui.upload;
 
         // 渲染轮播
         carousel.render({
@@ -542,6 +548,19 @@
             trigger : device.ios || device.android ? 'click' : 'hover',
             anim    : 'fade'
         });
-
+        //执行实例
+        var uploadInst = upload.render({
+            elem      : '#test1' //绑定元素
+            , url     : '/backend/upload/local' //上传接口
+            , done    : function (res, idx, up) {
+                console.log(['done', res, idx, up])
+            }
+            , error   : function (idx, file) {
+                console.log(['error', idx, file])
+            }
+            , exts    : 'png|jpg|jpeg|gif'
+            , auto    : true
+            , multiple: false
+        });
     });
 </script>
