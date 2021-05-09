@@ -60,6 +60,10 @@ class UploadController extends AdminController {
             Response::respond(415, 'only accept base64 encoded data');
         }
 
+        if (!is_dir(TMP_PATH . 'plupload') && !mkdir(TMP_PATH . 'plupload', 0755)) {
+            Response::respond(503, 'cannot create tmp directory');
+        }
+
         $filePath = TMP_PATH . 'plupload' . DS . $fileName . '.' . $ext;
         if (!file_put_contents($filePath, $imgData)) {
             @unlink($filePath);
@@ -79,9 +83,11 @@ class UploadController extends AdminController {
         if ($rst['done']) {
             $rst['code']          = 200;
             $rst['result']['url'] = trailingslashit($url) . $rst['result']['url'];
+            $rst['style']         = 2;
         } else {
             $rst['code']    = 500;
             $rst['message'] = $rst['error']['message'];
+            $rst['style']   = 2;
         }
 
         return $rst;

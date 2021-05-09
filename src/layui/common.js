@@ -17,48 +17,85 @@ layui.config({
                 return false;
             case 403:
                 $d.trigger('auth.perm.denied', data);
-                return true
+                break;
             case 422:
                 $d.trigger('form.data.invalid', data);
-                return true
+                break;
             default:
-                if (data && typeof data === 'object') {
-                    if (data.message) {
-                        switch (data.code) {
-                            case 500:
-                                window.$notice.error(data.message)
-                                break;
-                            case 400:
-                                window.$notice.warning(data.message)
-                                break;
-                            case 300:
-                                window.$notice.info(data.message)
-                                break;
-                            case 200:
-                                window.$notice.success(data.message)
-                                break;
-                        }
-                    }
-                    switch (data.action) {
-                        case 'redirect':
-                            window.location = data.target;
-                            return false;
-                        case 'reload':
-                            if (data.target) {
-                                layui.$(data.target).data('loaderObj').reloadData();
-                            } else {
-                                window.location.reload(true)
-                            }
-                            return false;
-                        case 'click':
-                            if (data.target) {
-                                layui.$(data.target).click();
-                                return false;
-                            }
-                    }
-                }
-                return true;
         }
+        if (data && typeof data === 'object') {
+            if (data.message) {
+                let style = data.style || 1;
+                switch (data.code) {
+                    case 500:
+                    case 400:
+                    case 300:
+                    case 200:
+                        break;
+                    default:
+                        style = 2;
+                }
+                if (style === 2 || style === 'alert') {
+                    let opts = {icon: 2, title: _t('Oops'), btn: null, shadeClose: true};
+                    switch (data.code) {
+                        case 500:
+                            opts.icon  = 5;
+                            opts.title = _t('Error');
+                            break;
+                        case 400:
+                            opts.icon  = 0;
+                            opts.title = _t('Warning');
+                            break;
+                        case 300:
+                            opts.icon  = 1;
+                            opts.title = _t('Tips');
+                            break;
+                        case 200:
+                            opts.icon  = 6;
+                            opts.title = _t('Success');
+                            break;
+                    }
+                    top.layui.admin.alert(data.message, opts)
+                } else if (style === 1 || style === 'notice') {
+                    switch (data.code) {
+                        case 500:
+                            window.$notice.error(data.message)
+                            break;
+                        case 400:
+                            window.$notice.warning(data.message)
+                            break;
+                        case 300:
+                            window.$notice.info(data.message)
+                            break;
+                        case 200:
+                            window.$notice.success(data.message)
+                            break;
+                        default:
+                            window.$notice.error(data.message)
+                    }
+                } else if (style === 3 || style === 'msg' || style === 'message') {
+                    top.layui.layer.msg(data.message)
+                }
+            }
+            switch (data.action) {
+                case 'redirect':
+                    window.location = data.target;
+                    return false;
+                case 'reload':
+                    if (data.target) {
+                        layui.$(data.target).data('loaderObj').reloadData();
+                    } else {
+                        window.location.reload(true)
+                    }
+                    return false;
+                case 'click':
+                    if (data.target) {
+                        layui.$(data.target).click();
+                        return false;
+                    }
+            }
+        }
+        return true;
     }
 }).extend({
     steps     : 'steps/steps',
@@ -81,7 +118,7 @@ layui.config({
 
 window._t = function () {
     if (arguments.length === 0) return ''
-    let msgG = arguments[0].split('@'), msg = msgG[0], gp = msgG.length > 1 ? msgG[1] : false, language, msgStr=msg
+    let msgG = arguments[0].split('@'), msg = msgG[0], gp = msgG.length > 1 ? msgG[1] : false, language, msgStr = msg
     if (gp) {
         language = window.wulacfg.lang['@' + gp]
         if (!language) {
