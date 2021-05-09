@@ -12,9 +12,20 @@ layui.define(['layer', 'form', 'formX', 'element', 'admin', 'notice'], function 
         admin.cropImg({
           imgSrc: $('#userInfoHead>img').attr('src'),
           onCrop: function (res) {
-            console.log(res)
-            $('#userInfoHead > img').attr('src', res);
-            parent.layui.jquery('.layui-layout-admin>.layui-header .layui-nav img.layui-nav-img').attr('src', res);
+            admin.post(admin.url('backend/upload/raw/avatar'), res, {
+              contentType: 'text/plain'
+            }).then(data => {
+              if (data && data.code === 200) {
+                admin.post('backend/profile/avatar', {
+                  avatar: data.result.url
+                }).then(d => {
+                  if (d && d.code === 200) {
+                    $('#userInfoHead > img').attr('src', data.result.url);
+                    parent.layui.jquery('.layui-layout-admin>.layui-header .layui-nav img.layui-nav-img').attr('src', data.result.url);
+                  }
+                })
+              }
+            })
           }
         });
       });
@@ -23,10 +34,10 @@ layui.define(['layer', 'form', 'formX', 'element', 'admin', 'notice'], function 
       form.on('submit(userInfoSubmit)', function (data) {
         admin.post(admin.url('backend/profile/save'), data.field).then(function (data) {
           if (data.code === 200) {
-            notice.success({'message':'用户信息更新成功','title':'SUCCESS','timeout':2000})
-            setTimeout(function (){
+            notice.success({'message': '用户信息更新成功', 'title': 'SUCCESS', 'timeout': 2000})
+            setTimeout(function () {
               admin.refresh()
-            },2000)
+            }, 2000)
           } else {
             notice.error(data.message);
           }

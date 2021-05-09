@@ -39,9 +39,13 @@ class PageMetaData {
         $meta['titleSuffix']  = App::cfg('site.titleSuffix', ' - ' . __('Powered By WulaCMS v%s', $cmsVer));
         $meta['logo']         = App::cfg('site.logo', App::res('backend/assets/img/logo.png'));
         $meta['projectName']  = App::cfg('site.projectName', 'WulaCms Pro');
-        $meta['brandImg']     = App::cfg('site.brandImg', App::res('backend/assets/img/logo.png'));
-        $meta['brandName']    = App::cfg('site.brandName');
-        $sc                   = App::acfg('site');
+        $bimg                 = App::cfg('site.brandImg', App::res('backend/assets/img/logo.png'));
+        if (is_array($bimg)) {
+            $bimg = ($bimg[ $_uit ] ?? ($bimg['default'] ?? '')) ?: App::res('backend/assets/img/logo.png');
+        }
+        $meta['brandImg']  = $bimg;
+        $meta['brandName'] = App::cfg('site.brandName');
+        $sc                = App::acfg('site');
         unset($sc['logo'], $sc['theme_base']);
         unset($sc['module_base'], $sc['assets_base']);
         unset($sc['name'], $sc['defaultTitle']);

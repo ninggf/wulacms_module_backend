@@ -261,7 +261,9 @@ layui.define(['layer'], function (exports) {
         if (!method) method = 'GET';
         if (typeof data === 'string') {
             option = option || {};
-            if (!option.contentType) option.contentType = 'application/json';
+            if (!option.contentType) {
+                option.contentType = 'application/json';
+            }
         } else if (setter.reqPutToPost) {
             if ('put' === method.toLowerCase()) {
                 method       = 'POST';
@@ -348,8 +350,8 @@ layui.define(['layer'], function (exports) {
         }
         // 解决缓存问题
         if (layui.cache.version && (!setter.apiNoCache || param.dataType.toLowerCase() !== 'json')) {
-            if (param.url.indexOf('?') === -1) param.url += '?v=';
-            else param.url += '&v=';
+            if (param.url.indexOf('?') === -1) param.url += '?_=';
+            else param.url += '&_=';
             if (layui.cache.version === true) param.url += new Date().getTime();
             else param.url += layui.cache.version;
         }
@@ -525,7 +527,7 @@ layui.define(['layer'], function (exports) {
                 var $body = win.layui.jquery('body');
                 $body.addClass(theme);
                 $body.data('theme', theme);
-                admin.addCookie('_uit',theme)
+                admin.addCookie('_uit', theme)
             } catch (e) {
             }
         }
@@ -544,7 +546,7 @@ layui.define(['layer'], function (exports) {
             $body.removeData('theme');
         } catch (e) {
         }
-        admin.addCookie('_uit','')
+        admin.addCookie('_uit', '')
     };
 
     /** 关闭当前iframe层弹窗 */
@@ -1513,7 +1515,7 @@ layui.define(['layer'], function (exports) {
     };
 
     /* 事件监听 */
-    admin.on = function (events, callback) {
+    admin.on        = function (events, callback) {
         return layui.onevent.call(this, 'admin', events, callback);
     };
     //写Cookie
@@ -1521,7 +1523,7 @@ layui.define(['layer'], function (exports) {
         var str = objName + "=" + escape(objValue); //编码
         if (objHours > 0) {//为0时不设定过期时间，浏览器关闭时cookie自动消失
             var date = new Date();
-            var ms = objHours * 3600 * 1000;
+            var ms   = objHours * 3600 * 1000;
             date.setTime(date.getTime() + ms);
             str += "; expires=" + date.toGMTString();
         }
@@ -1539,9 +1541,9 @@ layui.define(['layer'], function (exports) {
     }
 
     // 重新设置表格行高
-    admin.autoRowHeight = function(tableId) {
-        return function(){
-            var ctable = $('[lay-id='+tableId+']') // 找到当前表格
+    admin.autoRowHeight = function (tableId) {
+        return function () {
+            var ctable = $('[lay-id=' + tableId + ']') // 找到当前表格
             // 找出当前表格的每一行
             ctable.find(".layui-table-main table tr").each((index, ele) => {
                 // 获取当前行的高度
@@ -1556,7 +1558,7 @@ layui.define(['layer'], function (exports) {
         }
     }
     /** 侧导航折叠状态下鼠标经过无限悬浮效果 */
-    var navItemDOM = '.layui-layout-admin.admin-nav-mini>.layui-side .layui-nav .layui-nav-item';
+    var navItemDOM      = '.layui-layout-admin.admin-nav-mini>.layui-side .layui-nav .layui-nav-item';
     $(document).on('mouseenter', navItemDOM + ',' + navItemDOM + ' .layui-nav-child>dd', function () {
         if (admin.getPageWidth() > 768) {
             var $that = $(this), $navChild = $that.find('>.layui-nav-child');

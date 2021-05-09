@@ -18,7 +18,7 @@
     <!-- 头部 -->
     <div class="layui-header">
         <div class="layui-logo">
-            <img alt="" src="{'backend/assets/img/logo.png'|res}"/>
+            <img alt="{$pageMeta.projectName}" src="{$pageMeta.brandImg}"/>
             <cite>&nbsp;{$pageMeta.projectName}</cite>
         </div>
         <ul class="layui-nav layui-layout-left">

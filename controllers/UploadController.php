@@ -2,10 +2,8 @@
 
 namespace backend\controllers;
 
-use wulaphp\app\App;
-use wulaphp\io\IUploader;
+use wulaphp\io\Request;
 use wulaphp\io\Response;
-use wulaphp\io\UploadFile;
 use wulaphp\mvc\controller\AdminController;
 use wulaphp\mvc\controller\UploadSupport;
 
@@ -23,7 +21,7 @@ class UploadController extends AdminController {
             return $this->onDenied('you are denied');
         }
 
-        $file = $this->_prepareFile($app, $url);
+        $file = $this->prepareFile($app, $url);
 
         # 上传
         $rst = $this->upload($file);
@@ -32,7 +30,8 @@ class UploadController extends AdminController {
             $rst['code']          = 200;
             $rst['result']['url'] = trailingslashit($url) . $rst['result']['url'];
         } else {
-            Response::respond($rst['error']['code'], $rst['error']['message']);
+            $rst['code']    = 500;
+            $rst['message'] = $rst['error']['message'];
         }
 
         return $rst;
@@ -43,59 +42,48 @@ class UploadController extends AdminController {
         if (!$this->passport->cando($app . ':system/file')) {
             return $this->onDenied('you are denied');
         }
+
         $rawData = rqst('rawData');
-        //TODO 将rawData转换成图片然后
-
-    }
-
-    private function _prepareFile(string $app, ?string &$url): UploadFile {
-        $uploaderDef = App::acfg('uploader');
-        $apps        = array_filter($uploaderDef, function ($v) {
-            return $v{0} != '#';
-        }, ARRAY_FILTER_USE_KEY);
-
-        if (!$apps) {
-            Response::respond(503, 'missing uploader configuration');
+        if (!$rawData) {
+            Response::respond(411, 'now data');
         }
 
-        if (!isset($apps[ $app ])) {
-            Response::respond(404);
+        if (!preg_match('#^data:image/(jpe?g|png);base64,(.+)$#', $rawData, $ms)) {
+            Response::respond(415, 'only accept base64 encoded data');
         }
-        # 应用定义
-        $appDef = $apps[ $app ];
-        $ref    = $appDef['ref'] ?? null;
-        if (!$ref) {
-            Response::respond(503, 'missing ref of ' . $app);
-        }
-        if (!isset($uploaderDef[ $ref ])) {
-            Response::respond(503, 'missing uploader ' . $ref);
+        $ext      = $ms[1];
+        $data     = $ms[2];
+        $fileName = md5($rawData . $this->sessionID);
+        $imgData  = base64_decode($data, true);
+
+        if (!$imgData) {
+            Response::respond(415, 'only accept base64 encoded data');
         }
 
-        # 上传器配置
-        $uploaderCnf = array_merge($uploaderDef[ $ref ], $appDef);
-        $uploaderClz = $uploaderCnf['uploader'] ?? '';
-        if (!$uploaderClz || !($uploaderCls = new $uploaderClz()) instanceof IUploader) {
-            Response::respond(503, $uploaderClz . ' is not an implementation of ' . IUploader::class);
-        }
-        /**@var \wulaphp\io\IUploader $uploaderCls */
-        if (!$uploaderCls->setup($uploaderCnf['setup'] ?? [])) {
-            Response::respond(500, $uploaderCls->get_last_error());
-        }
-        $watermark = array_pad((array)($uploaderCnf['watermark'] ?? []), 3, null);
-        $url       = $uploaderCnf['url'] ?? App::base('');
-        $allowed   = (array)($uploaderCnf['allowed'] ?? []);
-        $maxSize   = intval($uploaderCnf['maxSize'] ?? 10000000);
-
-        $file = new UploadFile('', $allowed, $maxSize);
-        $file->setWatermark($watermark[0], $watermark[1], $watermark[2]);
-        $file->setUploader($uploaderCls);
-        if (isset($uploaderCnf['extractor']) && $uploaderCnf['extractor'] instanceof \Closure) {
-            $file->setMetaDataExtractor($uploaderCnf['extractor']);
-        }
-        if (isset($appDef['-watermark'])) {
-            $file->setWatermark(null);
+        $filePath = TMP_PATH . 'plupload' . DS . $fileName . '.' . $ext;
+        if (!file_put_contents($filePath, $imgData)) {
+            @unlink($filePath);
+            Response::respond(503, 'cannot save tmp file');
         }
 
-        return $file;
+        $file = $this->prepareFile($app, $url);
+        $file->setFile($filePath);
+
+        # 上传
+        Request::getInstance()->addUserData([
+            'name' => $fileName . '.' . $ext
+        ]);
+
+        $rst = $this->upload($file);
+
+        if ($rst['done']) {
+            $rst['code']          = 200;
+            $rst['result']['url'] = trailingslashit($url) . $rst['result']['url'];
+        } else {
+            $rst['code']    = 500;
+            $rst['message'] = $rst['error']['message'];
+        }
+
+        return $rst;
     }
 }

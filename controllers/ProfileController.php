@@ -62,6 +62,19 @@ class ProfileController extends PageController {
         return Ajax::error($msg);
     }
 
+    public function avatar(): JsonView {
+        $meta['avatar'] = rqst('avatar');
+        if (!$meta['avatar']) {
+            return Ajax::error('更新头像失败');
+        }
+        $metaTable = new UserMetaTable();
+        $metaTable->setMetas($this->passport->uid, $meta);
+        $this->passport->avatar = $meta['avatar'];
+        $this->passport->store();
+
+        return Ajax::success('头像更新成功');
+    }
+
     /**
      * @get
      * @return View
@@ -76,9 +89,11 @@ class ProfileController extends PageController {
      * @param string $oldPsw
      * @param string $newPsw
      * @param string $rePsw
+     *
      * @ResetPasswd
      * @post
      * @return JsonView
+     * @throws \wulaphp\validator\ValidateException
      */
     public function passwdPost(string $oldPsw, string $newPsw, string $rePsw): JsonView {
         if (!$this->passport->verifyPasswd($oldPsw)) {
@@ -99,7 +114,7 @@ class ProfileController extends PageController {
             return Ajax::error('修改密码失败，请联系管理员');
         }
 
-        $this->passport->data['passwd'] = $hash['passwd'];
+        $this->passport->data['passwd']           = $hash['passwd'];
         $this->passport->data['passwd_expire_at'] = $hash['passwd_expire_at'];
 
         $this->passport->store();
