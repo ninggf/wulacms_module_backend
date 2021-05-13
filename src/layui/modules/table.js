@@ -1,8 +1,7 @@
-/**
 
- @Name：table 表格操作组件
- @License：MIT
-
+/*!
+ * layui.table
+ * 数据表格组件
  */
 
 layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
@@ -154,7 +153,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,'</table>'].join('')
 
   //主模板
-  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
+  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}{{# if(d.data.className){ }} {{ d.data.className }}{{# } }}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
 
     ,'{{# if(d.data.toolbar){ }}'
     ,'<div class="layui-table-tool">'

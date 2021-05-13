@@ -1,9 +1,8 @@
+
 /*!
-
- @Name: layui
- @Description：Classic modular front-end UI framework
- @License：MIT
-
+ * layui
+ * Classic modular front-end ui framework
+ * MIT Licensed
  */
  
 ;!function(win){
@@ -17,10 +16,13 @@
   }
 
   ,Layui = function(){
-    this.v = '2.6.5'; //版本号
+    this.v = '2.6.6'; //版本号
   }
 
-  //获取layui所在目录
+  //识别预先可能定义的指定全局对象
+  ,GLOBAL = window.LAYUI_GLOBAL || {}
+
+  //获取 layui 所在目录
   ,getPath = function(){
     var jsPath = doc.currentScript ? doc.currentScript.src : function(){
       var js = doc.scripts
@@ -35,7 +37,7 @@
       return src || js[last].src;
     }();
 
-    return config.dir = jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
+    return config.dir = GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }()
 
   //异常提示
@@ -48,30 +50,30 @@
 
   //内置模块
   ,modules = config.builtin = {
-    lay: 'modules/lay' //基础 DOM 操作
-    ,layer: 'modules/layer' //弹层
-    ,laydate: 'modules/laydate' //日期
-    ,laypage: 'modules/laypage' //分页
-    ,laytpl: 'modules/laytpl' //模板引擎
-    ,layedit: 'modules/layedit' //富文本编辑器
-    ,form: 'modules/form' //表单集
-    ,upload: 'modules/upload' //上传
-    ,dropdown: 'modules/dropdown' //下拉菜单
-    ,transfer: 'modules/transfer' //穿梭框
-    ,tree: 'modules/tree' //树结构
-    ,table: 'modules/table' //表格
-    ,element: 'modules/element' //常用元素操作
-    ,rate: 'modules/rate'  //评分组件
-    ,colorpicker: 'modules/colorpicker' //颜色选择器
-    ,slider: 'modules/slider' //滑块
-    ,carousel: 'modules/carousel' //轮播
-    ,flow: 'modules/flow' //流加载
-    ,util: 'modules/util' //工具块
-    ,code: 'modules/code' //代码修饰器
-    ,jquery: 'modules/jquery' //DOM 库（第三方）
+    lay: 'lay' //基础 DOM 操作
+    ,layer: 'layer' //弹层
+    ,laydate: 'laydate' //日期
+    ,laypage: 'laypage' //分页
+    ,laytpl: 'laytpl' //模板引擎
+    ,layedit: 'layedit' //富文本编辑器
+    ,form: 'form' //表单集
+    ,upload: 'upload' //上传
+    ,dropdown: 'dropdown' //下拉菜单
+    ,transfer: 'transfer' //穿梭框
+    ,tree: 'tree' //树结构
+    ,table: 'table' //表格
+    ,element: 'element' //常用元素操作
+    ,rate: 'rate'  //评分组件
+    ,colorpicker: 'colorpicker' //颜色选择器
+    ,slider: 'slider' //滑块
+    ,carousel: 'carousel' //轮播
+    ,flow: 'flow' //流加载
+    ,util: 'util' //工具块
+    ,code: 'code' //代码修饰器
+    ,jquery: 'jquery' //DOM 库（第三方）
     
-    ,all: 'modules/all'
-    ,'layui.all': 'modules/layui.all' //聚合标识（功能性的，非真实模块）
+    ,all: 'all'
+    ,'layui.all': 'layui.all' //聚合标识（功能性的，非真实模块）
   };
 
   //记录基础数据
@@ -469,7 +471,7 @@
       //提取 Hash
       ,hash: that.router(function(){
         return href 
-          ? ((href.match(/#.+/) || [])[0] || '')
+          ? ((href.match(/#.+/) || [])[0] || '/')
         : location.hash;
       }())
     };
@@ -566,16 +568,21 @@
   //遍历
   Layui.prototype.each = function(obj, fn){
     var key
-    ,that = this;
+    ,that = this
+    ,callFn = function(key, obj){
+      return fn.call(obj[key], key, obj[key])
+    };
+
     if(typeof fn !== 'function') return that;
     obj = obj || [];
+
     if(obj.constructor === Object){
       for(key in obj){
-        if(fn.call(obj[key], key, obj[key])) break;
+        if(callFn(key, obj)) break;
       }
     } else {
       for(key = 0; key < obj.length; key++){
-        if(fn.call(obj[key], key, obj[key])) break;
+        if(callFn(key, obj)) break;
       }
     }
     return that;
