@@ -5357,3 +5357,7 @@ td[data-with="SUCCESS"]::before {
     top: 10px;
     right: 15px;
 }
+
+.layui-layer-page .layui-layer-content{
+    overflow: visible !important;
+}

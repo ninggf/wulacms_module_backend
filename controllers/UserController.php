@@ -29,7 +29,7 @@ use wulaphp\validator\ValidateException;
  */
 class UserController extends PageController {
 
-    public function index():View {
+    public function index(): View {
         return $this->render(['tableData' => $this->list()->render()]);
     }
 
@@ -150,7 +150,8 @@ class UserController extends PageController {
                     $db->commit();
                     $requests = Request::getInstance()->requests();
                     unset($requests['passwd']);
-                    Syslog::info('common', 'Add User successfully', 'Add User', $this->passport->uid, '', json_encode($requests));                    Syslog::info('common', 'Add User successfully', 'Add User', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
+                    Syslog::info('common', 'Add User successfully', 'Add User', $this->passport->uid, '', json_encode($requests));
+                    Syslog::info('common', 'Add User successfully', 'Add User', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
 
                     return Ajax::success();
                 }
@@ -180,6 +181,7 @@ class UserController extends PageController {
 
         $name         = explode('@', $user['name']);
         $user['name'] = $name[0];
+
         if (empty($user['name'])) {
             return Ajax::error('用户名不合法/用户名不能为空');
         }
@@ -187,9 +189,15 @@ class UserController extends PageController {
         if (rqset('status')) {
             $user['status'] = in_array(rqst('status'), [1, 0]) ? rqst('status') : 0;
         }
+
         if (!empty($passwd) && $passwd != rqst('rePasswd')) {
             return Ajax::error('两次输入的密码不相同！');
         }
+
+        if ($passwd) {
+            $user['passwd'] = $passwd;
+        }
+
         if (empty($roleIds)) {
             return Ajax::error('角色必选,不能为空!');
         }
@@ -197,6 +205,7 @@ class UserController extends PageController {
         //处理租户用户名
         $tenant = $this->passport->data['tenant'];
         $domain = $tenant['domain'] ?? '';
+
         if ($domain) {
             $user['name'] = $user['name'] . '@' . $domain;
         }
@@ -206,10 +215,12 @@ class UserController extends PageController {
         if (!$user1['id']) {
             return Ajax::error('用户不存在');
         }
+
         //超级管理员不能被别人修改.
         if ($user1['is_super_user'] && $uid != $this->passport->uid) {
             return Ajax::error('你无权修改此用户');
         }
+
         //不能修改别人家的用户
         if ($user1['tenant_id'] != APP_TENANT_ID) {
             return Ajax::error('你无权修改此用户');
@@ -218,15 +229,15 @@ class UserController extends PageController {
         $db = $userTable->db();
         $db->start();//启动事务
         try {
-            if ($res = $userTable->updateAccount($user, $uid)) {
+            if ($userTable->updateAccount($user, $uid)) {
                 $metaTable = new UserMetaTable($db);
                 $metaRes   = $metaTable->setMetas($uid, $userMeta);
                 $roleRes   = $userTable->setRoles($uid, explode(',', $roleIds));
                 if ($metaRes && $roleRes) {
                     $db->commit();
                     $requests = Request::getInstance()->requests();
-                    unset($requests['passwd']);
-                    Syslog::info('common', 'Edit User successfully', 'Edit User', $this->passport->uid, '', json_encode($requests));                    Syslog::info('common', 'Edit User successfully', 'Edit User', $this->passport->uid, '', json_encode(Request::getInstance()->requests()));
+                    unset($requests['passwd'], $requests['rePasswd']);
+                    Syslog::info('common', 'Edit User successfully', 'Edit User', $this->passport->uid, '', json_encode($requests));
 
                     return Ajax::success();
                 }
@@ -281,9 +292,9 @@ class UserController extends PageController {
     public function xmSelectData(): array {
         $userM              = new UserTable();
         $where['tenant_id'] = APP_TENANT_ID;
-        $page  = irqst('page', 1);
-        $limit = irqst('limit', 20);
-        $id    = rqst('id', '0');
+        $page               = irqst('page', 1);
+        $limit              = irqst('limit', 20);
+        $id                 = rqst('id', '0');
 
         $userM = $userM->select()->where($where);
         $count = $userM->count();
