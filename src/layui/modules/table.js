@@ -652,8 +652,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     options = options || {};
     delete that.haveInit;
 
-    //如果直接传入数组 data，则移除原来的数组，以免数组发生深度拷贝
-    if(options.data && options.data.constructor === Array) delete that.config.data;
+    //防止数组深度合并
+    layui.each(options, function(key, item){
+      if(layui._typeof(item) === 'array') delete that.config[key];
+    });
 
     //对参数进行深度或浅扩展
     that.config = $.extend(deep, {}, that.config, options);
@@ -744,7 +746,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
         ,error: function(e, msg){
-          that.errorView('数据接口请求异常：'+ msg);
+          that.errorView('请求异常，错误提示：'+ msg);
 
           that.renderForm();
           that.setColsWidth();
@@ -999,7 +1001,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
 
-      //td内容
+      //td 内容
       var content = function(){
         var text = item3.totalRowText || ''
         ,thisTotalNum = parseFloat(totalNums[field]).toFixed(2)
