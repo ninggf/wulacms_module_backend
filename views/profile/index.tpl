@@ -37,31 +37,32 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label layui-form-required">账户:</label>
                                     <div class="layui-input-block">
-                                        <input name="name" placeholder="请输入账户"  value="{$userMeta.username}" class="layui-input" lay-verType="tips" lay-verify="required" required/>
+                                        <input name="name" placeholder="请输入账户" value="{$userMeta.username}" class="layui-input" lay-verType="tips" lay-verify="required" required/>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label layui-form-required">姓名:</label>
                                     <div class="layui-input-block">
-                                        <input name="nickname" placeholder="请输入姓名" value="{$userMeta.nickname}" class="layui-input" lay-verType="tips" lay-verify="required" required/>
+                                        <input name="meta[nickname]" placeholder="请输入姓名" value="{$userMeta.nickname}" class="layui-input" lay-verType="tips" lay-verify="required" required/>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">手机:</label>
                                     <div class="layui-input-block">
-                                        <input name="phone" placeholder="请输入手机" value="{$userMeta.phone}" class="layui-input" lay-verType="tips" lay-verify="phoneX"/>
+                                        <input name="meta[phone]" placeholder="请输入手机" value="{$userMeta.phone}" class="layui-input" lay-verType="tips" lay-verify="phoneX"/>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">邮箱:</label>
                                     <div class="layui-input-block">
-                                        <input name="email" placeholder="请输入邮箱" value="{$userMeta.email}" class="layui-input" lay-verify="emailX" lay-verType="tips"/>
+                                        <input name="meta[email]" placeholder="请输入邮箱" value="{$userMeta.email}" class="layui-input" lay-verify="emailX" lay-verType="tips"/>
                                     </div>
                                 </div>
+                                {'backend\profileForm'|fire:$myPassport}
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">个人简介:</label>
                                     <div class="layui-input-block">
-                                        <textarea name="desc" placeholder="个人简介" class="layui-textarea" >{$userMeta.desc|escape}</textarea>
+                                        <textarea name="meta[desc]" placeholder="个人简介" class="layui-textarea">{$userMeta.desc|escape}</textarea>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">

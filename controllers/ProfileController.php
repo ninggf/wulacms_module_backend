@@ -26,10 +26,12 @@ class ProfileController extends PageController {
     }
 
     /**
+     * 保存个人资料.
+     *
      * @post
      */
-    public function save(): JsonView {
-        $meta = rqsts(['nickname', 'phone', 'email', 'desc']);
+    public function savePost(): JsonView {
+        $meta = rqst('meta');
         $name = rqst('name');
 
         $userTable = new UserTable();
@@ -42,20 +44,24 @@ class ProfileController extends PageController {
                 $metaTable = new UserMetaTable($db);
                 $rst       = $metaTable->setMetas($this->passport->uid, $meta);
                 if ($rst) {
-                    $db->commit();
-                    $this->passport->username     = $name;
-                    $this->passport->nickname     = $meta['nickname'];
-                    $this->passport->email        = $meta['email'];
-                    $this->passport->phone        = $meta['phone'];
-                    $this->passport->data['desc'] = $meta['desc'];
+
+                    $this->passport->username = $name;
+                    $this->passport->nickname = $meta['nickname'];
+                    $this->passport->email    = $meta['email'];
+                    $this->passport->phone    = $meta['phone'];
+                    $this->passport->data     = array_merge($this->passport->data, $meta);
                     $this->passport->store();
+                    fire('backend\profileUpdated', $this->passport, $meta);
+                    $db->commit();
 
                     return Ajax::success();
                 }
             }
             $msg = '修改个人信息失败，请联系管理员';
         } catch (ValidateException $e) {
-            $msg = '账户已经存在';
+            $msg = '账户名已经存在';
+        } catch (\Exception $e) {
+            $msg = $e->getMessage();
         }
         $db->rollback();
 
