@@ -90,6 +90,8 @@ body {
 
 .layui-layout-admin .layui-header .layui-nav-item .layui-icon {
     font-size: 16px;
+    top: 1px;
+    right: 0;
 }
 
 .layui-layout-admin .layui-header a {
@@ -108,7 +110,8 @@ body {
 }
 
 .layui-nav-child-left {
-    left: 12px;
+    left: auto;
+    right: -28px;
 }
 
 .layui-nav-child-left a {
@@ -5323,6 +5326,10 @@ td[data-with]::before {
     left: 0;
 }
 
+td[data-with="PENDING"]::before {
+    background: #BBB;
+}
+
 td[data-with="INFO"]::before {
     background: #2BCCCE;
 }
@@ -5345,7 +5352,7 @@ td[data-with="SUCCESS"]::before {
 
 .page-header {
     padding-bottom: 0;
-    margin-bottom: -10px;
+    margin-bottom: -5px;
 }
 
 .page-header small {

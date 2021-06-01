@@ -51,21 +51,33 @@
   <div class="layui-fluid layui-radius-table layui-no-pt layui-table-cell-ah">
     <div class="layui-tab layui-tab-brief" lay-filter="runStatus">
       <ul class="layui-tab-title" id="messageType">
-        <li class="layui-this text-info" data-type="R">{'Running'|t}</li>
+        <li class="layui-this text-info" data-type="R">{'Scheduled'|t}</li>
         <li data-type="S" class="text-success">{'Finished'|t}</li>
       </ul>
     </div>
     <table id="pageTable" lay-filter="pageTable"></table>
   </div>
+  <script type="text/html" id="nameTpl">
+    {literal}<span class="layui-text">
+      <a ew-href="{{d.$.detail}}{{d.id}}" ew-title="[{{d.id}}]{{=d.name}}">[{{= d.type }}]{{ d.name }}</a>
+    </span>{/literal}
+  </script>
   <script type="text/html" id="retryCol">
     {literal}<p>Retry: {{ d.retry }}</p><p>Interval: {{ d.interval }}</p>{/literal}
   </script>
   <!-- 表格工具栏 -->
   <script type="text/html" id="tableToolbar">
-    <a class="" lay-event="setup" title="{'Setup'|t}"><i class="layui-icon layui-icon-set"></i></a><a class="layui-fg-blue" lay-event="queue" title="{'Queue'|t}"><i class="layui-icon layui-icon-template-1"></i></a>
+    <a lay-event="setup" title="{'Setup'|t}"><i class="layui-icon layui-icon-set"></i></a>
   </script>
-  <!-- 任务队列界面 -->
-  <script type="text/html" id="taskQueueDialog">
-    <table lay-filter="queueTable"></table>
+  <!-- 任务选项界面 -->
+  <script type="text/html" id="taskSetupDialog">
+    <div id="jsoneditor" style="width: 100%;height: 100%"></div>
   </script>
-<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(e,t,a){return t in e?Object.defineProperty(e,t,{value:a,enumerable:!0,configurable:!0,writable:!0}):e[t]=a,e}layui.use(["jquery","form","table","admin","laydate"],function(e,t,a,r,n){var i=layui.element;(new(function(){function o(){_defineProperty(this,"where",{"sort[name]":"id","sort[dir]":"d",status:e("#runStatus").find("li.layui-this").data("type")})}var u=o.prototype;return u.init=function(o,u,l){var s=this,d=a.render({elem:o,cols:u,autoSort:!1,data:l,lazy:!0,limit:30,where:this.where,url:r.url("backend/task/data"),page:!0,done:r.autoRowHeight("pageTable")}),c=this;a.on("sort(pageTable)",function(e){s.where["sort[name]"]=e.field,s.where["sort[dir]"]="asc"===e.type?"a":"d",d.reloadData()}),a.on("tool(pageTable)",function(e){var t=e.event,a=e.data;switch(t){case"setup":break;case"queue":s.showQueue(a)}}),n.render({elem:'input[name="date"]',type:"date",range:!0,trigger:"click"}),t.on("submit(searchBtn)",function(t){return s.where=e.extend(s.where,t.field),d.reloadData(),!1}),t.on("reset(searchForm)",function(t){s.where=e.extend(s.where,t.field),d.reloadData()}),i.on("tab(runStatus)",function(){var t=e(this).data("type");t!==c.where.status&&(c.where.status=t,d.reloadData())})},u.showQueue=function(e){console.log(e)},o}())).init("#pageTable",pageData.table.cols,pageData.table.data)});{/literal}</script>
+<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(obj,key,value){if(key in obj){Object.defineProperty(obj,key,{value:value,enumerable:true,configurable:true,writable:true});}else{obj[key]=value;}return obj;}layui.use(['jquery','form','table','admin','laydate'],function($,form,table,admin,laydate){var element=layui.element,tpl=layui.laytpl;tpl.config({detail:admin.url('backend/task/detail/')});var TablePage=/*#__PURE__*/function(){function TablePage(){_defineProperty(this,"where",{'sort[name]':'id','sort[dir]':'d','status':$('#runStatus').find('li.layui-this').data('type')});}var _proto=TablePage.prototype;_proto.init=function init(id,cols,data){var _this=this;// 绘制表格
+var dataTable=table.render({elem:id,cols:cols,autoSort:false,data:data,lazy:true,limit:30,where:this.where,url:admin.url('backend/task/data'),page:true,done:admin.autoRowHeight('pageTable')}),that=this;//排序
+table.on('sort(pageTable)',function(obj){_this.where['sort[name]']=obj.field;_this.where['sort[dir]']=obj.type==='asc'?'a':'d';dataTable.reloadData();});//事件处理
+table.on('tool(pageTable)',function(obj){var event=obj.event,data=obj.data;switch(event){case'setup':var editor;admin.openDialog('#taskSetupDialog','Options',{area:['600px','400px'],offset:'auto',destroy:function destroy(){editor.destroy();}},function(){var container=document.getElementById("jsoneditor"),options={mode:'view'};editor=new JSONEditor(container,options);editor.set(data.options||{});});break;}});//绘制日期控件
+laydate.render({elem:'input[name="date"]',type:'date',range:true,trigger:'click'});//搜索表单提交
+form.on('submit(searchBtn)',function(obj){_this.where=$.extend(_this.where,obj.field);dataTable.reloadData();return false;});//重置表单
+form.on('reset(searchForm)',function(obj){_this.where=$.extend(_this.where,obj.field);dataTable.reloadData();});//标签切换
+element.on('tab(runStatus)',function(){var typ=$(this).data('type');if(typ!==that.where.status){that.where.status=typ;dataTable.reloadData();}});};return TablePage;}();var taskTable=new TablePage();taskTable.init('#pageTable',pageData.table.cols,pageData.table.data);});{/literal}</script>

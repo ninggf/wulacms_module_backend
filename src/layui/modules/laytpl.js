@@ -98,6 +98,11 @@ layui.define(function(exports){
   Tpl.pt.render = function(data, callback){
     var that = this, tpl;
     if(!data) return tool.error('no data');
+
+    // 将配置添加数据里
+    data.$ = config;
+    // 将配置添加数据里
+
     tpl = that.cache ? that.cache(data, tool.escape) : that.parse(that.tpl, data);
     if(!callback) return tpl;
     callback(tpl);

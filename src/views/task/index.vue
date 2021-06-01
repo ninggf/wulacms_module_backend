@@ -52,27 +52,35 @@
   <div class="layui-fluid layui-radius-table layui-no-pt layui-table-cell-ah">
     <div class="layui-tab layui-tab-brief" lay-filter="runStatus">
       <ul class="layui-tab-title" id="messageType">
-        <li class="layui-this text-info" data-type="R">{'Running'|t}</li>
+        <li class="layui-this text-info" data-type="R">{'Scheduled'|t}</li>
         <li data-type="S" class="text-success">{'Finished'|t}</li>
       </ul>
     </div>
     <table id="pageTable" lay-filter="pageTable"></table>
   </div>
+  <script type="text/html" id="nameTpl">
+    {literal}<span class="layui-text">
+      <a ew-href="{{d.$.detail}}{{d.id}}" ew-title="[{{d.id}}]{{=d.name}}">[{{= d.type }}]{{ d.name }}</a>
+    </span>{/literal}
+  </script>
   <script type="text/html" id="retryCol">
     {literal}<p>Retry: {{ d.retry }}</p><p>Interval: {{ d.interval }}</p>{/literal}
   </script>
   <!-- 表格工具栏 -->
   <script type="text/html" id="tableToolbar">
-    <a class="" lay-event="setup" title="{'Setup'|t}"><i class="layui-icon layui-icon-set"></i></a><a class="layui-fg-blue" lay-event="queue" title="{'Queue'|t}"><i class="layui-icon layui-icon-template-1"></i></a>
+    <a lay-event="setup" title="{'Setup'|t}"><i class="layui-icon layui-icon-set"></i></a>
   </script>
-  <!-- 任务队列界面 -->
-  <script type="text/html" id="taskQueueDialog">
-    <table lay-filter="queueTable"></table>
+  <!-- 任务选项界面 -->
+  <script type="text/html" id="taskSetupDialog">
+    <div id="jsoneditor" style="width: 100%;height: 100%"></div>
   </script>
 </template>
 <script>
 layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admin, laydate) => {
-  let element = layui.element
+  let element = layui.element, tpl = layui.laytpl
+  tpl.config({
+    detail: admin.url('backend/task/detail/')
+  })
 
   class TablePage {
     where = {
@@ -95,19 +103,31 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admi
         page    : true,
         done    : admin.autoRowHeight('pageTable')
       }), that      = this
+
       //排序
       table.on('sort(pageTable)', (obj) => {
         this.where['sort[name]'] = obj.field
         this.where['sort[dir]']  = obj.type === 'asc' ? 'a' : 'd'
         dataTable.reloadData()
-      });
+      })
+      //事件处理
       table.on('tool(pageTable)', (obj) => {
         let event = obj.event, data = obj.data
         switch (event) {
           case 'setup':
-            break;
-          case 'queue':
-            this.showQueue(data)
+            let editor;
+            admin.openDialog('#taskSetupDialog', 'Options', {
+              area  : ['600px', '400px'],
+              offset: 'auto',
+              destroy(){
+                editor.destroy()
+              }
+            }, () => {
+              let container = document.getElementById("jsoneditor")
+                  , options = {mode: 'view'}
+              editor  = new JSONEditor(container, options)
+              editor.set(data.options || {})
+            });
             break;
         }
       })
@@ -138,11 +158,6 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate'], ($, form, table, admi
           dataTable.reloadData()
         }
       })
-    }
-
-    showQueue(task) {
-      //admin.openDialog('','','')
-      console.log(task)
     }
   }
 

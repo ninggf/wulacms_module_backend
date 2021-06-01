@@ -21,11 +21,20 @@ trait TablePage {
      */
     protected function renderTable($tpl = null, ?array $data = null): View {
         if (is_array($tpl)) {
-            $data = $tpl;
-            $tpl  = null;
+            $data      = $tpl;
+            $tpl       = null;
+            $cols      = $this->cols();
+            $tableData = $this->data()->getData();
+        } else if ($tpl instanceof TableDef) {
+            $tableData = $tpl->data();
+            $cols      = $tpl->cols();
+            $tpl       = null;
+        } else {
+            $tableData = $this->data()->getData();
+            $cols      = $this->cols();
         }
-        $data['pageData']['table']['data'] = $this->data()->getData();
-        $data['pageData']['table']['cols'] = $this->cols();
+        $data['pageData']['table']['data'] = $tableData;
+        $data['pageData']['table']['cols'] = $cols;
 
         return $this->render($tpl, $data);
     }
