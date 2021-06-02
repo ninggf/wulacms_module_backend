@@ -131,6 +131,7 @@ layui.define('layer', function(exports){
           }
         }
       }
+      ,autocomplete: null //全局 autocomplete 状态。null 表示不干预
     };
   };
 
@@ -152,7 +153,8 @@ layui.define('layer', function(exports){
     layui.each(errors, function (_, err) {
       var input     = err.elem
           , item    = input.get(0)
-          , pt      = input.closest('div.layui-form-item')
+          , ptblk   = input.closest('div.layui-input-block').eq(0)
+          , pt      = ptblk?ptblk:input.closest('div.layui-form-item').eq(0)
           , ee      = pt.find('p.layui-error-msg')
           , verType = input.attr('lay-verType')
           ,errorText = err.error
@@ -277,13 +279,21 @@ layui.define('layer', function(exports){
   //表单控件渲染
   Form.prototype.render = function(type, filter){
     var that = this
+    ,options = that.config
     ,elemForm = $(ELEM + function(){
       return filter ? ('[lay-filter="' + filter +'"]') : '';
     }())
     ,items = {
+      //输入框
+      input: function(){
+        var inputs = elemForm.find('input,textarea');
+
+        //初始化全局的 autocomplete
+        options.autocomplete && inputs.attr('autocomplete', options.autocomplete);
+      }
 
       //下拉选择框
-      select: function(){
+      ,select: function(){
         var TIPS = '请选择', CLASS = 'layui-form-select', TITLE = 'layui-select-title'
         ,NONE = 'layui-select-none', initValue = '', thatInput
         ,selects = elemForm.find('select')
@@ -579,8 +589,8 @@ layui.define('layer', function(exports){
           var reElem = $(['<div class="'+ (isSearch ? '' : 'layui-unselect ') + CLASS
           ,(disabled ? ' layui-select-disabled' : '') +'">'
             ,'<div class="'+ TITLE +'">'
-              ,('<input type="text" placeholder="'+ placeholder +'" '
-                +('value="'+ (value ? selected.html() : '') +'"') //默认值
+              ,('<input type="text" placeholder="'+ $.trim(placeholder) +'" '
+                +('value="'+ $.trim(value ? selected.html() : '') +'"') //默认值
                 +((!disabled && isSearch) ? '' : ' readonly') //是否开启搜索
                 +' class="layui-input'
                 +(isSearch ? '' : ' layui-unselect')
@@ -591,11 +601,11 @@ layui.define('layer', function(exports){
               var arr = [];
               layui.each(options, function(index, item){
                 if(index === 0 && !item.value){
-                  arr.push('<dd lay-value="" class="layui-select-tips">'+ (item.innerHTML || TIPS) +'</dd>');
+                  arr.push('<dd lay-value="" class="layui-select-tips">'+ $.trim(item.innerHTML || TIPS) +'</dd>');
                 } else if(item.tagName.toLowerCase() === 'optgroup'){
                   arr.push('<dt>'+ item.label +'</dt>');
                 } else {
-                  arr.push('<dd lay-value="'+ item.value +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ item.innerHTML +'</dd>');
+                  arr.push('<dd lay-value="'+ item.value +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ $.trim(item.innerHTML) +'</dd>');
                 }
               });
               arr.length === 0 && arr.push('<dd lay-value="" class="'+ DISABLED +'">没有选项</dd>');
@@ -655,7 +665,7 @@ layui.define('layer', function(exports){
           var hasRender = othis.next('.' + RE_CLASS[0])
           ,reElem = $(['<div class="layui-unselect '+ RE_CLASS[0]
             ,(check.checked ? (' '+ RE_CLASS[1]) : '') //选中状态
-            ,(disabled ? ' layui-checkbox-disbaled '+ DISABLED : '') //禁用状态
+            ,(disabled ? ' layui-checkbox-disabled '+ DISABLED : '') //禁用状态
             ,'"'
             ,(skin ? ' lay-skin="'+ skin +'"' : '') //风格
           ,'>'
@@ -724,7 +734,7 @@ layui.define('layer', function(exports){
           //替代元素
           var reElem = $(['<div class="layui-unselect '+ CLASS
             ,(radio.checked ? (' '+CLASS+'ed') : '') //选中状态
-          ,(disabled ? ' layui-radio-disbaled '+DISABLED : '') +'">' //禁用状态
+          ,(disabled ? ' layui-radio-disabled '+DISABLED : '') +'">' //禁用状态
           ,'<i class="layui-anim layui-icon">'+ ICON[radio.checked ? 0 : 1] +'</i>'
           ,'<div>'+ function(){
             var title = radio.title || '';
@@ -742,12 +752,25 @@ layui.define('layer', function(exports){
       }
     };
     type ? (
-      items[type] ? items[type]() : hint.error('不支持的'+ type + '表单渲染')
+      items[type] ? items[type]() : hint.error('不支持的 "'+ type + '" 表单渲染')
     ) : layui.each(items, function(index, item){
       item();
     });
     return that;
   };
+  //验证
+  Form.prototype.validate  = function(filter){
+    let elem = $(ELEM + '[lay-filter="' + filter +'"]').eq(0)
+        ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
+        ,formElem = elem
+        , valid = true
+    //开始校验
+    layui.each(verifyElem, function(_, item){
+      valid &= !verifyIt($(item),$(formElem))
+    });
+    return valid
+  }
+
   // 单个输入组件校验
   var verifyIt = function (othis, elem){
     var stop = false
@@ -816,6 +839,8 @@ layui.define('layer', function(exports){
     ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
     ,formElem = button.parents('form')[0] //获取当前所在的 form 元素，如果存在的话
     ,filter = button.attr('lay-filter'); //获取过滤器
+
+
     //开始校验
     layui.each(verifyElem, function(_, item){
       stop = verifyIt($(item),$(formElem))
