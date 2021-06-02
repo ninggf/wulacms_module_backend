@@ -16,6 +16,7 @@ use system\classes\model\UserMetaTable;
 use system\classes\model\UserRoleModel;
 use system\classes\model\UserTable;
 use system\classes\Syslog;
+use wulaphp\db\sql\Query;
 use wulaphp\io\Ajax;
 use wulaphp\io\Request;
 use wulaphp\mvc\view\JsonView;
@@ -24,11 +25,14 @@ use wulaphp\validator\ValidateException;
 
 /**
  * Class UserController
- * @acl     r:system/account/user
+ *
  * @package backend\controllers
  */
 class UserController extends PageController {
-
+    /**
+     * @acl     r:system/account/user
+     * @return \wulaphp\mvc\view\View
+     */
     public function index(): View {
         return $this->render(['tableData' => $this->list()->render()]);
     }
@@ -294,17 +298,47 @@ class UserController extends PageController {
         $where['tenant_id'] = APP_TENANT_ID;
         $page               = irqst('page', 1);
         $limit              = irqst('limit', 20);
-        $id                 = rqst('id', '0');
+        $id                 = irqst('id');
+        $role               = rqst('role');
+        $rid                = irqst('rid');
 
-        $userM = $userM->select()->where($where);
-        $count = $userM->count();
-        $list  = $userM->page($page, $limit)->toArray();
-
-        if (!is_null($id) && is_numeric($id)) {
-            $tree = $list;
+        $query = $userM->select('id,name')->where($where);
+        if ($role || $rid) {
+            $query->with([
+                'roles' => function (Query $q) use ($role, $rid) {
+                    $w = [];
+                    if ($role) {
+                        $w['name'] = $role;
+                    }
+                    if ($rid) {
+                        $w['role_id'] = $rid;
+                    }
+                    $q->where($w);
+                }
+            ]);
         }
 
-        return ['code' => 0, 'count' => $count, 'data' => $list, 'tree' => $tree ?? []];
-    }
+        $count = $query->count();
+        $list  = $query->page($page, $limit)->toArray(null, 'id');
 
+        $ids  = array_keys($list);
+        $list = array_values($list);
+
+        if ($ids) {
+            $userMate = new UserMetaTable();
+            $meta     = $userMate->select('user_id,value')->where([
+                'user_id @' => $ids,
+                'name'      => 'nickname'
+            ])->toArray('value', 'user_id');
+            foreach ($list as &$item) {
+                $item['name'] = ($meta[ $item['id'] ] ?? '') . '(' . $item['name'] . ')';
+            }
+        }
+        array_unshift($list, ['id' => '', 'name' => _t('All')]);
+        if (!is_null($id) && is_numeric($id)) {
+            return ['code' => 0, 'count' => $count, 'tree' => $list];
+        } else {
+            return ['code' => 0, 'count' => $count, 'data' => $list];
+        }
+    }
 }

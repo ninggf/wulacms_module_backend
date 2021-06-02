@@ -141,7 +141,7 @@ class IndexController extends AuthedController {
                 'message' => __('Username can not be blank'),
                 'ent'     => $eCnt,
                 'elem'    => 'input[name=username]'
-            ], 'alert');
+            ], Ajax::STYLE_NOTICE);
         }
         if ($eCnt < 3) {
             $table = new UserTable();
@@ -154,12 +154,12 @@ class IndexController extends AuthedController {
                     'message' => __('You entered an incorrect username or password.'),
                     'ent'     => $eCnt,
                     'elem'    => 'input[name=username]'
-                ], 'alert');
+                ], Ajax::STYLE_NOTICE);
             }
             $eCnt               = intval($user->meta()->where(['name' => 'errCnt'], true)->get('value'));
             $_SESSION['errCnt'] = $eCnt;
             if ($eCnt >= 3) {
-                return Ajax::error(['ent' => $eCnt], 'alert');
+                return Ajax::error(['ent' => $eCnt], 4);
             }
         }
 
@@ -167,10 +167,10 @@ class IndexController extends AuthedController {
             $auth_code_obj = new Captcha();
             if (!$auth_code_obj->validate($captcha, false, false)) {
                 return Ajax::error([
-                    'message' => __('Please try again.'),
+                    'message' => __('Captcha is invalid'),
                     'ent'     => $eCnt,
                     'elem'    => 'input[name=captcha]'
-                ], 'alert');
+                ], Ajax::STYLE_NOTICE);
             }
         }
 
@@ -183,7 +183,7 @@ class IndexController extends AuthedController {
                     'message' => __('Your tenant account is locked.'),
                     'ent'     => $eCnt,
                     'elem'    => 'input[name=username]'
-                ], 'alert');
+                ], Ajax::STYLE_NOTICE);
             }
             $userMeta = new UserMetaTable();
             if ($this->passport->login([$username, $password, $captcha])) {
@@ -219,7 +219,7 @@ class IndexController extends AuthedController {
                     'message' => $this->passport->error,
                     'ent'     => $eCnt,
                     'elem'    => 'input[name=username]'
-                ], 'alert');
+                ], Ajax::STYLE_NOTICE);
             }
         } catch (Exception $e) {
             return Ajax::error(['message' => '出错啦，请联系管理员', 'ent' => $eCnt, 'elem' => '#signinbtn'], 'alert');
@@ -236,7 +236,7 @@ class IndexController extends AuthedController {
      * @param string $size
      * @param int    $font
      */
-    public function captcha($type = 'png', $size = '120x36', $font = 13) {
+    public function captcha(string $type = 'png',string $size = '120x36',int $font = 13) {
         Response::nocache();
         $size = explode('x', $size);
         if (count($size) == 1) {

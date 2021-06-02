@@ -98,17 +98,21 @@ layui.define(['layer'], function (exports) {
     admin.open = function (param) {
         if (param.content && param.type === 2) param.url = undefined;  // 参数纠正
         if (param.url && (param.type === 2 || param.type === undefined)) param.type = 1;  // 参数纠正
-        if (param.area === undefined) param.area = param.type === 2 ? ['360px', '300px'] : '360px';
-        if (param.offset === undefined) param.offset = '70px';
+        if (param.area === undefined) param.area = param.type === 2 ? ['360px', '300px'] : ['360px', 'auto'];
+        if (param.offset === undefined) param.offset = 'auto'
         if (param.shade === undefined) param.shade = .1;
         if (param.fixed === undefined) param.fixed = false;
         if (param.resize === undefined) param.resize = false;
         if (param.skin === undefined) param.skin = 'layui-layer-admin';
+        if (param.maxHeight === undefined) param.maxHeight = $(window).height - 80
+        if (param.maxWidth === undefined) param.maxWidth = $(window).width - 80
+
         var eCallBack = param.end;
         param.end     = function () {
             layer.closeAll('tips');  // 关闭表单验证的tips
             eCallBack && eCallBack();
         };
+
         if (param.url) {
             var sCallBack = param.success, cCallback = param.cancel;
             param.success = function (layero, index) {
@@ -124,15 +128,28 @@ layui.define(['layer'], function (exports) {
     };
 
     admin.openDialog = function (id, title, param, success) {
-        param         = param || {}
-        param.content = $(id).html()
-        param.title   = title
-        param.type    = 1
+        param = param || {}
+        if (id && id.substr(0, 1) === '#') {
+            param.content = $(id).html()
+            var area      = $(param.content).data('area')
+
+            if (area) {
+                param.area = area
+            }
+        } else if (id) {
+            param.url = id;
+        } else {
+            console.error('illegal id or url')
+            return;
+        }
+        param.title = title
+        param.type  = 1
         if (typeof success === 'function') {
             param.success = success
         }
         admin.open(param)
     };
+
     /** 获取弹窗数据 */
     admin.getLayerData = function (index, key) {
         if (index === undefined) {

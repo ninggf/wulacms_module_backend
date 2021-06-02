@@ -19,11 +19,9 @@
       </div>
     </div>
   </div>
-  {literal}
   <script type="text/html" id="taskSetupDialog">
     <div id="jsoneditor" style="width: 100%;height: 100%"></div>
   </script>
-  {/literal}
 </template>
 
 <script>
