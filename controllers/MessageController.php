@@ -28,7 +28,8 @@ class MessageController extends PageController {
         $editViews   = [];
         $newMsgItems = [];
         $permitTypes = [];
-        foreach ($messages as $type => &$msg) {
+        $myMsgs      = [];
+        foreach ($messages as $type => $msg) {
             if ($this->passport->cando('edit:system/message/' . $type)) {
                 $editViews[ $type ]   = $msg->getEditView()->render();
                 $newMsgItems[]        = [
@@ -36,6 +37,7 @@ class MessageController extends PageController {
                     'id'    => $type
                 ];
                 $permitTypes[ $type ] = $msg->getName();
+                $myMsgs[ $type ]      = $msg;
             }
         }
         $defaultType = array_keys($editViews)[0];
@@ -43,7 +45,7 @@ class MessageController extends PageController {
 
         return $this->renderTable('message', [
             'editors'  => $editViews,
-            'messages' => $messages,
+            'messages' => $myMsgs,
             'pageData' => ['newMsgItems' => $newMsgItems, 'permitTypes' => $permitTypes]
         ]);
     }
