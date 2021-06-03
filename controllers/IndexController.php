@@ -66,10 +66,16 @@ class IndexController extends AuthedController {
 
     public function notice(): View {
         $messages = Message::messages();
-        $msgModel = new \system\classes\model\Message();
-
-        $data = apply_filter('backend\initNoticeWidget', []);
-        $tpl  = $data['tpl'] ?? 'notice';
+        $types    = [];
+        $data     = apply_filter('backend\initNoticeWidget', []);
+        $tpl      = $data['tpl'] ?? 'notice';
+        foreach ($messages as $type => $msg) {
+            $typeData             = ['name' => $msg->getName()];
+            $typeData['newCnt']   = $msg->getNewCount($this->passport->uid);
+            $typeData['listHtml'] = $msg->getNotifyView($this->passport->uid)->render();
+            $types[ $type ]       = $typeData;
+        }
+        $data['types'] = $types;
 
         return view($tpl, $data);
     }
@@ -236,7 +242,7 @@ class IndexController extends AuthedController {
      * @param string $size
      * @param int    $font
      */
-    public function captcha(string $type = 'png',string $size = '120x36',int $font = 13) {
+    public function captcha(string $type = 'png', string $size = '120x36', int $font = 13) {
         Response::nocache();
         $size = explode('x', $size);
         if (count($size) == 1) {

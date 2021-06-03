@@ -54,22 +54,29 @@
     <div class="layui-tab layui-tab-brief" lay-filter="messageType">
       <ul class="layui-tab-title" id="messageType">
         {foreach $messages as $typ => $msg}
-        {if in_array($typ,$pageData.permitTypes)}
         <li class="{if $msg@first}layui-this{/if}" data-type="{$typ}">{$msg->getName()}</li>
-        {/if}
         {/foreach}
       </ul>
     </div>
     <table id="pageTable" lay-filter="pageTable"></table>
   </div>
   {literal}
-  <script type="text/html" id="cpTimeTpl">
-    <p>{{d.create_time}}</p>
-    <p>{{d.publish_time}}</p>
+  <script type="text/html" id="createTpl">
+    <p>{{d.cu_nick}}({{d.cu_name}})</p>
+    <p><small>{{d.create_time}}</small></p>
+  </script>
+  <script type="text/html" id="publishTpl">
+    {{# if(d.publish_time){ }}
+    <p>{{d.pu_nick}}({{d.pu_name}})</p>
+    <p><small>{{d.publish_time}}</small></p>
+    {{# } }}
   </script>
   <script type="text/html" id="statusTpl"><span class="text-{{=d.cls}}">{{ d.status }}</span></script>
   <script type="text/html" id="title_desc">
-    <p>{{= d.title }}</p>{{# if (d.desc) { }}<p><small>{{= d.desc }}</small></p>{{# } }}
+    <p class="layui-text">
+      <a ew-href="{{d.$.viewURL}}/{{d.id}}" ew-title="{{=d.title}}">{{=d.title }}</a>
+    </p>
+    {{# if (d.desc) { }}<p><small>{{= d.desc }}</small></p>{{# } }}
   </script>
   <script type="text/html" id="toolbar">
     {{# if(d.ce && d.status == 'Draft'){ }}<a lay-event="edit" title="{{= _t('Edit') }}"><i class="layui-icon layui-icon-edit layui-fg-blue"></i></a>{{# } }}{{# if(d.cp && d.status == 'Draft'){ }}
@@ -82,7 +89,7 @@
     {$editor}
   </script>
   {/foreach}
-<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(obj,key,value){if(key in obj){Object.defineProperty(obj,key,{value:value,enumerable:true,configurable:true,writable:true});}else{obj[key]=value;}return obj;}layui.use(['jquery','form','table','admin','laydate','dropdown','xmSelect'],function($,form,table,admin,laydate){var element=layui.element,dropdown=layui.dropdown,xmSelect=layui.xmSelect;var TablePage=/*#__PURE__*/function(){function TablePage(){_defineProperty(this,"where",{'sort[name]':'id','sort[dir]':'d','msgType':$('#messageType').find('li.layui-this').data('type')});_defineProperty(this,"savedData",{});_defineProperty(this,"dataTable",null);}var _proto=TablePage.prototype;_proto.init=function init(id,cols,data){var _this=this;// 绘制表格
+<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(obj,key,value){if(key in obj){Object.defineProperty(obj,key,{value:value,enumerable:true,configurable:true,writable:true});}else{obj[key]=value;}return obj;}layui.use(['jquery','form','table','admin','laydate','dropdown','xmSelect'],function($,form,table,admin,laydate){var element=layui.element,dropdown=layui.dropdown,xmSelect=layui.xmSelect;layui.laytpl.config({viewURL:admin.url('backend/message/view')});var TablePage=/*#__PURE__*/function(){function TablePage(){_defineProperty(this,"where",{'sort[name]':'id','sort[dir]':'d','msgType':$('#messageType').find('li.layui-this').data('type')});_defineProperty(this,"savedData",{});_defineProperty(this,"dataTable",null);}var _proto=TablePage.prototype;_proto.init=function init(id,cols,data){var _this=this;// 绘制表格
 var dataTable=table.render({elem:id,cols:cols,autoSort:false,data:data,lazy:true,limit:30,where:this.where,url:admin.url('backend/message/data'),page:true,done:admin.autoRowHeight('pageTable')}),that=this;that.dataTable=dataTable;//排序
 table.on('tool(pageTable)',function(obj){var event=obj.event,data=obj.data;switch(event){case'edit':that.openEditor(data.type,pageData.permitTypes[obj.type],data);break;case'delete':admin.confirm('你真的要删除该消息吗?',function(idx){layer.close(idx);admin.showLoading('body',4,.65);admin.post('backend/message/delete/'+data.type+'/'+data.id).then(function(resp){dataTable.reloadData();admin.removeLoading();}).fail(function(resp){admin.removeLoading();});});break;case'pub':admin.confirm('你真的要发布该消息吗?',function(idx){layer.close(idx);admin.showLoading('body',4,.65);admin.post('backend/message/publish/'+data.type+'/'+data.id).then(function(resp){dataTable.reloadData();admin.removeLoading();}).fail(function(resp){admin.removeLoading();});});break;default:}});//绘制日期控件
 laydate.render({elem:'input[name="date"]',type:'date',calendar:true,range:true,trigger:'click'});//搜索表单提交

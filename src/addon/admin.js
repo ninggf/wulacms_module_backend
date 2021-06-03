@@ -134,6 +134,11 @@ layui.define(['layer'], function (exports) {
             var area      = $(param.content).data('area')
 
             if (area) {
+                area = area.split(',')
+                if(area.length===1){
+                    area.push('auto')
+                }
+                console.log(['area',area])
                 param.area = area
             }
         } else if (id) {

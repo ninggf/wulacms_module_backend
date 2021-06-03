@@ -1,1 +1,1 @@
-<div>view notice</div>
+<div class="markdown-body">{$content}</div>

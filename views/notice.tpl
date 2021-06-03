@@ -1,118 +1,29 @@
-<div class="layui-card" style="box-shadow: none;border: none;">
+<div class="layui-card" id="dlg-notice" style="box-shadow: none;border: none;">
     <div class="layui-tab layui-tab-brief">
-        <ul class="layui-tab-title" style="text-align: center;">
-            <li class="layui-this">通知(5)</li>
-            <li>私信(12)</li>
-            <li>待办(3)</li>
+        <ul class="layui-tab-title">
+            {foreach $types as $msg}
+            <li {if $msg@first}class="layui-this"{/if}>{$msg.name}{if $msg.newCnt}({$msg.newCnt}){/if}</li>
+            {/foreach}
         </ul>
-        <div class="layui-tab-content" style="padding: 0;">
-            <!-- tab1 -->
-            <div class="layui-tab-item layui-show">
-                <div class="message-list">
-                    <!-- 实际项目请使用后台数据循环出来 -->
-                    <a class="message-list-item" href="javascript:;">
-                        <i class="layui-icon layui-icon-speaker message-item-icon"></i>
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">你收到了14份新周报</h2>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                    <a class="message-list-item" href="javascript:;">
-                        <i class="layui-icon layui-icon-speaker message-item-icon"></i>
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">你收到了14份新周报</h2>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                    <a class="message-list-item" href="javascript:;">
-                        <i class="layui-icon layui-icon-speaker message-item-icon"></i>
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">你收到了14份新周报</h2>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                </div>
-                <!-- 列表为空 -->
-                <div class="message-list-empty">
-                    <i class="layui-icon layui-icon-notice"></i>
-                    <div>没有通知</div>
-                </div>
-                <a id="messageClearBtn1" class="message-btn-clear">全部标记已读</a>
+        <div class="layui-tab-content" id="message_wrapper" style="padding: 0;">
+            {foreach $types as $msg}
+            <div class="layui-tab-item {if $msg@first}layui-show{/if}">
+                {$msg.listHtml}
             </div>
-            <!-- tab2 -->
-            <div class="layui-tab-item">
-                <div class="message-list">
-                    <a class="message-list-item" href="javascript:;">
-                        <img class="message-item-icon" src="{'backend/assets/img/head.jpg'|res}" alt="">
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">xx评论了你</h2>
-                            <p class="message-item-text">哈哈哈哈哈哈</p>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                    <a class="message-list-item" href="javascript:;">
-                        <img class="message-item-icon" src="{'backend/assets/img/head.jpg'|res}" alt="">
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">xx评论了你</h2>
-                            <p class="message-item-text">哈哈哈哈哈哈</p>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                    <a class="message-list-item" href="javascript:;">
-                        <img class="message-item-icon" src="{'backend/assets/img/head.jpg'|res}" alt="">
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">xx评论了你</h2>
-                            <p class="message-item-text">哈哈哈哈哈哈</p>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                    <a id="messageMoreBtn2" class="message-btn-more">加载更多</a>
-                </div>
-                <!-- 列表为空 -->
-                <div class="message-list-empty">
-                    <i class="layui-icon layui-icon-dialogue"></i>
-                    <div>没有消息</div>
-                </div>
-                <a id="messageClearBtn2" class="message-btn-clear">清空消息</a>
-            </div>
-            <!-- tab3 -->
-            <div class="layui-tab-item">
-                <div class="message-list">
-                    <a class="message-list-item" href="javascript:;">
-                        <span class="layui-badge layui-badge-yellow">待完成</span>
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">你收到了14份新周报</h2>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                    <a class="message-list-item" href="javascript:;">
-                        <span class="layui-badge layui-badge-green">已完成</span>
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">你收到了14份新周报</h2>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                    <a class="message-list-item" href="javascript:;">
-                        <span class="layui-badge layui-badge-red">未完成</span>
-                        <div class="message-item-right">
-                            <h2 class="message-item-title">你收到了14份新周报</h2>
-                            <p class="message-item-text">10个月前</p>
-                        </div>
-                    </a>
-                </div>
-                <!-- 列表为空 -->
-                <div class="message-list-empty">
-                    <i class="layui-icon layui-icon-flag"></i>
-                    <div>没有待办</div>
-                </div>
-                <a id="messageClearBtn3" class="message-btn-clear">清空待办</a>
-            </div>
+            {/foreach}
+            <a id="messageClearBtn1" class="message-btn-clear" ew-href="{'backend/message/center'|app}" ew-title="{'Message Center'|t}">{'Message Center'|t}</a>
         </div>
     </div>
 </div>
 
 <script>
-    layui.use(['element'], function () {
+    layui.use(['jquery','admin','element'], function ($,admin) {
+        $('#message_wrapper').on('click','a[ew-href]',function(){
+            layui.layer.close($('#dlg-notice').closest('.layui-layer').attr('id').substr(11))
+        }).on('click','a[ew-ajax]',function(){
+            layui.layer.close($('#dlg-notice').closest('.layui-layer').attr('id').substr(11))
+            admin.get($(this).attr('ew-ajax'))
+        })
     });
 </script>
 

@@ -2,6 +2,7 @@
 
 namespace backend\classes\message;
 
+use Michelf\MarkdownExtra;
 use system\classes\Message;
 use wulaphp\mvc\view\View;
 
@@ -27,6 +28,7 @@ class Notice extends Message {
      * @return \wulaphp\mvc\view\View
      */
     public function getView(array $data): View {
+        $data['content'] = MarkdownExtra::defaultTransform($data['content']);
         return view('backend/views/message/notice_view', $data);
     }
 
@@ -42,11 +44,22 @@ class Notice extends Message {
     /**
      * 通知中心视图.
      *
-     * @param array $data
+     * @param int $uid
+     * @param int $start
+     * @param int $limit
      *
      * @return \wulaphp\mvc\view\View
      */
-    public function getNotifyView(array $data): View {
+    public function getNotifyView(int $uid, int $start = 0, int $limit = 30): View {
+        $messages = $this->getMessages($uid, $start, $limit);
+        $ctime    = time();
+        foreach ($messages as &$msg) {
+            $msg['create_time'] = readable_date($ctime - $msg['create_time']);
+        }
+        $data = [
+            'messages' => $messages
+        ];
+
         return view('backend/views/message/notice_notify', $data);
     }
 }

@@ -3,7 +3,8 @@
     "description": "wualcms管理后台界面",
     "type": "wula-module",
     "require": {
-        "wula/wula-installer": "^3.0"
+        "wula/wula-installer": "^3.0",
+        "michelf/php-markdown": "^1.9"
     },
     "license": "MIT",
     "authors": [

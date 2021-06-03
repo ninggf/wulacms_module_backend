@@ -55,22 +55,29 @@
     <div class="layui-tab layui-tab-brief" lay-filter="messageType">
       <ul class="layui-tab-title" id="messageType">
         {foreach $messages as $typ => $msg}
-        {if in_array($typ,$pageData.permitTypes)}
         <li class="{if $msg@first}layui-this{/if}" data-type="{$typ}">{$msg->getName()}</li>
-        {/if}
         {/foreach}
       </ul>
     </div>
     <table id="pageTable" lay-filter="pageTable"></table>
   </div>
   {literal}
-  <script type="text/html" id="cpTimeTpl">
-    <p>{{d.create_time}}</p>
-    <p>{{d.publish_time}}</p>
+  <script type="text/html" id="createTpl">
+    <p>{{d.cu_nick}}({{d.cu_name}})</p>
+    <p><small>{{d.create_time}}</small></p>
+  </script>
+  <script type="text/html" id="publishTpl">
+    {{# if(d.publish_time){ }}
+    <p>{{d.pu_nick}}({{d.pu_name}})</p>
+    <p><small>{{d.publish_time}}</small></p>
+    {{# } }}
   </script>
   <script type="text/html" id="statusTpl"><span class="text-{{=d.cls}}">{{ d.status }}</span></script>
   <script type="text/html" id="title_desc">
-    <p>{{= d.title }}</p>{{# if (d.desc) { }}<p><small>{{= d.desc }}</small></p>{{# } }}
+    <p class="layui-text">
+      <a ew-href="{{d.$.viewURL}}/{{d.id}}" ew-title="{{=d.title}}">{{=d.title }}</a>
+    </p>
+    {{# if (d.desc) { }}<p><small>{{= d.desc }}</small></p>{{# } }}
   </script>
   <script type="text/html" id="toolbar">
     {{# if(d.ce && d.status == 'Draft'){ }}<a lay-event="edit" title="{{= _t('Edit') }}"><i class="layui-icon layui-icon-edit layui-fg-blue"></i></a>{{# } }}{{# if(d.cp && d.status == 'Draft'){ }}
@@ -90,7 +97,9 @@ layui.use(['jquery', 'form', 'table', 'admin', 'laydate', 'dropdown', 'xmSelect'
   let element    = layui.element
       , dropdown = layui.dropdown
       , xmSelect = layui.xmSelect
-
+  layui.laytpl.config({
+    viewURL: admin.url('backend/message/view')
+  })
   class TablePage {
     where     = {
       'sort[name]': 'id',

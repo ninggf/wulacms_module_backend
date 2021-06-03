@@ -8,10 +8,22 @@
           <input type="text" name="title" required lay-verify="required" lay-reqText="请填写标题" placeholder="请输入标题" autocomplete="off" class="layui-input">
         </div>
       </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">通知摘要</label>
+        <div class="layui-input-block">
+          <textarea type="text" name="desc" style="resize: none;height: 80px;min-height:80px" placeholder="请输摘要" autocomplete="off" class="layui-textarea"></textarea>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">正文URL</label>
+        <div class="layui-input-block">
+          <input type="text" name="url" placeholder="请输入正文URL" autocomplete="off" class="layui-input">
+        </div>
+      </div>
       <div class="layui-form-item layui-no-mb">
         <label class="layui-form-label">通知正文</label>
         <div class="layui-input-block">
-          <textarea type="text" name="content" rows="10" style="resize: none;height: 300px" placeholder="请输正文" autocomplete="off" class="layui-textarea"></textarea>
+          <textarea type="text" name="content" rows="10" style="resize: none;height: 150px" placeholder="请输正文" autocomplete="off" class="layui-textarea"></textarea>
         </div>
       </div>
     </form>

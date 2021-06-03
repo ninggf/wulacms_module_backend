@@ -2,6 +2,7 @@
 
 namespace backend\hooks\backend;
 
+use system\classes\Message;
 use system\classes\Setting;
 use system\classes\Syslog;
 use wulaphp\app\App;
@@ -90,7 +91,7 @@ class InitDashboard extends Handler {
         $topMenu      = $dashboard->topMenu();
         $msg          = $topMenu->get('msg', __('Message'), 1);
         $msg->iconCls = 'layui-icon-notice';
-        //$msg->badge             = 10;
+        $msg->badge             = Message::getAllNewCount($passport->uid);
         $msg->attrs['ew-event'] = 'message';
         $msg->data['url']       = App::url('backend/notice');
     }
