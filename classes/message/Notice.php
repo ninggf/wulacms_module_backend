@@ -29,6 +29,7 @@ class Notice extends Message {
      */
     public function getView(array $data): View {
         $data['content'] = MarkdownExtra::defaultTransform($data['content']);
+
         return view('backend/views/message/notice_view', $data);
     }
 
@@ -49,6 +50,7 @@ class Notice extends Message {
      * @param int $limit
      *
      * @return \wulaphp\mvc\view\View
+     * @throws \wulaphp\db\DialectException
      */
     public function getNotifyView(int $uid, int $start = 0, int $limit = 30): View {
         $messages = $this->getMessages($uid, $start, $limit);

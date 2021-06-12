@@ -113,6 +113,7 @@ class UserController extends PageController {
      * @acl     add:system/account/user
      * @return \wulaphp\mvc\view\JsonView
      * @Author  LW 2021/3/24 12:05
+     * @throws \Exception
      */
     public function add(): JsonView {
         $user     = rqsts(['name', 'passwd']);

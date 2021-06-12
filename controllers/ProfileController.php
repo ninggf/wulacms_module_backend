@@ -44,12 +44,11 @@ class ProfileController extends PageController {
                 $metaTable = new UserMetaTable($db);
                 $rst       = $metaTable->setMetas($this->passport->uid, $meta);
                 if ($rst) {
-
                     $this->passport->username = $name;
                     $this->passport->nickname = $meta['nickname'];
                     $this->passport->email    = $meta['email'];
                     $this->passport->phone    = $meta['phone'];
-                    $this->passport->data     = array_merge($this->passport->data, $meta);
+                    $this->passport->meta     = array_merge($this->passport->meta, $meta);
                     $this->passport->store();
                     fire('backend\profileUpdated', $this->passport, $meta);
                     $db->commit();

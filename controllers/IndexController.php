@@ -228,7 +228,10 @@ class IndexController extends AuthedController {
                 ], Ajax::STYLE_NOTICE);
             }
         } catch (Exception $e) {
-            return Ajax::error(['message' => '出错啦，请联系管理员', 'ent' => $eCnt, 'elem' => '#signinbtn'], 'alert');
+            return Ajax::error([
+                'message' => $e->getMessage(),
+                'ent'     => $eCnt
+            ], Ajax::STYLE_ALERT);
         }
     }
 
