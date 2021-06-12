@@ -21,4 +21,54 @@
   <script type="text/html" id="taskSetupDialog">
     <div id="jsoneditor" style="width: 100%;height: 100%"></div>
   </script>
-<script>var pageData = {$pageData|json_encode};{literal}layui.use(["jquery","admin","element"],function(t,n){function e(){n.get(c+u).then(function(t){if(t&&t.contents){var n=s.text()+"\n"+t.contents;s.text(n),u=t.id}"P"!==i&&"R"!==i||setInterval(function(){i="X",e()},5e3)})}var o=t(window).height()-150,i=t("#running").val(),a=t("#task_qid").val(),s=t("#task_logs"),u=0,c="backend/task/logs/"+a+"/",l=null;s.closest(".layui-card-body").height(o).show(),"P"!==i&&"R"!==i||t("#refreshing").show(),t("#newMsgButton").on("click",function(){n.openDialog("#taskSetupDialog","Options",{area:["600px","400px"],offset:"auto",destroy:function(){l.destroy()}},function(){var t=document.getElementById("jsoneditor"),n={mode:"view"};l=new JSONEditor(t,n),l.set(pageData.options||{})})}),e(u)});{/literal}</script>
+<script>var pageData = {$pageData|json_encode};{literal}
+layui.use(['jquery', 'admin', 'element'], function ($, admin) {
+  var wh = $(window).height() - 150,
+      running = $('#running').val(),
+      tqId = $('#task_qid').val(),
+      logViewer = $('#task_logs'),
+      cid = 0,
+      url = 'backend/task/logs/' + tqId + '/',
+      editor = null;
+  logViewer.closest('.layui-card-body').height(wh).show();
+
+  if (running === 'P' || running === 'R') {
+    $('#refreshing').show();
+  }
+
+  $('#newMsgButton').on('click', function () {
+    admin.openDialog('#taskSetupDialog', 'Options', {
+      area: ['600px', '400px'],
+      offset: 'auto',
+      destroy: function destroy() {
+        editor.destroy();
+      }
+    }, function () {
+      var container = document.getElementById("jsoneditor"),
+          options = {
+        mode: 'view'
+      };
+      editor = new JSONEditor(container, options);
+      editor.set(pageData.options || {});
+    });
+  });
+
+  function getLog() {
+    admin.get(url + cid).then(function (data) {
+      if (data && data.contents) {
+        var co = logViewer.text() + "\n" + data.contents;
+        logViewer.text(co);
+        cid = data.id;
+      }
+
+      if (running === 'P' || running === 'R') {
+        setInterval(function () {
+          running = 'X';
+          getLog();
+        }, 5000);
+      }
+    });
+  }
+
+  getLog(cid);
+});{/literal}</script>

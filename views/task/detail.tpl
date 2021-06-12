@@ -67,4 +67,106 @@
     <div id="jsoneditor" style="width: 100%;height: 100%"></div>
   </script>
   {/literal}
-<script>var pageData = {$pageData|json_encode};{literal}function _defineProperty(e,t,a){return t in e?Object.defineProperty(e,t,{value:a,enumerable:!0,configurable:!0,writable:!0}):e[t]=a,e}layui.use(["jquery","form","table","admin","laydate","element"],function(e,t,a,n,r){var o=layui.element,i=layui.laytpl,l=e("#task_id").val(),d=e("#taskName").val();i.config({detail:n.url("backend/task/log/"),taskName:d}),(new(function(){function i(){_defineProperty(this,"where",{"sort[name]":"id","sort[dir]":"d"})}return i.prototype.init=function(i,d,u){var s=this,c=a.render({elem:i,cols:d,autoSort:!1,data:u,lazy:!0,limit:30,where:this.where,url:n.url("backend/task/detail-data/"+l),page:!0,done:function(e){n.autoRowHeight("pageTable")(e),o.render("progress","tpr")}});a.on("tool(pageTable)",function(e){e.event;e.data}),r.render({elem:'input[name="date"]',type:"date",range:!0,trigger:"click"}),t.on("submit(searchBtn)",function(t){return s.where=e.extend(s.where,t.field),c.reloadData(),!1}),t.on("reset(searchForm)",function(t){s.where=e.extend(s.where,t.field),c.reloadData()}),a.on("tool(pageTable)",function(e){var t=e.event,a=e.data;switch(t){case"setup":var r;n.openDialog("#taskSetupDialog","Options",{area:["600px","400px"],offset:"auto",destroy:function(){r.destroy()}},function(){var e=document.getElementById("jsoneditor"),t={mode:"view"};r=new JSONEditor(e,t),r.set(a.options||{})})}})},i}())).init("#pageTable",pageData.table.cols,pageData.table.data)});{/literal}</script>
+<script>var pageData = {$pageData|json_encode};{literal}
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+layui.use(['jquery', 'form', 'table', 'admin', 'laydate', 'element'], function ($, form, table, admin, laydate) {
+  var element = layui.element,
+      tpl = layui.laytpl,
+      task_id = $('#task_id').val(),
+      taskName = $('#taskName').val();
+  tpl.config({
+    detail: admin.url('backend/task/log/'),
+    taskName: taskName
+  });
+
+  var TablePage = /*#__PURE__*/function () {
+    function TablePage() {
+      _defineProperty(this, "where", {
+        'sort[name]': 'id',
+        'sort[dir]': 'd'
+      });
+    }
+
+    var _proto = TablePage.prototype;
+
+    _proto.init = function init(id, cols, data) {
+      var _this = this;
+
+      // 绘制表格
+      var dataTable = table.render({
+        elem: id,
+        cols: cols,
+        autoSort: false,
+        data: data,
+        lazy: true,
+        limit: 30,
+        where: this.where,
+        url: admin.url('backend/task/detail-data/' + task_id),
+        page: true,
+        done: function done(tid) {
+          admin.autoRowHeight('pageTable')(tid);
+          element.render('progress', 'tpr');
+        }
+      });
+      table.on('tool(pageTable)', function (obj) {
+        var event = obj.event,
+            data = obj.data;
+
+        switch (event) {
+          case 'setup':
+            break;
+        }
+      }); //绘制日期控件
+
+      laydate.render({
+        elem: 'input[name="date"]',
+        type: 'date',
+        range: true,
+        trigger: 'click'
+      }); //搜索表单提交
+
+      form.on('submit(searchBtn)', function (obj) {
+        _this.where = $.extend(_this.where, obj.field);
+        dataTable.reloadData();
+        return false;
+      }); //重置表单
+
+      form.on('reset(searchForm)', function (obj) {
+        _this.where = $.extend(_this.where, obj.field);
+        dataTable.reloadData();
+      }); //事件处理
+
+      table.on('tool(pageTable)', function (obj) {
+        var event = obj.event,
+            data = obj.data;
+
+        switch (event) {
+          case 'setup':
+            var editor;
+            admin.openDialog('#taskSetupDialog', 'Options', {
+              area: ['600px', '400px'],
+              offset: 'auto',
+              destroy: function destroy() {
+                editor.destroy();
+              }
+            }, function () {
+              var container = document.getElementById("jsoneditor"),
+                  options = {
+                mode: 'view'
+              };
+              editor = new JSONEditor(container, options);
+              editor.set(data.options || {});
+            });
+            break;
+        }
+      });
+    } //end init
+    ;
+
+    return TablePage;
+  }();
+
+  var taskTable = new TablePage();
+  taskTable.init('#pageTable', pageData.table.cols, pageData.table.data);
+});{/literal}</script>

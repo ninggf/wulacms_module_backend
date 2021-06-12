@@ -1,2 +1,250 @@
-/** wulacms-v3.0.0 MIT License By https://github.com/ninggf/wulacms */
- ;layui.define(["jquery"],function(o){var u=layui.jquery,a="dropdown-open",d="dropdown-no-scroll",i="dropdown-menu-shade",n="dropdown-menu",r="dropdown-menu-nav",s="dropdown-hover",c="fixed",l="layui-anim layui-anim-upbit",p="layui-anim layui-anim-fadein",f=["bottom-left","bottom-right","bottom-center","top-left","top-right","top-center","left-top","left-bottom","left-center","right-top","right-bottom","right-center"];u("#ew-css-dropdown").length<=0&&layui.link(layui.cache.base+"dropdown/dropdown.css");var h={init:function(){u(document).off("click.dropdown").on("click.dropdown","."+n+">*:first-child",function(o){var t=u(this).parent();t.hasClass(s)||(t.hasClass(a)?t.removeClass(a):(h.hideAll(),h.show(u(this).parent().find("."+r)))),o.stopPropagation()}),u(document).off("click.dropHide").on("click.dropHide",function(o){h.hideAll()}),u(document).off("click.dropNav").on("click.dropNav","."+r,function(o){o.stopPropagation()});var t,e,o="."+n+"."+s;u(document).off("mouseenter.dropdown").on("mouseenter.dropdown",o,function(o){e&&e==o.currentTarget&&clearTimeout(t),h.show(u(this).find("."+r))}),u(document).off("mouseleave.dropdown").on("mouseleave.dropdown",o,function(o){e=o.currentTarget,t=setTimeout(function(){u(o.currentTarget).removeClass(a)},300)}),u(document).off("click.dropStand").on("click.dropStand","[data-dropdown]",function(o){h.showFixed(u(this)),o.stopPropagation()});o="."+r+" li";u(document).off("mouseenter.dropdownNav").on("mouseenter.dropdownNav",o,function(o){u(this).children(".dropdown-menu-nav-child").addClass(l),u(this).addClass("active")}),u(document).off("mouseleave.dropdownNav").on("mouseleave.dropdownNav",o,function(o){u(this).removeClass("active"),u(this).find("li.active").removeClass("active")}),u(document).off("click.popconfirm").on("click.popconfirm",".dropdown-menu-nav [btn-cancel]",function(o){h.hideAll(),o.stopPropagation()})},openClickNavClose:function(){u(document).off("click.dropNavA").on("click.dropNavA","."+r+">li>a",function(o){h.hideAll(),u(this).parentsUntil("."+n).last().parent().removeClass(a),o.stopPropagation()})},hideAll:function(){u("."+n).removeClass(a),u("."+r+"."+c).addClass("layui-hide"),u("."+i).remove(),u("body").removeClass(d),u(".dropdown-fix-parent").removeClass("dropdown-fix-parent"),u("[data-dropdown]").removeClass(a)},show:function(o){if(o&&0<o.length&&!o.hasClass("dropdown-disabled")){var t;o.hasClass("dropdown-popconfirm")?(o.removeClass(l),o.addClass(p)):(o.removeClass(p),o.addClass(l));for(var e=0;e<f.length;e++)if(o.hasClass("dropdown-"+f[e])){t=f[e];break}return t||(o.addClass("dropdown-"+f[0]),t=f[0]),h.forCenter(o,t),o.parent("."+n).addClass(a),t}return!1},showFixed:function(o){var t,e,n=u(o.data("dropdown"));n.hasClass("layui-hide")?(h.hideAll(),(t=h.show(n))&&(n.addClass(c),n.removeClass("layui-hide"),e=h.getTopLeft(o,n,t),e=h.checkPosition(n,o,t,e),n.css(e),u("body").addClass(d),e="true"==o.attr("no-shade"),u("body").append('<div class="'+(e?i+" no-shade":i)+' layui-anim layui-anim-fadein"></div>'),o.parentsUntil("body").each(function(){var o=u(this).css("z-index");/[0-9]+/.test(o)&&u(this).addClass("dropdown-fix-parent")}),o.addClass(a))):h.hideAll()},forCenter:function(o,t){var e,n,a,d,i;o.hasClass(c)||(e=o.parent().outerWidth(),n=o.parent().outerHeight(),a=o.outerWidth(),d=o.outerHeight(),t=(i=t.split("-"))[0],i=i[1],"top"!=t&&"bottom"!=t||"center"!=i||o.css("left",(e-a)/2),"left"!=t&&"right"!=t||"center"!=i||o.css("top",(n-d)/2))},getTopLeft:function(o,t,e){var n=o.outerWidth(),a=o.outerHeight(),d=t.outerWidth(),i=t.outerHeight(),r=o.offset().top-u(document).scrollTop(),s=o.offset().left,c=s+n,l=0,p=0,o=e.split("-"),e=o[0],o=o[1];if("top"==e||"bottom"==e)switch(i+=8,o){case"left":p=s;break;case"center":p=s-d/2+n/2;break;case"right":p=c-d}if("left"==e||"right"==e)switch(d+=8,o){case"top":l=r+a-i;break;case"center":l=r-i/2+a/2;break;case"bottom":l=r}switch(e){case"top":l=r-i;break;case"right":p=s+n;break;case"bottom":l=r+a;break;case"left":p=s-d}return{top:l,left:p,right:"auto",bottom:"auto"}},checkPosition:function(o,t,e,n){var a=e.split("-");return"bottom"==a[0]?n.top+o.outerHeight()>h.getPageHeight()&&(n=h.getTopLeft(t,o,"top-"+a[1]),o.removeClass("dropdown-"+e),o.addClass("dropdown-top-"+a[1])):"top"==a[0]&&n.top<0&&(n=h.getTopLeft(t,o,"bottom-"+a[1]),o.removeClass("dropdown-"+e),o.addClass("dropdown-bottom-"+a[1])),n},getPageHeight:function(){return document.documentElement.clientHeight||document.body.clientHeight},getPageWidth:function(){return document.documentElement.clientWidth||document.body.clientWidth}};h.init(),o("dropdownX",h)});
+/** 下拉菜单模块 date:2020-05-04   License By http://easyweb.vip */
+layui.define(['jquery'], function (exports) {
+    var $ = layui.jquery;
+    var openClass = 'dropdown-open';
+    var disableClass = 'dropdown-disabled';
+    var noScrollClass = 'dropdown-no-scroll';
+    var shadeClass = 'dropdown-menu-shade';
+    var dropdownClass = 'dropdown-menu';
+    var dropNavClass = 'dropdown-menu-nav';
+    var hoverClass = 'dropdown-hover';
+    var fixedClass = 'fixed';
+    var noShadeClass = 'no-shade';
+    var animClass = 'layui-anim layui-anim-upbit';
+    var popAnimClass = 'layui-anim layui-anim-fadein';
+    var dropDirect = ['bottom-left', 'bottom-right', 'bottom-center', 'top-left', 'top-right', 'top-center', 'left-top', 'left-bottom', 'left-center', 'right-top', 'right-bottom', 'right-center'];
+    if ($('#ew-css-dropdown').length <= 0) {
+        layui.link(layui.cache.base + 'dropdown/dropdown.css');
+    }
+
+    var dropdown = {
+        // 绑定事件
+        init: function () {
+            // 点击触发
+            $(document).off('click.dropdown').on('click.dropdown', '.' + dropdownClass + '>*:first-child', function (event) {
+                var $drop = $(this).parent();
+                if (!$drop.hasClass(hoverClass)) {
+                    if ($drop.hasClass(openClass)) {
+                        $drop.removeClass(openClass);
+                    } else {
+                        dropdown.hideAll();
+                        dropdown.show($(this).parent().find('.' + dropNavClass));
+                    }
+                }
+                event.stopPropagation();
+            });
+            // 点击任何位置关闭所有
+            $(document).off('click.dropHide').on('click.dropHide', function (event) {
+                dropdown.hideAll();
+            });
+            // 点击下拉菜单内容部分不关闭
+            $(document).off('click.dropNav').on('click.dropNav', '.' + dropNavClass, function (event) {
+                event.stopPropagation();
+            });
+            // hover触发
+            var timer, lastDrop, hoverSelector = '.' + dropdownClass + '.' + hoverClass;
+            $(document).off('mouseenter.dropdown').on('mouseenter.dropdown', hoverSelector, function (event) {
+                if (lastDrop && lastDrop == event.currentTarget) {
+                    clearTimeout(timer);
+                }
+                dropdown.show($(this).find('.' + dropNavClass));
+            });
+            $(document).off('mouseleave.dropdown').on('mouseleave.dropdown', hoverSelector, function (event) {
+                lastDrop = event.currentTarget;
+                timer = setTimeout(function () {
+                    $(event.currentTarget).removeClass(openClass);
+                }, 300);
+            });
+            // 分离式绑定
+            $(document).off('click.dropStand').on('click.dropStand', '[data-dropdown]', function (event) {
+                dropdown.showFixed($(this));
+                event.stopPropagation();
+            });
+            // 无限级子菜单
+            var hoverNavSelector = '.' + dropNavClass + ' li';
+            $(document).off('mouseenter.dropdownNav').on('mouseenter.dropdownNav', hoverNavSelector, function (event) {
+                $(this).children('.dropdown-menu-nav-child').addClass(animClass);
+                $(this).addClass('active');
+            });
+            $(document).off('mouseleave.dropdownNav').on('mouseleave.dropdownNav', hoverNavSelector, function (event) {
+                $(this).removeClass('active');
+                $(this).find('li.active').removeClass('active');
+            });
+            // 气泡确认弹窗
+            $(document).off('click.popconfirm').on('click.popconfirm', '.dropdown-menu-nav [btn-cancel]', function (event) {
+                dropdown.hideAll();
+                event.stopPropagation();
+            });
+        },
+        // 点击菜单关闭
+        openClickNavClose: function () {
+            $(document).off('click.dropNavA').on('click.dropNavA', '.' + dropNavClass + '>li>a', function (event) {
+                dropdown.hideAll();
+                $(this).parentsUntil('.' + dropdownClass).last().parent().removeClass(openClass);
+                event.stopPropagation();
+            });
+        },
+        // 关闭所有
+        hideAll: function () {
+            $('.' + dropdownClass).removeClass(openClass);
+            // 隐藏分离式菜单
+            $('.' + dropNavClass + '.' + fixedClass).addClass('layui-hide');  // 隐藏分离式菜单
+            $('.' + shadeClass).remove();  // 移除遮罩层
+            $('body').removeClass(noScrollClass);  // 移除禁止页面滚动
+            $('.dropdown-fix-parent').removeClass('dropdown-fix-parent');
+            $('[data-dropdown]').removeClass(openClass);
+        },
+        // 展开非分离式下拉菜单
+        show: function ($dropNav) {
+            if ($dropNav && $dropNav.length > 0 && !$dropNav.hasClass(disableClass)) {
+                if ($dropNav.hasClass('dropdown-popconfirm')) {
+                    $dropNav.removeClass(animClass);
+                    $dropNav.addClass(popAnimClass);
+                } else {
+                    $dropNav.removeClass(popAnimClass);
+                    $dropNav.addClass(animClass);
+                }
+                var position;  // 获取位置
+                for (var i = 0; i < dropDirect.length; i++) {
+                    if ($dropNav.hasClass('dropdown-' + dropDirect[i])) {
+                        position = dropDirect[i];
+                        break;
+                    }
+                }
+                if (!position) {  // 没有设置位置添加默认位置
+                    $dropNav.addClass('dropdown-' + dropDirect[0]);
+                    position = dropDirect[0];
+                }
+                dropdown.forCenter($dropNav, position);
+                $dropNav.parent('.' + dropdownClass).addClass(openClass);
+                return position;
+            }
+            return false;
+        },
+        // 展开分离式菜单
+        showFixed: function ($trigger) {
+            var $dropNav = $($trigger.data('dropdown')), position;
+            if (!$dropNav.hasClass('layui-hide')) {
+                dropdown.hideAll();  // 已经展开则隐藏
+                return;
+            }
+            dropdown.hideAll();  // 已经展开则隐藏
+            position = dropdown.show($dropNav);  // 获取弹出位置
+            if (position) {
+                $dropNav.addClass(fixedClass);  // 设置为固定定位
+                $dropNav.removeClass('layui-hide');  // 显示下拉菜单
+                var topLeft = dropdown.getTopLeft($trigger, $dropNav, position);  // 计算坐标
+                topLeft = dropdown.checkPosition($dropNav, $trigger, position, topLeft); // 是否溢出屏幕
+                $dropNav.css(topLeft);  // 设置坐标
+                $('body').addClass(noScrollClass); // 禁止页面滚动
+                var hideShade = ($trigger.attr('no-shade') == 'true');  // 是否隐藏遮罩层
+                $('body').append('<div class="' + (hideShade ? (shadeClass + ' ' + noShadeClass) : shadeClass) + ' layui-anim layui-anim-fadein"></div>');  // 添加遮罩层
+                // 重置父元素z-index
+                $trigger.parentsUntil('body').each(function () {
+                    var zIndex = $(this).css('z-index');
+                    if (/[0-9]+/.test(zIndex)) {
+                        $(this).addClass('dropdown-fix-parent');
+                    }
+                });
+                $trigger.addClass(openClass);
+            }
+        },
+        // 解决绝对定位因动画导致平移失效
+        forCenter: function ($dropNav, position) {
+            if (!$dropNav.hasClass(fixedClass)) {
+                var wTrigger = $dropNav.parent().outerWidth(), hTrigger = $dropNav.parent().outerHeight();
+                var wDrop = $dropNav.outerWidth(), hDrop = $dropNav.outerHeight();
+                var pParts = position.split('-'), dropSide = pParts[0], dropPosition = pParts[1];  // 显示方向
+                if ((dropSide == 'top' || dropSide == 'bottom') && dropPosition == 'center') {
+                    $dropNav.css('left', (wTrigger - wDrop) / 2);
+                }
+                if ((dropSide == 'left' || dropSide == 'right') && dropPosition == 'center') {
+                    $dropNav.css('top', (hTrigger - hDrop) / 2);
+                }
+            }
+        },
+        // 计算固定定位坐标
+        getTopLeft: function ($trigger, $dropdown, position) {
+            var widthTrigger = $trigger.outerWidth();
+            var heightTrigger = $trigger.outerHeight();
+            var widthDropdown = $dropdown.outerWidth();
+            var heightDropdown = $dropdown.outerHeight();
+            var topTrigger = $trigger.offset().top - $(document).scrollTop();
+            var leftTrigger = $trigger.offset().left;
+            var rightTrigger = leftTrigger + widthTrigger;
+            var top = 0, left = 0;
+            var positionParts = position.split('-');
+            var anchorSide = positionParts[0];  // 箭头位置
+            var anchorPosition = positionParts[1];  // 箭头方向
+            if (anchorSide == 'top' || anchorSide == 'bottom') {
+                heightDropdown += 8; // 加上margin距离
+                switch (anchorPosition) {
+                    case 'left':
+                        left = leftTrigger;
+                        break;
+                    case 'center':
+                        left = leftTrigger - widthDropdown / 2 + widthTrigger / 2;
+                        break;
+                    case 'right':
+                        left = rightTrigger - widthDropdown;
+                }
+            }
+            if (anchorSide == 'left' || anchorSide == 'right') {
+                widthDropdown += 8;  // 加上margin距离
+                switch (anchorPosition) {
+                    case 'top':
+                        top = topTrigger + heightTrigger - heightDropdown;
+                        break;
+                    case 'center':
+                        top = topTrigger - heightDropdown / 2 + heightTrigger / 2;
+                        break;
+                    case 'bottom':
+                        top = topTrigger;
+                }
+            }
+            switch (anchorSide) {
+                case 'top':
+                    top = topTrigger - heightDropdown;
+                    break;
+                case 'right':
+                    left = leftTrigger + widthTrigger;
+                    break;
+                case 'bottom':
+                    top = topTrigger + heightTrigger;
+                    break;
+                case 'left':
+                    left = leftTrigger - widthDropdown;
+            }
+            return {top: top, left: left, right: 'auto', bottom: 'auto'};
+        },
+        // 检查是否溢出屏幕
+        checkPosition: function ($dropNav, $trigger, position, topLeft) {
+            var aps = position.split('-');
+            if ('bottom' == aps[0]) {
+                if ((topLeft.top + $dropNav.outerHeight()) > dropdown.getPageHeight()) {
+                    topLeft = dropdown.getTopLeft($trigger, $dropNav, 'top-' + aps[1]);
+                    $dropNav.removeClass('dropdown-' + position);
+                    $dropNav.addClass('dropdown-top-' + aps[1]);
+                }
+            } else if ('top' == aps[0]) {
+                if (topLeft.top < 0) {
+                    topLeft = dropdown.getTopLeft($trigger, $dropNav, 'bottom-' + aps[1]);
+                    $dropNav.removeClass('dropdown-' + position);
+                    $dropNav.addClass('dropdown-bottom-' + aps[1]);
+                }
+            }
+            return topLeft;
+        },
+        // 获取浏览器高度
+        getPageHeight: function () {
+            return document.documentElement.clientHeight || document.body.clientHeight;
+        },
+        // 获取浏览器宽度
+        getPageWidth: function () {
+            return document.documentElement.clientWidth || document.body.clientWidth;
+        }
+    };
+
+    dropdown.init();
+    exports('dropdownX', dropdown);
+});

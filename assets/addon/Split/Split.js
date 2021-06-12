@@ -1,2 +1,192 @@
-/** wulacms-v3.0.0 MIT License By https://github.com/ninggf/wulacms */
- ;!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):window.layui&&layui.define?layui.define(function(e){layui.link(layui.cache.base+"Split/Split.css"),e("Split",t())}):e.Split=t()}(this,function(){"use strict";function F(){return!1}function i(e){return"string"==typeof e||e instanceof String}function B(e){if(i(e)){var t=I.querySelector(e);if(!t)throw new Error("Selector "+e+" did not match a DOM element");return t}return e}function L(e,t,n){return void 0!==(t=e[t])?t:n}function T(e,t,n,r){if(t){if("end"===r)return 0;if("center"===r)return e/2}else if(n){if("start"===r)return 0;if("center"===r)return e/2}return e}function N(e,t){var n=I.createElement("div");return n.className="gutter gutter-"+t,n}function R(e,t,n){var r={};return i(t)?r[e]=t:r[e]=J?t+"%":s+"("+t+"% - "+n+"px)",r}function q(e,t){var n;return(n={})[e]=t+"px",n}var H=window,I=H.document,W="addEventListener",X="removeEventListener",Y="getBoundingClientRect",G="horizontal",J=H.attachEvent&&!H[W],s=["","-webkit-","-moz-","-o-"].filter(function(e){var t=I.createElement("div");return t.style.cssText="width:"+e+"calc(9px)",!!t.style.length}).shift()+"calc";return function(e,o){void 0===o&&(o={});var a,t,n,r,l,u,c=e;Array.from&&(c=Array.from(c));var f=B(c[0]).parentNode,m=getComputedStyle?getComputedStyle(f).flexDirection:null,d=L(o,"sizes")||c.map(function(){return 100/c.length}),i=L(o,"minSize",100),h=Array.isArray(i)?i:c.map(function(){return i}),s=L(o,"expandToMin",!1),g=L(o,"gutterSize",5),p=L(o,"gutterAlign","center"),y=L(o,"snapOffset",30),v=L(o,"dragInterval",1),z=L(o,"direction",G),S=L(o,"cursor",z===G?"col-resize":"row-resize"),b=L(o,"gutter",N),_=L(o,"elementStyle",R),w=L(o,"gutterStyle",q);function E(t,e,n,r){var i=_(a,e,n,r);Object.keys(i).forEach(function(e){t.style[e]=i[e]})}function k(){return u.map(function(e){return e.size})}function x(e){return("touches"in e?e.touches[0]:e)[t]}function M(e){var t=u[this.a],n=u[this.b],r=t.size+n.size;t.size=e/this.size*r,n.size=r-e/this.size*r,E(t.element,t.size,this._b,t.i),E(n.element,n.size,this._c,n.i)}function U(){var e=u[this.a].element,t=u[this.b].element,e=e[Y](),t=t[Y]();this.size=e[a]+t[a]+this._b+this._c,this.start=e[n],this.end=e[r]}function O(r){var i=function(e){if(!getComputedStyle)return null;var t=getComputedStyle(e);return 0===(e=e[l])?null:e-=z===G?parseFloat(t.paddingLeft)+parseFloat(t.paddingRight):parseFloat(t.paddingTop)+parseFloat(t.paddingBottom)}(f);if(null===i)return r;var s=0,o=[],e=r.map(function(e,t){var n=i*e/100,e=T(g,0===t,t===r.length-1,p),e=h[t]+e;return n<e?(s+=e-n,o.push(0),e):(o.push(n-e),n)});return 0===s?r:e.map(function(e,t){var n=e;return 0<s&&0<o[t]-s&&(t=Math.min(s,o[t]-s),s-=t,n=e-t),n/i*100})}z===G?(a="width",t="clientX",n="left",r="right",l="clientWidth"):"vertical"===z&&(a="height",t="clientY",n="top",r="bottom",l="clientHeight"),d=O(d);var C=[];function D(e){var t=e.i===C.length,n=t?C[e.i-1]:C[e.i];U.call(n);e=t?n.size-e.minSize-n._c:e.minSize+n._b;M.call(n,e)}function A(e){var s=O(e);s.forEach(function(e,t){var n,r,i;0<t&&(n=C[t-1],r=u[n.a],i=u[n.b],r.size=s[t-1],i.size=e,E(r.element,r.size,n._b),E(i.element,i.size,n._c))})}function j(n,r){C.forEach(function(t){var e;!0!==r?t.parent.removeChild(t.gutter):(t.gutter[X]("mousedown",t._a),t.gutter[X]("touchstart",t._a)),!0!==n&&(e=_(a,t.a.size,t._b),Object.keys(e).forEach(function(e){u[t.a].element.style[e]="",u[t.b].element.style[e]=""}))})}return(u=c.map(function(e,t){var n,r,i,s,e={element:B(e),size:d[t],minSize:h[t],i:t};return 0<t&&((n={a:t-1,b:t,dragging:!1,direction:z,parent:f})._b=T(g,t-1==0,!1,p),n._c=T(g,!1,t===c.length-1,p),"row-reverse"===m||"column-reverse"===m)&&(r=n.a,n.a=n.b,n.b=r),!J&&0<t&&(r=b(t,z,e.element),i=r,s=w(a,g,t),Object.keys(s).forEach(function(e){i.style[e]=s[e]}),n._a=function(e){var t,n,r;"button"in e&&0!==e.button||(n=u[(t=this).a].element,r=u[t.b].element,t.dragging||L(o,"onDragStart",F)(k()),e.preventDefault(),t.dragging=!0,t.move=function(e){var t=u[this.a],n=u[this.b];this.dragging&&(e=x(e)-this.start+(this._b-this.dragOffset),1<v&&(e=Math.round(e/v)*v),e<=t.minSize+y+this._b?e=t.minSize+this._b:e>=this.size-(n.minSize+y+this._c)&&(e=this.size-(n.minSize+this._c)),M.call(this,e),L(o,"onDrag",F)())}.bind(t),t.stop=function(){var e=this,t=u[e.a].element,n=u[e.b].element;e.dragging&&L(o,"onDragEnd",F)(k()),e.dragging=!1,H[X]("mouseup",e.stop),H[X]("touchend",e.stop),H[X]("touchcancel",e.stop),H[X]("mousemove",e.move),H[X]("touchmove",e.move),e.stop=null,e.move=null,t[X]("selectstart",F),t[X]("dragstart",F),n[X]("selectstart",F),n[X]("dragstart",F),t.style.userSelect="",t.style.webkitUserSelect="",t.style.MozUserSelect="",t.style.pointerEvents="",n.style.userSelect="",n.style.webkitUserSelect="",n.style.MozUserSelect="",n.style.pointerEvents="",e.gutter.style.cursor="",e.parent.style.cursor="",I.body.style.cursor=""}.bind(t),H[W]("mouseup",t.stop),H[W]("touchend",t.stop),H[W]("touchcancel",t.stop),H[W]("mousemove",t.move),H[W]("touchmove",t.move),n[W]("selectstart",F),n[W]("dragstart",F),r[W]("selectstart",F),r[W]("dragstart",F),n.style.userSelect="none",n.style.webkitUserSelect="none",n.style.MozUserSelect="none",n.style.pointerEvents="none",r.style.userSelect="none",r.style.webkitUserSelect="none",r.style.MozUserSelect="none",r.style.pointerEvents="none",t.gutter.style.cursor=S,t.parent.style.cursor=S,I.body.style.cursor=S,U.call(t),t.dragOffset=x(e)-t.end)}.bind(n),r[W]("mousedown",n._a),r[W]("touchstart",n._a),f.insertBefore(r,e.element),n.gutter=r),E(e.element,e.size,T(g,0===t,t===c.length-1,p)),0<t&&C.push(n),e})).forEach(function(e){var t=e.element[Y]()[a];t<e.minSize&&(s?D(e):e.minSize=t)}),J?{setSizes:A,destroy:j}:{setSizes:A,getSizes:k,collapse:function(e){D(u[e])},destroy:j,parent:f,pairs:C}}});
+/*! Split.js - v1.5.9 */
+!function (e, t) {
+    if ("object" == typeof exports && "undefined" != typeof module) {
+        module.exports = t()
+    } else if ("function" == typeof define && define.amd) {
+        define(t)
+    } else if (window.layui && layui.define) {  // layui加载
+        layui.define(function (exports) {
+            layui.link(layui.cache.base + 'Split/Split.css');
+            exports('Split', t());
+        });
+    } else {
+        e.Split = t()
+    }
+    /*
+    "object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : e.Split = t()
+    */
+}(this, function () {
+    "use strict";
+    var B = window, L = B.document, T = "addEventListener", N = "removeEventListener", R = "getBoundingClientRect",
+        q = "horizontal", H = function () {
+            return !1
+        }, I = B.attachEvent && !B[T], i = ["", "-webkit-", "-moz-", "-o-"].filter(function (e) {
+            var t = L.createElement("div");
+            return t.style.cssText = "width:" + e + "calc(9px)", !!t.style.length
+        }).shift() + "calc", s = function (e) {
+            return "string" == typeof e || e instanceof String
+        }, W = function (e) {
+            if (s(e)) {
+                var t = L.querySelector(e);
+                if (!t) throw new Error("Selector " + e + " did not match a DOM element");
+                return t
+            }
+            return e
+        }, X = function (e, t, n) {
+            var r = e[t];
+            return void 0 !== r ? r : n
+        }, Y = function (e, t, n, r) {
+            if (t) {
+                if ("end" === r) return 0;
+                if ("center" === r) return e / 2
+            } else if (n) {
+                if ("start" === r) return 0;
+                if ("center" === r) return e / 2
+            }
+            return e
+        }, G = function (e, t) {
+            var n = L.createElement("div");
+            return n.className = "gutter gutter-" + t, n
+        }, J = function (e, t, n) {
+            var r = {};
+            return s(t) ? r[e] = t : r[e] = I ? t + "%" : i + "(" + t + "% - " + n + "px)", r
+        }, K = function (e, t) {
+            var n;
+            return (n = {})[e] = t + "px", n
+        };
+    return function (e, i) {
+        void 0 === i && (i = {});
+        var u, t, s, o, r, a, l = e;
+        Array.from && (l = Array.from(l));
+        var c = W(l[0]).parentNode, f = getComputedStyle ? getComputedStyle(c).flexDirection : null,
+            m = X(i, "sizes") || l.map(function () {
+                return 100 / l.length
+            }), n = X(i, "minSize", 100), h = Array.isArray(n) ? n : l.map(function () {
+                return n
+            }), d = X(i, "expandToMin", !1), g = X(i, "gutterSize", 5), v = X(i, "gutterAlign", "center"),
+            p = X(i, "snapOffset", 30), y = X(i, "dragInterval", 1), z = X(i, "direction", q),
+            S = X(i, "cursor", z === q ? "col-resize" : "row-resize"), b = X(i, "gutter", G),
+            _ = X(i, "elementStyle", J), E = X(i, "gutterStyle", K);
+
+        function w(t, e, n, r) {
+            var i = _(u, e, n, r);
+            Object.keys(i).forEach(function (e) {
+                t.style[e] = i[e]
+            })
+        }
+
+        function k() {
+            return a.map(function (e) {
+                return e.size
+            })
+        }
+
+        function x(e) {
+            return "touches" in e ? e.touches[0][t] : e[t]
+        }
+
+        function M(e) {
+            var t = a[this.a], n = a[this.b], r = t.size + n.size;
+            t.size = e / this.size * r, n.size = r - e / this.size * r, w(t.element, t.size, this._b, t.i), w(n.element, n.size, this._c, n.i)
+        }
+
+        function U() {
+            var e = a[this.a].element, t = a[this.b].element, n = e[R](), r = t[R]();
+            this.size = n[u] + r[u] + this._b + this._c, this.start = n[s], this.end = n[o]
+        }
+
+        function O(s) {
+            var o = function (e) {
+                if (!getComputedStyle) return null;
+                var t = getComputedStyle(e), n = e[r];
+                return 0 === n ? null : n -= z === q ? parseFloat(t.paddingLeft) + parseFloat(t.paddingRight) : parseFloat(t.paddingTop) + parseFloat(t.paddingBottom)
+            }(c);
+            if (null === o) return s;
+            var a = 0, u = [], e = s.map(function (e, t) {
+                var n = o * e / 100, r = Y(g, 0 === t, t === s.length - 1, v), i = h[t] + r;
+                return n < i ? (a += i - n, u.push(0), i) : (u.push(n - i), n)
+            });
+            return 0 === a ? s : e.map(function (e, t) {
+                var n = e;
+                if (0 < a && 0 < u[t] - a) {
+                    var r = Math.min(a, u[t] - a);
+                    a -= r, n = e - r
+                }
+                return n / o * 100
+            })
+        }
+
+        function C(e) {
+            if (!("button" in e && 0 !== e.button)) {
+                var t = this, n = a[t.a].element, r = a[t.b].element;
+                t.dragging || X(i, "onDragStart", H)(k()), e.preventDefault(), t.dragging = !0, t.move = function (e) {
+                    var t, n = a[this.a], r = a[this.b];
+                    this.dragging && (t = x(e) - this.start + (this._b - this.dragOffset), 1 < y && (t = Math.round(t / y) * y), t <= n.minSize + p + this._b ? t = n.minSize + this._b : t >= this.size - (r.minSize + p + this._c) && (t = this.size - (r.minSize + this._c)), M.call(this, t), X(i, "onDrag", H)())
+                }.bind(t), t.stop = function () {
+                    var e = this, t = a[e.a].element, n = a[e.b].element;
+                    e.dragging && X(i, "onDragEnd", H)(k()), e.dragging = !1, B[N]("mouseup", e.stop), B[N]("touchend", e.stop), B[N]("touchcancel", e.stop), B[N]("mousemove", e.move), B[N]("touchmove", e.move), e.stop = null, e.move = null, t[N]("selectstart", H), t[N]("dragstart", H), n[N]("selectstart", H), n[N]("dragstart", H), t.style.userSelect = "", t.style.webkitUserSelect = "", t.style.MozUserSelect = "", t.style.pointerEvents = "", n.style.userSelect = "", n.style.webkitUserSelect = "", n.style.MozUserSelect = "", n.style.pointerEvents = "", e.gutter.style.cursor = "", e.parent.style.cursor = "", L.body.style.cursor = ""
+                }.bind(t), B[T]("mouseup", t.stop), B[T]("touchend", t.stop), B[T]("touchcancel", t.stop), B[T]("mousemove", t.move), B[T]("touchmove", t.move), n[T]("selectstart", H), n[T]("dragstart", H), r[T]("selectstart", H), r[T]("dragstart", H), n.style.userSelect = "none", n.style.webkitUserSelect = "none", n.style.MozUserSelect = "none", n.style.pointerEvents = "none", r.style.userSelect = "none", r.style.webkitUserSelect = "none", r.style.MozUserSelect = "none", r.style.pointerEvents = "none", t.gutter.style.cursor = S, t.parent.style.cursor = S, L.body.style.cursor = S, U.call(t), t.dragOffset = x(e) - t.end
+            }
+        }
+
+        z === q ? (u = "width", t = "clientX", s = "left", o = "right", r = "clientWidth") : "vertical" === z && (u = "height", t = "clientY", s = "top", o = "bottom", r = "clientHeight"), m = O(m);
+        var D = [];
+
+        function A(e) {
+            var t = e.i === D.length, n = t ? D[e.i - 1] : D[e.i];
+            U.call(n);
+            var r = t ? n.size - e.minSize - n._c : e.minSize + n._b;
+            M.call(n, r)
+        }
+
+        function j(e) {
+            var s = O(e);
+            s.forEach(function (e, t) {
+                if (0 < t) {
+                    var n = D[t - 1], r = a[n.a], i = a[n.b];
+                    r.size = s[t - 1], i.size = e, w(r.element, r.size, n._b), w(i.element, i.size, n._c)
+                }
+            })
+        }
+
+        function F(n, r) {
+            D.forEach(function (t) {
+                if (!0 !== r ? t.parent.removeChild(t.gutter) : (t.gutter[N]("mousedown", t._a), t.gutter[N]("touchstart", t._a)), !0 !== n) {
+                    var e = _(u, t.a.size, t._b);
+                    Object.keys(e).forEach(function (e) {
+                        a[t.a].element.style[e] = "", a[t.b].element.style[e] = ""
+                    })
+                }
+            })
+        }
+
+        return (a = l.map(function (e, t) {
+            var n, r, i, s = {element: W(e), size: m[t], minSize: h[t], i: t};
+            if (0 < t && ((n = {
+                a: t - 1,
+                b: t,
+                dragging: !1,
+                direction: z,
+                parent: c
+            })._b = Y(g, t - 1 == 0, !1, v), n._c = Y(g, !1, t === l.length - 1, v), "row-reverse" === f || "column-reverse" === f)) {
+                var o = n.a;
+                n.a = n.b, n.b = o
+            }
+            if (!I && 0 < t) {
+                var a = b(t, z, s.element);
+                r = a, i = E(u, g, t), Object.keys(i).forEach(function (e) {
+                    r.style[e] = i[e]
+                }), n._a = C.bind(n), a[T]("mousedown", n._a), a[T]("touchstart", n._a), c.insertBefore(a, s.element), n.gutter = a
+            }
+            return w(s.element, s.size, Y(g, 0 === t, t === l.length - 1, v)), 0 < t && D.push(n), s
+        })).forEach(function (e) {
+            var t = e.element[R]()[u];
+            t < e.minSize && (d ? A(e) : e.minSize = t)
+        }), I ? {setSizes: j, destroy: F} : {
+            setSizes: j, getSizes: k, collapse: function (e) {
+                A(a[e])
+            }, destroy: F, parent: c, pairs: D
+        }
+    }
+});
+//# sourceMappingURL=split.min.js.map

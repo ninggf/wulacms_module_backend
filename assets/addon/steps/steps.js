@@ -1,2 +1,70 @@
-/** wulacms-v3.0.0 MIT License By https://github.com/ninggf/wulacms */
- ;layui.define(["element"],function(t){var i=layui.jquery,l=layui.element;i("#ew-css-steps").length<=0&&layui.link(layui.cache.base+"steps/steps.css");var r={next:function(t){r.checkLayId(t);var e=i('[lay-filter="'+t+'"]').children(".layui-tab-title").children("li"),a=e.filter(".layui-this").next();a.length<=0&&(a=e.first()),l.tabChange(t,a.attr("lay-id"))},prev:function(t){r.checkLayId(t);var e=i('[lay-filter="'+t+'"]').children(".layui-tab-title").children("li"),a=e.filter(".layui-this").prev();a.length<=0&&(a=e.last()),l.tabChange(t,a.attr("lay-id"))},go:function(t,e){r.checkLayId(t);var a=i('[lay-filter="'+t+'"]').children(".layui-tab-title").children("li");l.tabChange(t,a.eq(e).attr("lay-id"))},checkLayId:function(t){var e=i('.layui-steps[lay-filter="'+t+'"]'),t=e.children(".layui-tab-title").children("li");void 0===t.first().attr("lay-id")&&t.each(function(t){i(this).attr("lay-id","steps-"+t)}),e.find(".layui-tab-bar").remove(),e.removeAttr("overflow")}};i(document).off("click.steps").on("click.steps","[data-steps]",function(){var t=i(this),e=t.parents(".layui-steps").first().attr("lay-filter"),a=t.data("steps");"next"===a?r.next(e):"prev"===a?r.prev(e):"go"===a&&r.go(e,t.data("go"))}),t("steps",r)});
+/** 步骤条模块 date:2020-02-16   License By http://easyweb.vip */
+layui.define(['element'], function (exports) {
+    var $ = layui.jquery;
+    var element = layui.element;
+    if ($('#ew-css-steps').length <= 0) {
+        layui.link(layui.cache.base + 'steps/steps.css');
+    }
+    var steps = {};
+
+    /* 下一步 */
+    steps.next = function (filter) {
+        steps.checkLayId(filter);
+        var $steps = $('[lay-filter="' + filter + '"]');
+        var $li = $steps.children('.layui-tab-title').children('li');
+        var $next = $li.filter('.layui-this').next();
+        if ($next.length <= 0) {
+            $next = $li.first();
+        }
+        element.tabChange(filter, $next.attr('lay-id'));
+    };
+
+    /* 上一步 */
+    steps.prev = function (filter) {
+        steps.checkLayId(filter);
+        var $steps = $('[lay-filter="' + filter + '"]');
+        var $li = $steps.children('.layui-tab-title').children('li');
+        var $next = $li.filter('.layui-this').prev();
+        if ($next.length <= 0) {
+            $next = $li.last();
+        }
+        element.tabChange(filter, $next.attr('lay-id'));
+    };
+
+    /* 跳转到第几步 */
+    steps.go = function (filter, index) {
+        steps.checkLayId(filter);
+        var $steps = $('[lay-filter="' + filter + '"]');
+        var $li = $steps.children('.layui-tab-title').children('li');
+        element.tabChange(filter, $li.eq(index).attr('lay-id'));
+    };
+
+    /* 检查lay-id属性 */
+    steps.checkLayId = function (filter) {
+        var $steps = $('.layui-steps[lay-filter="' + filter + '"]');
+        var $li = $steps.children('.layui-tab-title').children('li');
+        if ($li.first().attr('lay-id') === undefined) {
+            $li.each(function (index) {
+                $(this).attr('lay-id', 'steps-' + index);
+            });
+        }
+        $steps.find('.layui-tab-bar').remove();
+        $steps.removeAttr('overflow');
+    };
+
+    /* 上一步、下一步按钮 */
+    $(document).off('click.steps').on('click.steps', '[data-steps]', function () {
+        var $this = $(this);
+        var filter = $this.parents('.layui-steps').first().attr('lay-filter');
+        var type = $this.data('steps');
+        if (type === 'next') {
+            steps.next(filter);
+        } else if (type === 'prev') {
+            steps.prev(filter);
+        } else if (type === 'go') {
+            steps.go(filter, $this.data('go'));
+        }
+    });
+
+    exports('steps', steps);
+});
