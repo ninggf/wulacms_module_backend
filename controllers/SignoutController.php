@@ -39,13 +39,14 @@ class SignoutController extends AuthedController {
         if ($this->passport->isLogin) {
             Syslog::info('authlog', 'sign out %s', 'Sign out', $this->passport->uid, $this->passport->username);
         }
-        $this->destorySession();
+        $logoutSuccessURL = $this->passport->data['logoutSucessURL'] ?? 'backend/login';
+        $this->destroySession();
         //清空自动登录
         Response::cookie('astoken', null, - 1, WWWROOT_DIR . App::id2dir('backend') . '/login');
         if (Request::isAjaxRequest() || rqset('ajax')) {
-            return Ajax::redirect(App::url('backend/login'));
+            return Ajax::redirect($logoutSuccessURL ?: 'backend/login');
         } else {
-            App::redirect('backend/login');
+            App::redirect($logoutSuccessURL ?: 'backend/login');
 
             return null;
         }

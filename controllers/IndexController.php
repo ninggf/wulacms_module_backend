@@ -95,10 +95,10 @@ class IndexController extends AuthedController {
         if ($from) {
             $_SESSION['loginBack'] = $from;
         }
-        $landingPage = sess_get('loginBack', App::url('backend'));
+        $landingPage = sess_get('loginBack');
         if ($this->passport->isLogin) {
             sess_del('loginBack');
-            Response::redirect($landingPage);
+            Response::redirect($landingPage ?: ($this->passport->data['landing'] ?? App::url('backend')));
         } else if (isset($_COOKIE['astoken'])) {
             // 自动登录
             $asToken = explode('/', $_COOKIE['astoken']);
@@ -108,7 +108,7 @@ class IndexController extends AuthedController {
                     if ($this->passport['astoken'] == $_COOKIE['astoken']) {
                         Syslog::info('authlog', '%s auto sign in successfully', 'Sign in', $this->passport->uid, $this->passport->username);
                         sess_del('loginBack');
-                        Response::redirect($landingPage);
+                        Response::redirect($landingPage ?: ($this->passport->data['landing'] ?? App::url('backend')));
                     }
                 }
             }
@@ -205,9 +205,9 @@ class IndexController extends AuthedController {
                     Response::cookie('astoken', null, - 1, $path);
                 }
 
-                $landingPage = sess_del('loginBack', App::url('backend'));
+                $landingPage = sess_del('loginBack');
 
-                return Ajax::redirect($landingPage);
+                return Ajax::redirect($landingPage ?: ($this->passport->data['landing'] ?? App::url('backend')));
             } else {
                 if ($eCnt < 3) {
                     $eCnt               += 1;
@@ -258,20 +258,19 @@ class IndexController extends AuthedController {
             $width  = 60;
             $height = 20;
         }
-        $font          = intval($font);
         $font          = max([18, $font]);
         $type          = in_array($type, ['gif', 'png']) ? $type : 'png';
         $auth_code_obj = new Captcha(rqst('name', 'auth_code'));
         // 定义验证码信息
         $arr ['code'] = [
-            'characters' => 'A-H,L-K,M-N,P-T,V-Z,3-6',
+            'characters' => 'A-H,L-K,M-N,P-T,V-Z,3-4',
             'length'     => 4,
             'deflect'    => true,
             'multicolor' => true
         ];
         $auth_code_obj->setCode($arr ['code']);
         // 定义干扰信息
-        $arr ['molestation'] = ['type' => 'both', 'density' => 'normal'];
+        $arr ['molestation'] = ['type' => 'point', 'density' => 'normal'];
         $auth_code_obj->setMolestation($arr ['molestation']);
         // 定义图像信息. 设置图象类型请确认您的服务器是否支持您需要的类型
         $arr ['image'] = ['type' => $type, 'width' => $width, 'height' => $height];

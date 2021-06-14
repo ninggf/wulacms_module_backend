@@ -153,7 +153,7 @@ layui.define('layer', function(exports){
     layui.each(errors, function (_, err) {
       var input     = err.elem
           , item    = input.get(0)
-          , ptblk   = input.closest('div.layui-input-block').eq(0)
+          , ptblk   = input.closest('div').eq(0)
           , pt      = ptblk?ptblk:input.closest('div.layui-form-item').eq(0)
           , ee      = pt.find('p.layui-error-msg')
           , verType = input.attr('lay-verType')
