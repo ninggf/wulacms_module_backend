@@ -35,15 +35,10 @@
         // 监听提交
         form.on('submit(submit-psw)', function (data) {
             $.post($.url('backend/profile/passwd'), data.field).then(function (data) {
-                if (data.code === 200) {
+                if (data && data.code === 200) {
                     $.closeDialog('[lay-filter="submit-psw"]');
-                    $.toast.success('密码修改成功');
-                } else {
-                    $.toast.tc().error(data.message);
                 }
-            }).fail(function (data) {
-                $.toast.tc().error(data.message);
-            });
+            })
             return false;
         });
     });

@@ -72,7 +72,7 @@
                         </a>
                     </dd>
                     <dd lay-unselect>
-                        <a ew-event="psw" data-url="{'backend/profile/passwd'|url}">
+                        <a ew-event="psw" data-area="500px" data-url="{'backend/profile/passwd'|url}">
                             <i class="layui-icon layui-icon-password"></i> {'Change Password'|t}
                         </a>
                     </dd>
