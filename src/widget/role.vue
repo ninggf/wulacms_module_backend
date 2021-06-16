@@ -64,7 +64,11 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
             _this.doDel({'ids': [id]});
             break;
           case 'auth'://授权
-            index.openTab({url: admin.url('backend/role/grant?rid=' + id), title: obj.data.role + ' ' + _t('Permissions'), end: ''});
+            index.openTab({
+              url: admin.url('backend/role/grant?rid=' + id),
+              title: obj.data.role + ' ' + _t('Permissions'),
+              refer: admin.url('backend/role')
+            });
             break;
           case 'view'://查看
             break;

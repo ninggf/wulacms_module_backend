@@ -19,7 +19,7 @@
   </script>
   <script type="text/html" id="title_desc">
     <p class="layui-text">
-      <a ew-href="{{d.$.viewURL}}/{{d.id}}" ew-title="{{=d.title}}">
+      <a ew-href="{{d.$.viewURL}}/{{d.id}}" ew-title="{{=d.title}}" ew-refer="~">
         {{=d.title }}
         {{# if (!d.read_time) { }}<i class="layui-icon layui-icon-email layui-fg-red"></i>{{# } }}
       </a>

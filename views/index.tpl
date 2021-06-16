@@ -44,7 +44,7 @@
                 <a ew-event="fullScreen" title="{'Fullscreen'|t}"><i class="layui-icon layui-icon-screen-full"></i></a>
             </li>
             <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                <a ew-event="lockScreen" data-url="{'backend/locked'|url}" title="{'Lock Screen'|t}"><i class="layui-icon layui-icon-password"></i></a>
+                <a ew-event="lockScreen" data-url="{'backend/locked'|app}" title="{'Lock Screen'|t}"><i class="layui-icon layui-icon-password"></i></a>
             </li>
 
             <li class="layui-nav-item" lay-unselect>
@@ -67,24 +67,24 @@
                         {/if}
                     {/foreach}
                     <dd lay-unselect>
-                        <a ew-href="{'backend/profile'|t}">
+                        <a ew-href="{'backend/profile'|app}">
                             <i class="layui-icon layui-icon-username"></i> {'My Profile'|t}
                         </a>
                     </dd>
                     <dd lay-unselect>
-                        <a ew-event="psw" data-area="500px" data-url="{'backend/profile/passwd'|url}">
+                        <a ew-event="psw" data-area="500px" data-url="{'backend/profile/passwd'|app}">
                             <i class="layui-icon layui-icon-password"></i> {'Change Password'|t}
                         </a>
                     </dd>
                     <hr/>
                     <dd lay-unselect>
-                        <a ew-event="logout" data-url="{'backend/signout'|url}">
+                        <a ew-event="logout" data-url="{'backend/signout'|app}">
                             <i class="layui-icon layui-icon-logout text-danger"></i> {'Sign out'|t}</a>
                     </dd>
                 </dl>
             </li>
             <li class="layui-nav-item" lay-unselect>
-                <a ew-event="theme" data-url="{'backend/theme'|url}" title="主题"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                <a ew-event="theme" data-url="{'backend/theme'|app}" title="主题"><i class="layui-icon layui-icon-more-vertical"></i></a>
             </li>
         </ul>
     </div>
@@ -93,7 +93,7 @@
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-shrink="_all">
                 <li class="layui-nav-item" id="navi-menu">
-                    <a lay-href="{'backend/home'|url}"><i class="layui-icon layui-icon-home"></i>&emsp;<cite>{'Dashboard'|t}</cite></a>
+                    <a lay-href="{'backend/home'|app}"><i class="layui-icon layui-icon-home"></i>&emsp;<cite>{'Dashboard'|t}</cite></a>
                 </li>
                 {foreach $dashboard->naviMenu()->menus() as $menu}
                     <li class="layui-nav-item" id="navi-menu-{$menu.id}">
@@ -170,7 +170,7 @@
 <script>
     layui.use(['index', 'admin'], function (index) {
         index.loadHome({
-            menuPath: "{'backend/home'|url}",
+            menuPath: "{'backend/home'|app}",
             menuName: '<i class="layui-icon layui-icon-home"></i>'
         });
     });

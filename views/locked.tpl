@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <script>if (window !== top) top.location = "{'backend/lock'|url}"</script>
+    <script>if (window !== top) top.location = "{'backend/lock'|app}"</script>
     <link href="/favicon.ico" rel="icon"/>
     <title>{$pageMeta.projectName|escape}{if $pageMeta.brandName} - {$pageMeta.brandName}{/if}{$pageMeta.titleSuffix}</title>
     <link rel="stylesheet" href="{'backend/assets/css/layui.css'|res}"/>
@@ -201,7 +201,7 @@
     </div>
     <div class="lock-screen-tool">
         <div class="lock-screen-tool-item">
-            <i class="layui-icon layui-icon-logout" ew-event="logout" data-confirm="false" data-url="{'backend/signout'|url}"></i>
+            <i class="layui-icon layui-icon-logout" ew-event="logout" data-confirm="false" data-url="{'backend/signout'|app}"></i>
             <div class="lock-screen-tool-tip">{'Sign out'|t}</div>
         </div>
     </div>

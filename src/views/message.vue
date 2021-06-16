@@ -75,7 +75,7 @@
   <script type="text/html" id="statusTpl"><span class="text-{{=d.cls}}">{{ d.status }}</span></script>
   <script type="text/html" id="title_desc">
     <p class="layui-text">
-      <a ew-href="{{d.$.viewURL}}/{{d.id}}" ew-title="{{=d.title}}">{{=d.title }}</a>
+      <a ew-href="{{d.$.viewURL}}/{{d.id}}" ew-refer="~" ew-title="{{=d.title}}">{{=d.title }}</a>
     </p>
     {{# if (d.desc) { }}<p><small>{{= d.desc }}</small></p>{{# } }}
   </script>

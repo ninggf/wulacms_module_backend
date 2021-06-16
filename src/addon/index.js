@@ -44,7 +44,7 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
             if (!param.noChange) element.tabChange(tabFilter, param.menuPath);  // 切换到此tab
             if(param.refer) {
                 var refers = admin.getTempData('menuRefers') || {}
-                refers[param.menuPath] = param.refer;
+                refers[param.menuPath] = [param.refer,param.reload];
                 admin.putTempData('menuRefers',refers)
             }
         } else {  // 单标签模式
@@ -103,7 +103,7 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
     index.openTab = function (param) {
         if (window !== top && !admin.isTop() && top.layui && top.layui.index) return top.layui.index.openTab(param);
         if (param.end) tabEndCall[param.url] = param.end;
-        index.loadView({menuPath: param.url, menuName: param.title,refer:param.refer||null});
+        index.loadView({menuPath: param.url, menuName: param.title,refer:param.refer,reload:param.reload});
     };
 
     /** 关闭tab */
@@ -125,6 +125,7 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
     index.clearTabCache = function () {
         admin.putTempData('indexTabs', null);
         admin.putTempData('tabPosition', null);
+        admin.putTempData('menuRefers', null);
     };
 
     /** 设置tab标题 */
@@ -256,11 +257,15 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
         if(refers[mTab.menuPath]){
             var refer =refers[mTab.menuPath], flag;  // 选项卡是否已添加
             delete refers[mTab.menuPath];
+            admin.putTempData('menuRefers',refers)
             $(tabDOM + '>.layui-tab-title>li').each(function () {
-                if ($(this).attr('lay-id') === refer) flag = true;
+                if ($(this).attr('lay-id') === refer[0]) flag = true;
             });
             if(flag){
-                element.tabChange(tabFilter, refer);  // 切换到此tab
+                element.tabChange(tabFilter, refer[0]);  // 切换到此tab
+                if(refer[1]){
+                    admin.refresh(refer[0])
+                }
                 return;
             }
         }

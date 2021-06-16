@@ -35,7 +35,6 @@
 
 <!-- 表格操作列 -->
 <script type="text/html" id="roleTbBar">
-    {*<a class="" lay-event="view" title="查看"><i class="layui-icon iconfont layui-extend-view"></i></a>*}
     {if ican('edit:system/account/role')}
         <a class="layui-fg-blue" lay-event="edit" title="编辑"><i class="layui-icon iconfont layui-extend-edit"></i></a>
     {/if}

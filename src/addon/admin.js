@@ -36,11 +36,11 @@ layui.define(['layer'], function (exports) {
     /** 设置导航栏选中 */
     admin.activeNav = function (url) {
         if (window !== top && !admin.isTop() && top.layui && top.layui.admin) return top.layui.admin.activeNav(url);
-        if (!url) return console.warn('active url is null');
+        if (!url) return;
         $(sideDOM + '>.layui-nav .layui-nav-item .layui-nav-child dd.layui-this').removeClass('layui-this');
         $(sideDOM + '>.layui-nav .layui-nav-item.layui-this').removeClass('layui-this');
         var $a = $(sideDOM + '>.layui-nav a[lay-href="' + url + '"]');
-        if ($a.length === 0) return console.warn(url + ' not found');
+        if ($a.length === 0) return ;
         var isMini = $('.layui-layout-admin').hasClass('admin-nav-mini');
         if ($(sideDOM + '>.layui-nav').attr('lay-shrink') === '_all') {  // 手风琴效果
             var $pChilds = $a.parent('dd').parents('.layui-nav-child');
@@ -493,7 +493,6 @@ layui.define(['layer'], function (exports) {
                 $iframe[0].contentWindow.location.reload();
             }
         } catch (e) {
-            console.warn(e);
             $iframe.attr('src', $iframe.attr('src'));
         }
     };
@@ -1755,13 +1754,14 @@ layui.define(['layer'], function (exports) {
         if(refer ===  '~'){
             refer = window.location.href.substr(window.location.origin.length)
         }
+        var reload = $this.attr('ew-reload');
         try {
             if (end) end = new Function(end);
             else end = undefined;
         } catch (e) {
             console.error(e);
         }
-        if (win.layui && win.layui.index) win.layui.index.openTab({title: title || '', url: href, end: end,refer:refer});
+        if (win.layui && win.layui.index) win.layui.index.openTab({title: title || '', url: href, end: end,refer:refer,reload:reload});
         else location.href = href;
     });
 
