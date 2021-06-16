@@ -59,7 +59,9 @@
   </div>
   <script type="text/html" id="nameTpl">
     {literal}<span class="layui-text">
-      <a ew-href="{{d.$.detail}}{{d.id}}" ew-title="[{{d.id}}]{{=d.name}}">[{{= d.type }}]{{ d.name }}</a>
+      <a ew-href="{{d.$.detail}}{{d.id}}"
+         ew-refer="~"
+         ew-title="[{{d.id}}]{{=d.name}}">[{{= d.type }}]{{ d.name }}</a>
     </span>{/literal}
   </script>
   <script type="text/html" id="retryCol">

@@ -155,7 +155,9 @@
             {if $pageMeta.site.supportBy}
                 {$pageMeta.site.supportBy}
             {else}
-                Powered by <a href="https://wulacms.com" target="_blank">wulacms.com</a> Ver: {$pageMeta.cmsVer}
+                Powered by
+                <a href="https://wulacms.com" target="_blank">wulacms.com</a>
+                Ver: {$pageMeta.cmsVer}
             {/if}
         </span>
     </div>

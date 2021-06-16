@@ -57,7 +57,7 @@
     <span class="text-{{=d.statusCls}}">{{=d.statusText}}</span>
   </script>
   <script type="text/html" id="tableToolbar">
-    <a ew-href="{{d.$.detail}}{{d.id}}" ew-title="{{=d.id}}@{{=d.$.taskName}}[{{d.retried+1}}]">
+    <a ew-href="{{d.$.detail}}{{d.id}}" ew-refer="~" ew-title="{{=d.id}}@{{=d.$.taskName}}[{{d.retried+1}}]">
       <i class="layui-icon layui-icon-log"></i>
     </a>
     <a lay-event="setup" title="{'Setup'|t}"><i class="layui-icon layui-icon-set"></i></a>

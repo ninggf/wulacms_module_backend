@@ -20,6 +20,7 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
     /** 渲染主体部分 */
     index.loadView = function (param) {
         if (!param.menuPath) return layer.msg('url不能为空', {icon: 2, anim: 6});
+
         if (setter.pageTabs) {  // 多标签模式
             var flag;  // 选项卡是否已添加
             $(tabDOM + '>.layui-tab-title>li').each(function () {
@@ -41,6 +42,11 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
                 if (setter.cacheTab) admin.putTempData('indexTabs', index.mTabList);  // 缓存tab
             }
             if (!param.noChange) element.tabChange(tabFilter, param.menuPath);  // 切换到此tab
+            if(param.refer) {
+                var refers = admin.getTempData('menuRefers') || {}
+                refers[param.menuPath] = param.refer;
+                admin.putTempData('menuRefers',refers)
+            }
         } else {  // 单标签模式
             admin.activeNav(param.menuPath);
             var $contentDom = $(bodyDOM + '>div>.admin-iframe');
@@ -97,7 +103,7 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
     index.openTab = function (param) {
         if (window !== top && !admin.isTop() && top.layui && top.layui.index) return top.layui.index.openTab(param);
         if (param.end) tabEndCall[param.url] = param.end;
-        index.loadView({menuPath: param.url, menuName: param.title});
+        index.loadView({menuPath: param.url, menuName: param.title,refer:param.refer||null});
     };
 
     /** 关闭tab */
@@ -239,12 +245,24 @@ layui.define(['layer', 'element', 'admin'], function (exports) {
 
     /** tab删除监听 */
     element.on('tabDelete(' + tabFilter + ')', function (data) {
+        var refers = admin.getTempData('menuRefers') || {}
         var mTab = index.mTabList[data.index - 1];
         if (mTab) {
             index.mTabList.splice(data.index - 1, 1);
             if (setter.cacheTab) admin.putTempData('indexTabs', index.mTabList);
             tabEndCall[mTab.menuPath] && tabEndCall[mTab.menuPath].call();
             layui.event.call(this, 'admin', 'tabDelete({*})', {layId: mTab.menuPath});
+        }
+        if(refers[mTab.menuPath]){
+            var refer =refers[mTab.menuPath], flag;  // 选项卡是否已添加
+            delete refers[mTab.menuPath];
+            $(tabDOM + '>.layui-tab-title>li').each(function () {
+                if ($(this).attr('lay-id') === refer) flag = true;
+            });
+            if(flag){
+                element.tabChange(tabFilter, refer);  // 切换到此tab
+                return;
+            }
         }
         if ($(tabDOM + '>.layui-tab-title>li.layui-this').length === 0)
             $(tabDOM + '>.layui-tab-title>li:last').trigger('click');  // 解决删除后可能无选中bug

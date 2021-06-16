@@ -771,6 +771,7 @@ layui.define(['layer'], function (exports) {
                     var loadIndex = layer.load(2);
                     admin.req(option.ajax, function (res) {
                         layer.close(loadIndex);
+                        admin.strToWin(option.window).layui.index.clearTabCache();
                         if (option.parseData) {
                             try {
                                 var parseData = new Function('res', option.parseData);
@@ -787,6 +788,7 @@ layui.define(['layer'], function (exports) {
                         }
                     }, option.method || 'delete');
                 } else {
+                    admin.strToWin(option.window).layui.index.clearTabCache();
                     setter.removeToken && setter.removeToken();
                     location.replace(option.url || '/');
                 }
@@ -1749,13 +1751,17 @@ layui.define(['layer'], function (exports) {
         var win   = $this.data('window');
         win ? (win = admin.strToWin(win)) : (win = top);
         var end = $this.attr('ew-end');
+        var refer = $this.attr('ew-refer');
+        if(refer ===  '~'){
+            refer = window.location.href.substr(window.location.origin.length)
+        }
         try {
             if (end) end = new Function(end);
             else end = undefined;
         } catch (e) {
             console.error(e);
         }
-        if (win.layui && win.layui.index) win.layui.index.openTab({title: title || '', url: href, end: end});
+        if (win.layui && win.layui.index) win.layui.index.openTab({title: title || '', url: href, end: end,refer:refer});
         else location.href = href;
     });
 
