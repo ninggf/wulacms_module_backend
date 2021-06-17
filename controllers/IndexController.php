@@ -21,6 +21,7 @@ use system\classes\Syslog;
 use system\classes\Tenant;
 use wulaphp\app\App;
 use wulaphp\io\Ajax;
+use wulaphp\io\Request;
 use wulaphp\io\Response;
 use wulaphp\mvc\view\JsonView;
 use wulaphp\mvc\view\View;
@@ -321,5 +322,45 @@ class IndexController extends AuthedController {
         }
 
         return Ajax::error('');
+    }
+
+    /**
+     * 重置密码
+     * @ResetPasswd
+     * @return \wulaphp\mvc\view\SmartyView
+     * @author Leo Ning <windywany@gmail.com>
+     * @date   2021-06-17 19:23:53
+     * @since  1.0.0
+     */
+    public function resetPasswd(): \wulaphp\mvc\view\SmartyView {
+        $data = PageMetaData::meta();
+
+        return view('profile/reset',$data);
+    }
+
+    /**
+     * 退出
+     * @nologin
+     * @unlock
+     * @ResetPasswd
+     * @author Leo Ning <windywany@gmail.com>
+     * @date   2021-06-17 19:25:45
+     * @since  1.0.0
+     */
+    public function logout(): ?JsonView {
+        if ($this->passport->isLogin) {
+            Syslog::info('authlog', 'sign out %s', 'Sign out', $this->passport->uid, $this->passport->username);
+        }
+        $logoutSuccessURL = $this->passport->data['logoutSucessURL'] ?? 'backend/login';
+        $this->destroySession();
+        //清空自动登录
+        Response::cookie('astoken', null, - 1, WWWROOT_DIR . App::id2dir('backend') . '/login');
+        if (Request::isAjaxRequest() || rqset('ajax')) {
+            return Ajax::redirect($logoutSuccessURL ?: 'backend/login');
+        } else {
+            App::redirect($logoutSuccessURL ?: 'backend/login');
+
+            return null;
+        }
     }
 }

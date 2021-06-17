@@ -121,7 +121,7 @@ class ProfileController extends PageController {
 
         $this->passport->data['passwd']           = $hash['passwd'];
         $this->passport->data['passwd_expire_at'] = $hash['passwd_expire_at'];
-
+        $this->passport->data['passwd_expired']   = 0;
         $this->passport->store();
 
         return Ajax::success();

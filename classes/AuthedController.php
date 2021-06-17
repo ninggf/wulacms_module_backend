@@ -27,7 +27,7 @@ class AuthedController extends AdminController {
         if ($this->passport->uid && !$this->methodAnn->has('ResetPasswd')) {
             $resetPasswd = $this->passport->data['passwd_expired'];
             if ($resetPasswd) {
-                Response::redirect(App::url('backend/profile/reset'));
+                Response::redirect(App::url('backend/reset-passwd'));
             }
         }
 
