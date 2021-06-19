@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <script>if (window !== top) top.location = "{'backend/lock'|app}"</script>
+    <script>if (window !== top) top.location = "{'backend/locked'|app}"</script>
     <link href="/favicon.ico" rel="icon"/>
     <title>{$pageMeta.projectName|escape}{if $pageMeta.brandName} - {$pageMeta.brandName}{/if}{$pageMeta.titleSuffix}</title>
     <link rel="stylesheet" href="{'backend/assets/css/layui.css'|res}"/>
