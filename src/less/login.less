@@ -1,26 +1,24 @@
-body {
-  background-image: url("../img/bg-login.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 100vh;
+html, body {
+  background: #fff;
+  height: 100%;
+  width: 100%;
 }
 
-body:before {
-  content: "";
-  background-color: rgba(0, 0, 0, .2);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+body {
+  background-image: url("../img/bg-login.svg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center 50%;
 }
+
 body.close-footer {
   .login-copyright {
     display: none;
   }
 }
+
 .login-wrapper {
-  max-width: 420px;
+  max-width: 500px;
   padding: 20px;
   margin: 0 auto;
   position: relative;
@@ -30,17 +28,28 @@ body.close-footer {
 
 .login-wrapper > .layui-form {
   padding: 25px 30px;
-  background-color: #FFF;
-  box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.19);
-  box-sizing: border-box;
-  border-radius: 4px;
 }
 
 .login-wrapper > .layui-form > h2 {
-  color: #333;
-  font-size: 18px;
+  color: rgba(0, 0, 0, .85);
+  font-size: 33px;
+  font-weight: 600;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 40px;
+  line-height: 2.6rem;
+}
+
+h2 {
+  img {
+    height: 44px;
+    margin-top: -10px;
+  }
+
+  p {
+    color: rgba(0, 0, 0, .45);
+    font-size: 14px;
+    font-weight: normal;
+  }
 }
 
 .login-wrapper > .layui-form > .layui-form-item {
@@ -112,7 +121,6 @@ body.close-footer {
 }
 
 .login-copyright {
-  color: #EEE;
   padding-bottom: 20px;
   text-align: center;
   position: relative;

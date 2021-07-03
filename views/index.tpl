@@ -18,8 +18,12 @@
     <!-- 头部 -->
     <div class="layui-header">
         <div class="layui-logo">
-            <img alt="{$pageMeta.projectName}" src="{$pageMeta.brandImg}"/>
-            <cite>&nbsp;{$pageMeta.projectName}</cite>
+            {if $pageMeta.bigBrandImg}
+                <img style="{$pageMeta.brandImgStyle}" alt="{$pageMeta.projectName}" src="{$pageMeta.bigBrandImg}"/>
+            {else}
+                <img style="{$pageMeta.brandImgStyle}" alt="{$pageMeta.projectName}" src="{$pageMeta.brandImg}"/>
+                <cite>&nbsp;{$pageMeta.projectName}</cite>
+            {/if}
         </div>
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item" lay-unselect>

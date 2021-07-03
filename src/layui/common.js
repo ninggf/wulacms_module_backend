@@ -4,6 +4,7 @@ layui.config({
     dir              : window.wulacfg.mBase + '/backend/assets/',
     module           : window.wulacfg.mBase,
     ajaxSuccessBefore: function (data, url, opts) {
+        if(window.wulacfg.nbap==='yes') return;
         var $d = layui.$(document)
         switch (opts.xhr.status) {
             case 390:

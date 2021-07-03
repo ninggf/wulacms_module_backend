@@ -770,7 +770,8 @@ layui.define(['layer'], function (exports) {
                     var loadIndex = layer.load(2);
                     admin.req(option.ajax, function (res) {
                         layer.close(loadIndex);
-                        admin.strToWin(option.window).layui.index.clearTabCache();
+                        if(admin.strToWin(option.window).layui.index)
+                            admin.strToWin(option.window).layui.index.clearTabCache();
                         if (option.parseData) {
                             try {
                                 var parseData = new Function('res', option.parseData);
@@ -787,7 +788,8 @@ layui.define(['layer'], function (exports) {
                         }
                     }, option.method || 'delete');
                 } else {
-                    admin.strToWin(option.window).layui.index.clearTabCache();
+                    if(admin.strToWin(option.window).layui.index)
+                        admin.strToWin(option.window).layui.index.clearTabCache();
                     setter.removeToken && setter.removeToken();
                     location.replace(option.url || '/');
                 }

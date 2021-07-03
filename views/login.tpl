@@ -18,7 +18,10 @@
 <div id="loginApp">
     <div class="login-wrapper layui-anim layui-anim-scale layui-hidex">
         <form class="layui-form">
-            <h2>{'Sign in'|t}</h2>
+            <h2>
+                <img src="{$pageMeta.brandImg}" alt=""> {$pageMeta.projectName|escape}
+                {if $pageMeta.wellcomeMsg}<p>{$pageMeta.wellcomeMsg|escape}</p>{/if}
+            </h2>
             <div class="layui-form-item layui-input-icon-group">
                 <i class="layui-icon layui-icon-username"></i>
                 <input class="layui-input" name="username" lay-verType="tips" placeholder="{'Username'|t}" autocomplete="off" lay-verify="required"/>
@@ -48,7 +51,7 @@
         {/if}
     </div>
 </div>
-{include './common.tpl' isTop=true}
+{include './common.tpl' isTop=true nbap='yes'}
 <script>
     layui.use(['@backend.login'], function (login) {
         login.init()

@@ -1,4 +1,4 @@
-<script>window.wulacfg = {uicfg isTop=$isTop};window.LAYUI_GLOBAL = { dir: wulacfg.mBase+'/backend/assets/' };</script>
+<script>window.wulacfg = {uicfg isTop=$isTop};window.LAYUI_GLOBAL = { dir: wulacfg.mBase+'/backend/assets/' };wulacfg.nbap="{$nbap}"</script>
 <script type="text/javascript" src="{'backend/assets/js/layui.js'|res}"></script>
 {foreach $_js_files.head as $_js_file}
     <script src="{$_js_file}"></script>

@@ -20,10 +20,8 @@
             height: 100%;
             box-sizing: border-box;
             padding: 50px 60px 0 60px;
-            background-color: #000000;
-            background-image: url("{'backend/assets/img/bg-screen.jpg'|res}");
-            background-repeat: no-repeat;
-            background-size: cover;
+            background: #000 url("{'backend/assets/img/bg-login.svg'|res}") no-repeat center 100px;
+            background-size: 100%;
             position: relative;
         }
 
@@ -119,9 +117,10 @@
         .lock-screen-tip {
             color: red;
             width: 230px;
-            padding: 0 3px;
+            padding-top: 5px;
+            margin-left: -55px;
             font-size: 14px;
-            text-align: left;
+            text-align: center;
             box-sizing: border-box;
             display: none;
         }
@@ -201,7 +200,7 @@
     </div>
     <div class="lock-screen-tool">
         <div class="lock-screen-tool-item">
-            <i class="layui-icon layui-icon-logout" ew-event="logout" data-confirm="false" data-url="{'backend/signout'|app}"></i>
+            <i class="layui-icon layui-icon-logout" ew-event="logout" data-confirm="false" data-url="{'backend/logout'|app}"></i>
             <div class="lock-screen-tool-tip">{'Sign out'|t}</div>
         </div>
     </div>
@@ -209,26 +208,25 @@
 {include './common.tpl' isTop=true}
 <script>
     layui.use(['util', 'admin'], function () {
-        var $     = layui.jquery;
-        var util  = layui.util;
-        var admin = layui.admin;
+        var $              = layui.jquery;
+        var util           = layui.util;
+        var admin          = layui.admin;
+        admin.isLockScreen = true;
         // 获取各个组件
-        var $form = $('.lock-screen-wrapper .lock-screen-form');
-        var $psw  = $form.find('.lock-screen-psw');
-        var $tip  = $form.find('.lock-screen-tip');
-        var $time = $('.lock-screen-wrapper .lock-screen-time');
-        var $date = $('.lock-screen-wrapper .lock-screen-date');
+        var $form          = $('.lock-screen-wrapper .lock-screen-form');
+        var $psw           = $form.find('.lock-screen-psw');
+        var $tip           = $form.find('.lock-screen-tip');
+        var $time          = $('.lock-screen-wrapper .lock-screen-time');
+        var $date          = $('.lock-screen-wrapper .lock-screen-date');
 
         // 监听enter键
         $(window).keydown(function (event) {
-            if (admin.isLockScreen) {
-                if (event.keyCode === 13) {
-                    doVer();
-                } else if (event.keyCode === 8 && !$psw.val()) {
-                    restForm();
-                    if (event.preventDefault) event.preventDefault();
-                    if (event.returnValue) event.returnValue = false;
-                }
+            if (event.keyCode === 13) {
+                doVer();
+            } else if (event.keyCode === 8 && !$psw.val()) {
+                restForm();
+                if (event.preventDefault) event.preventDefault();
+                if (event.returnValue) event.returnValue = false;
             }
         });
 

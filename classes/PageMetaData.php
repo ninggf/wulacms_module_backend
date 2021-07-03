@@ -43,15 +43,13 @@ class PageMetaData {
         if (is_array($bimg)) {
             $bimg = ($bimg[ $_uit ] ?? ($bimg['default'] ?? '')) ?: App::res('backend/assets/img/logo.png');
         }
-        $meta['brandImg']  = $bimg;
-        $meta['brandName'] = App::cfg('site.brandName');
-        $sc                = App::acfg('site');
-        unset($sc['logo'], $sc['theme_base']);
-        unset($sc['module_base'], $sc['assets_base']);
-        unset($sc['name'], $sc['defaultTitle']);
-        unset($sc['titleSuffix'], $sc['projectName']);
-        unset($sc['brandImg'], $sc['brandImg']);
-        $meta['site'] = $sc;
+        $meta['brandImg']      = $bimg;
+        $meta['brandName']     = App::cfg('site.brandName', $meta['projectName']);
+        $meta['bigBrandImg']   = App::cfg('site.bigBrandImg');
+        $meta['brandImgStyle'] = App::cfg('site.brandImgStyle');
+        $meta['wellcomeMsg']   = App::cfg('site.wellcomeMsg');
+        $sc                    = App::acfg('site');
+        $meta['site']          = $sc;
 
         // 插件可以修改meta数据
         $meta           = apply_filter('init_layout_page_meta', $meta);
@@ -68,7 +66,7 @@ class PageMetaData {
             $umeta['id']       = $info['id'];
             $umeta['username'] = $info['username'];
             $umeta['nickname'] = $info['nickname'];
-            $umeta['avatar']   = $info['avatar'] ? $info['avatar'] : App::res('backend/assets/img/head.jpg');
+            $umeta['avatar']   = $info['avatar'] ?: App::res('backend/assets/img/head.jpg');
             $umeta['email']    = $info['email'];
             $umeta['phone']    = $info['phone'];
             $umeta['desc']     = $passport->meta['desc'] ?? '';
