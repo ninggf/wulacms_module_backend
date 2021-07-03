@@ -58,7 +58,7 @@
 </style>
 <div id="wellcom-wrap">
     <div class="img-wrap">
-        <img src="{$myPassport.avatar}" alt="">
+        <img src="{$userMeta.avatar}" alt="">
     </div>
     <h2>{$myPassport.nickname}，祝你开心每一天!</h2>
     <p>
