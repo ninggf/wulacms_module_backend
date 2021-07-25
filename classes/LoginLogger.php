@@ -25,15 +25,20 @@ class LoginLogger extends SimpleLogger {
 
     public function getCols(): array {
         $cols[] = [
-            'field'    => 'date',
-            'title'    => __('Datetime'),
-            'width'    => 160,
-            'minWidth' => 160,
-            'fixed'    => true,
-            'with'     => 'level'
+            'field' => 'date',
+            'title' => __('Datetime'),
+            'width' => 165,
+            'fixed' => 'left',
+            'with'  => 'level'
         ];
-        $cols[] = ['field' => 'username', 'title' => __('Username'), 'width' => 100, 'sort' => true, 'fixed' => true];
-        $cols[] = ['field' => 'action', 'title' => __('Action'), 'width' => 90, 'fixed' => true, 'align' => 'center'];
+        $cols[] = ['field' => 'username', 'title' => __('Username'), 'width' => 120, 'sort' => true, 'fixed' => 'left'];
+        $cols[] = [
+            'field' => 'action',
+            'title' => __('Action'),
+            'width' => 120,
+            'fixed' => 'left',
+            'align' => 'center'
+        ];
         $cols[] = ['field' => 'device', 'title' => __('Device'), 'width' => 70, 'align' => 'center'];
         $cols[] = ['field' => 'ip', 'title' => 'IP', 'width' => 100];
         $cols[] = ['field' => 'agent', 'title' => __('Agent'), 'width' => 160];

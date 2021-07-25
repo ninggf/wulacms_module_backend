@@ -249,7 +249,13 @@ class TaskController extends PageController {
         $headCols = [];//表头
 
         $cols[]     = ['field' => 'id', 'title' => '#', 'width' => 70, 'with' => 'level', 'fixed' => 'left'];
-        $cols[]     = ['field' => 'name', 'title' => __('Name'), 'minWidth' => 200, 'templet' => '#nameTpl'];
+        $cols[]     = [
+            'field'    => 'name',
+            'title'    => __('Name'),
+            'minWidth' => 300,
+            'templet'  => '#nameTpl',
+            'fixed'    => 'left'
+        ];
         $cols[]     = ['field' => 'retry', 'title' => __('Retry'), 'width' => 100, 'templet' => '#retryCol'];
         $cols[]     = ['field' => 'create_time', 'title' => __('Create Time'), 'width' => 165];
         $cols[]     = ['field' => 'first_runtime', 'title' => __('First Run Time'), 'width' => 165];

@@ -22,10 +22,11 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
         cellMinWidth  : 100,
         cols          : [[
           {type: 'checkbox'},
-          {type: 'numbers', title: '序号', width: 80,},
-          {field: 'role', title: '角色', sort: false, width: 200,
-            templet:(d)=>{
-              return d.role +  (d.system ? '&nbsp;<span class="layui-badge layui-bg-green">S</span>':'')
+          {field: 'id', title: 'ID', width: 80},
+          {
+            field  : 'role', title: '角色', sort: false, width: 200,
+            templet: (d) => {
+              return d.role + (d.system ? '&nbsp;<span class="layui-badge layui-bg-green">S</span>' : '')
             }
           },
           {field: 'name', title: '标识', sort: false, width: 100},
@@ -65,7 +66,7 @@ layui.define(['layer', 'form', 'util', 'admin', 'zTree', 'xmSelect', 'treeTable'
             break;
           case 'auth'://授权
             index.openTab({
-              url: admin.url('backend/role/grant?rid=' + id),
+              url  : admin.url('backend/role/grant?rid=' + id),
               title: obj.data.role + ' ' + _t('Permissions'),
               refer: admin.url('backend/role')
             });

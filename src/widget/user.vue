@@ -26,10 +26,10 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'notice'], 
         defaultToolbar: ['filter'],
         autoRow       : true,
         cols          : [[
-          {type: 'checkbox'},
-          {type: 'numbers'},
+          {type: 'checkbox', fixed: 'left'},
+          {field: 'id', title: 'ID', width: 80, fixed: 'left'},
           {field: 'name', title: '账户', sort: false},
-          {field: 'nickname', title: '姓名', sort: false},
+          {field: 'nickname', title: '姓名', minWidth: 200, sort: false},
           {field: 'phone', title: '手机', sort: false, minWidth: 120},
           {
             field: 'status', title: '状态', sort: false, width: 80, templet: (d) => {
@@ -56,9 +56,9 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'notice'], 
             field  : 'create_time', title: '创建时间', templet: function (d) {
               return util.toDateString(d.create_time);
             }
-            , width: 160,
+            , width: 170,
           },
-          {field: '_ops', title: '操作', toolbar: '#userTbBar', align: 'center', width: 110, minWidth: 110}
+          {field: '_ops', title: '操作','fixed':'right', toolbar: '#userTbBar', align: 'center', width: 110, minWidth: 110}
         ]],
         lazy          : true,
         data          : data,
