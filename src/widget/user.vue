@@ -29,7 +29,7 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'notice'], 
           {type: 'checkbox', fixed: 'left'},
           {field: 'id', title: 'ID', width: 80, fixed: 'left'},
           {field: 'name', title: '账户', sort: false},
-          {field: 'nickname', title: '姓名', minWidth: 200, sort: false},
+          {field: 'nickname', title: '姓名', minWidth: 150, sort: false},
           {field: 'phone', title: '手机', sort: false, minWidth: 120},
           {
             field: 'status', title: '状态', sort: false, width: 80, templet: (d) => {
@@ -41,10 +41,10 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'notice'], 
             }
           },
           {
-            field: 'roles', title: '角色', minWidth: 160, sort: false, templet: (d) => {
+            field: 'roles', title: '角色', width: 160, sort: false, templet: (d) => {
               return d.roles.map(function (item) {
-                return '<span class="layui-badge layui-badge-gray">' + item + '</span>';
-              }).join('&nbsp;&nbsp;');
+                return '<p><span class="layui-badge layui-badge-gray">' + item + '</span></p>';
+              }).join('');
             }
           },
           {
@@ -58,11 +58,12 @@ layui.define(['layer', 'form', 'table', 'util', 'admin', 'xmSelect', 'notice'], 
             }
             , width: 170,
           },
-          {field: '_ops', title: '操作','fixed':'right', toolbar: '#userTbBar', align: 'center', width: 110, minWidth: 110}
+          {field: '_ops', title: '操作', fixed: 'right', toolbar: '#userTbBar', align: 'center', width: 110}
         ]],
         lazy          : true,
         data          : data,
-        where         : this.where
+        where         : this.where,
+        done          : admin.autoRowHeight('userTable')
       });
 
       let userRoleList = xmSelect.render({

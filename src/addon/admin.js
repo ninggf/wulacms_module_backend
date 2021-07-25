@@ -104,8 +104,11 @@ layui.define(['layer'], function (exports) {
         if (param.fixed === undefined) param.fixed = false;
         if (param.resize === undefined) param.resize = false;
         if (param.skin === undefined) param.skin = 'layui-layer-admin';
-        if (param.maxHeight === undefined) param.maxHeight = $(window).height - 80
-        if (param.maxWidth === undefined) param.maxWidth = $(window).width - 80
+
+        if(param.offset != 'r') {
+            if (param.maxHeight === undefined) param.maxHeight = $(window).height - 80
+            if (param.maxWidth === undefined) param.maxWidth = $(window).width - 80
+        }
 
         var eCallBack = param.end;
         param.end     = function () {
@@ -1567,6 +1570,7 @@ layui.define(['layer'], function (exports) {
 
     // 重新设置表格行高
     admin.autoRowHeight = function (tableId) {
+        $('[lay-filter=' + tableId + ']').parent('div').addClass('layui-table-cell-ah');
         return function () {
             var ctable = $('[lay-id=' + tableId + ']') // 找到当前表格
             // 找出当前表格的每一行
