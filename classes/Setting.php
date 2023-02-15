@@ -122,8 +122,6 @@ abstract class Setting {
      *                                         获取的配置表单实例.
      * @param string                  $setting 配置
      * @param string                  $group   配置组
-     *
-     * @return array
      */
     public function load(&$form, $setting, $group = '') {
         $table = new SettingsTable();
@@ -131,7 +129,6 @@ abstract class Setting {
             $setting .= '/' . $group;
         }
         $cfg = $table->findAll(['group' => $setting], 'name,value')->toArray('value', 'name');
-
-        return $form->inflateByData($cfg);
+        $form->inflateByData($cfg);
     }
 }

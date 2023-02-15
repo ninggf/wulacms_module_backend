@@ -62,3 +62,7 @@
         </a>
     </div>
 </div>
+<div class="row m-l-none m-r-none bg-light lter">
+    <p class="text">应用版本: {$appVer}, 应用模式: {$appMode}, 集群部署: {$clusterStatus}</p>
+    <p class="text">日志驱动: {$loggerDriver}, 日志级别: {$loggerLevel}</p>
+</div>

@@ -67,8 +67,13 @@ class SystemStatusWidget extends Widget {
         $system         = App::getModuleById('system');
         $data['system'] = $system->getCurrentVersion();
 
-        $backend         = App::getModuleById('backend');
-        $data['backend'] = $backend->getCurrentVersion();
+        $backend               = App::getModuleById('backend');
+        $data['backend']       = $backend->getCurrentVersion();
+        $data['appVer']        = BUILD_NUMBER;
+        $data['loggerDriver']  = LOG_DRIVER;
+        $data['appMode']       = APP_MODE;
+        $data['loggerLevel']   = env('app.logger.level', 'warn');
+        $data['clusterStatus'] = empty(env('app.cluster')) ? '未启用' : '启用';
 
         return $this->load('backend/views/widget/system', $data);
     }

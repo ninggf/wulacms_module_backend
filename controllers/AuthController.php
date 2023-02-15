@@ -42,7 +42,7 @@ class AuthController extends AdminController {
                 $uid = intval($astokens[1]);
                 if ($this->passport->login($uid)) {
                     if ($this->passport['astoken'] == $_COOKIE['astoken']) {
-                        Syslog::info('Auto Login', $this->passport->uid, 'accesslog');
+                        Syslog::info('Auto Login: ' . $this->passport->uid . ', ' . $this->passport->username, 0, 'login');
                         Response::redirect($landingPage);
                     }
                 }
@@ -83,7 +83,7 @@ class AuthController extends AdminController {
             }
         }
         if ($this->passport->login([$username, $passwd, $captcha])) {
-            Syslog::info('Login', $this->passport->uid, 'accesslog');
+            Syslog::info('Login: ' . $this->passport->uid . ', ' . $this->passport->username, 0, 'login');
             sess_del('errCnt');
 
             if (rqst('remember') == 'on') {
@@ -100,7 +100,6 @@ class AuthController extends AdminController {
                 $eCnt += 1;
             }
             $_SESSION['errCnt'] = $eCnt;
-            Syslog::warn('Login Fail: ' . $username, 0, 'accesslog');
 
             return Ajax::error(['message' => $this->passport->error, 'ent' => $eCnt], 'alert');
         }
@@ -153,14 +152,12 @@ class AuthController extends AdminController {
 
     /**
      * 登出.
-     * @nologin
+     *
      * @return null|\wulaphp\mvc\view\JsonView
      */
     public function signout() {
-        if ($this->passport->isLogin) {
-            Syslog::info('Logout', $this->passport->uid, 'accesslog');
-            $this->passport->logout();
-        }
+        Syslog::info('Logout: ' . $this->passport->uid . ', ' . $this->passport->username, 0, 'login');
+        $this->passport->logout();
         //清空自动登录
         Response::cookie('astoken', null);
         if (Request::isAjaxRequest() || rqset('ajax')) {

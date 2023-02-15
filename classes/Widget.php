@@ -33,15 +33,16 @@ abstract class Widget implements Renderable {
      * @param string                  $id
      * @param \backend\classes\Widget $widget
      */
-    public static function register($id, Widget $widget) {
+    public static function register(string $id, Widget $widget) {
         self::$WIDGETS[ $id ] = $widget;
     }
 
     /**
      * 小部件集合.
      * @return array id/widget
+     * @throws \Exception
      */
-    public static function widgets() {
+    public static function widgets(): array {
         if (empty(self::$WIDGETS)) {
             Widget::register('welcome', new WelcomeWidget());
             Widget::register('system', new SystemStatusWidget());
@@ -57,7 +58,7 @@ abstract class Widget implements Renderable {
      *
      * @param array $cfg
      */
-    public function setCfg($cfg) {
+    public function setCfg(array $cfg) {
         $this->cfg = $cfg;
     }
 
@@ -70,7 +71,7 @@ abstract class Widget implements Renderable {
      * @return string
      * @throws
      */
-    public function load($tpl, $data = []) {
+    public function load(string $tpl, array $data = []) {
         $tpl    = explode('/', $tpl);
         $tpl[0] = App::id2dir($tpl[0]);
         $tpl    = implode('/', $tpl);
@@ -80,6 +81,10 @@ abstract class Widget implements Renderable {
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function tabs(): ?array {
+        return null;
     }
 
     /**
@@ -126,15 +131,12 @@ abstract class Widget implements Renderable {
         return 0;
     }
 
-    /**
-     * 当前用户是否可见.
-     *
-     * @param \wulaphp\auth\Passport $passport
-     *
-     * @return bool
-     */
-    public function check($passport) {
-        return true;
+    public function bodyCls() {
+        return '';
+    }
+
+    public function bodyStyle() {
+        return '';
     }
 
     /**

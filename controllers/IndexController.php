@@ -93,7 +93,11 @@ class IndexController extends BackendController {
 
         $data['website']['name'] = App::cfg('name', 'Hello WulaCms');
         $data['brandName']       = App::cfg('brandName');
-
+        $theme                   = $_COOKIE['theme'] ?? 'blue';
+        if (!$theme) {
+            $theme = 'blue';
+        }
+        $data['theme']  = $theme;
         $themes[]       = [
             'name'    => 'blue',
             'header'  => '#FFF',
@@ -155,13 +159,6 @@ class IndexController extends BackendController {
         if (!is_array($favorites)) {
             $favorites = [];
         }
-
-        $theme = $userMeta->getStrMeta($this->passport->uid, 'myTheme');
-        if (!$theme) {
-            $theme = 'blue';
-        }
-        $data['theme'] = $theme;
-
         $fmenus = [];
         foreach ($favorites as $fid => $v) {
             $m = $ui->getMenu($fid);
@@ -192,8 +189,8 @@ class IndexController extends BackendController {
 
         usort($myWidgets, ArrayCompare::compare('pos'));
 
-        $uses    = ['jquery', 'bootstrap', 'sortable', 'wulaui'];
-        $alias   = ['$', '_$$$', '_$$', '_$'];
+        $uses    = ['jquery', 'bootstrap', 'sortable', 'wulaui', 'element'];
+        $alias   = ['$', '_$$$', '_$$', '_$', '$e'];
         $init    = [];
         $modules = [];
         foreach ($myWidgets as $w) {
@@ -201,13 +198,13 @@ class IndexController extends BackendController {
             if (isset($widgets[ $id ])) {
                 /**@var Widget $widget */
                 $widget = $widgets[ $id ];
-                if (!$widget->check($this->passport)) {
-                    continue;
-                }
                 if (isset($w['cfg'])) {
                     $widget->setCfg($w['cfg']);
                 }
                 $w['widget']   = $widget;
+                $w['tabs']     = $widget->tabs();
+                $w['style']    = $widget->bodyStyle();
+                $w['cls']      = $widget->bodyCls();
                 $w['badge']    = $widget->badge();
                 $w['minWidth'] = $widget->minWidth();
                 if ($w['width'] == '2') {
@@ -228,6 +225,7 @@ class IndexController extends BackendController {
         $data['alias']   = implode(',', $alias);
         $data['init']    = implode(';', $init);
         $data['modules'] = json_encode($modules);
+        $data['onerow']  = App::icfgn('onerow');
 
         return view($data, 'layout');
     }
@@ -243,9 +241,8 @@ class IndexController extends BackendController {
         $myWidgets  = $userMeta->myWidgets($uid);
         $widgets    = Widget::widgets();
         $newWidgets = [];
-        /**@var  Widget $w */
         foreach ($widgets as $id => $w) {
-            if (!isset($myWidgets[ $id ]) && $w->check($this->passport)) {
+            if (!isset($myWidgets[ $id ])) {
                 $newWidgets[ $id ] = $w;
             }
         }
@@ -344,7 +341,6 @@ class IndexController extends BackendController {
         $cfg          = isset($wdata['cfg']) ? $wdata['cfg'] : [];
         $cfg['name']  = $wdata['name'];
         $cfg['width'] = $wdata['width'];
-        $cfg          = $form->loadCfg($cfg);
         $form->inflateByData($cfg);
 
         $data['form']  = BootstrapFormRender::v($form);
@@ -506,12 +502,5 @@ class IndexController extends BackendController {
         } else {
             return Ajax::warn('未知操作');
         }
-    }
-
-    public function setTheme($theme) {
-        $userMeta = new UserMetaModel();
-        $userMeta->setStrMeta($this->passport->uid, 'myTheme', $theme);
-
-        return Ajax::success();
     }
 }

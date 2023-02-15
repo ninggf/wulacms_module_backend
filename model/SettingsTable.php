@@ -24,20 +24,28 @@ class SettingsTable extends Table {
 	public function saveSetting($group, $cfgs) {
 		try {
 			$datas = [];
-			foreach ($cfgs as $name => $value) {
-				$data           = [];
-				$data ['group'] = $group;
-				$data ['name']  = $name;
-				$cfg            = $this->find($data)->get();
-				if ($cfg && $cfg ['value'] != $value) {
-					$data ['value'] = $value;
-					unset ($cfg ['value']);
-					$this->update($data, $cfg);
-				} else if (!$cfg) {
-					$data ['value'] = $value;
-					$datas []       = $data;
-				}
-			}
+            foreach ($cfgs as $name => $value) {
+                $needLog        = false;
+                $before = '';
+                $data           = [];
+                $data ['group'] = $group;
+                $data ['name']  = $name;
+                $cfg            = $this->find($data)->get();
+                if ($cfg && $cfg ['value'] != $value) {
+                    $needLog        = true;
+                    $data ['value'] = $value;
+                    $before = $cfg['value'];
+                    unset ($cfg ['value']);
+                    $this->update($data, $cfg);
+                } else if (!$cfg) {
+                    $needLog        = true;
+                    $data ['value'] = $value;
+                    $datas []       = $data;
+                }
+                if ($needLog) {
+                    fire('setting/configSave', $group, $name, $before, $value);
+                }
+            }
 			if ($datas) {
 				$this->inserts($datas);
 			}

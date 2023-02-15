@@ -177,13 +177,7 @@ EQL;
 <a class="btn btn-default" data-toggle data-act="source"><i class="fa fa-code"></i></a>
 </div>
 EQL;
-        if (in_array('preview', $btns)) {
-            $toolbar [] = <<<EQL
-<div class="btn-group btn-group-sm">
-<a class="btn btn-default" data-act="preview" title="预览" data-original-title="预览"><i class="fa fa-eye"></i></a>
-</div>
-EQL;
-        }
+
         $toolbar[] = '</div>';
 
         return implode('', $toolbar);

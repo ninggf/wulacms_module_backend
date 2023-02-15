@@ -73,26 +73,12 @@ class BackendModule extends CmfModule {
      * @return \wulaphp\mvc\view\View
      */
     public static function onDenied($view, $message) {
-        if (Request::isAjaxRequest()) {
-            $view = Ajax::fatal($message ? $message : __('permission denied'), 403);
-        } else {
-            Response::respond(403, $message ? $message : __('permission denied'));
-        }
-
-        return $view;
-    }
-
-    /**
-     * 用户被禁用了。
-     *
-     * @param \wulaphp\mvc\view\View $view
-     *
-     * @filter mvc\admin\onLocked
-     * @return \wulaphp\mvc\view\View
-     */
-    public static function onLocked($view) {
-        if (Request::isAjaxRequest()) {
-            $view = Ajax::fatal('You are blocked', 403);
+        if (!$view) {
+            if (Request::isAjaxRequest()) {
+                $view = Ajax::fatal($message ? $message : __('permission denied'), 403);
+            } else {
+                Response::respond(403, $message ? $message : __('permission denied'));
+            }
         }
 
         return $view;
