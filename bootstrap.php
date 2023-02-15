@@ -16,19 +16,19 @@ use wulaphp\io\Response;
  * @group kernel
  */
 class BackendModule extends CmfModule {
-    public function getName() {
+    public function getName(): string {
         return '管理后台';
     }
 
-    public function getDescription() {
+    public function getDescription(): string {
         return '基于bootstrap&layui的管理后台。';
     }
 
-    public function getHomePageURL() {
+    public function getHomePageURL(): string {
         return 'https://www.wulacms.com/modules/backend';
     }
 
-    public function getAuthor() {
+    public function getAuthor(): string {
         return 'Leo Ning';
     }
 
@@ -84,10 +84,11 @@ class BackendModule extends CmfModule {
         return $view;
     }
 
-    public function getVersionList() {
+    public function getVersionList(): array {
         $v['1.0.0'] = '管理后台的第一个版本';
         $v['2.0.0'] = '不再支持 php 5.6.x版本';
         $v['2.1.0'] = '优化界面';
+        $v['2.4.1'] = '兼容 wulaphp 3.7';
 
         return $v;
     }
